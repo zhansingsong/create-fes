@@ -1,0 +1,22 @@
+{
+  "name": "create-fes",
+  "version": "1.0.0",
+  "description": "Set up a modern multiple pages by running one command",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhansingsong/create-fes.git"
+  },
+  "keywords": [
+    "create-fes"
+  ],
+  "author": "singsong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhansingsong/create-fes/issues"
+  },
+  "homepage": "https://github.com/zhansingsong/create-fes#readme"
+}
