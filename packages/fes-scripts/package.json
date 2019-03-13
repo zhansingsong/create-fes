@@ -1,0 +1,25 @@
+{
+  "name": "fes-scripts",
+  "version": "1.0.0",
+  "description": "a dependency of create-fes",
+  "keywords": [
+    "fes-scripts"
+  ],
+  "author": "zhansingsong <zhansingsong@gmail.com>",
+  "homepage": "https://github.com/zhansingsong/create-fes/tree/master/packages/fes-scripts#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhansingsong/create-fes.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/zhansingsong/create-fes/issues"
+  }
+}
