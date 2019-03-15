@@ -1,10 +1,12 @@
 # 代码规范化工具 ESLint
 
+在将 ESLint 集成到自己的开发环境中时，发现对 ESLint 的了解有点模糊。于是就写了这篇文章，记录一下 ESLint 一般使用。
+
 ## ESLint
 
 > ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code, with the goal of making code more consistent and avoiding bugs —— ESLint official website
 
-ESLint 是一个基于 ECMAScript/JavaScript 代码模式识别和报告的工具，用于确保代码一致性和正确性。
+ESLint 是一个基于 ECMAScript/JavaScript 代码模式识别和报告的工具，用于确保代码的一致性和正确性。
 
 ## 安装和使用
 
@@ -64,10 +66,9 @@ eslint yourfile.js
 `"semi"` 和 `"quotes"` 是 ESLint 的规则名，取值可以是下面任何一个值：
 
 - `"off"` 或 `0`：关闭规则。
-- `"warn"` 或 `1`：开启规则，如果规则匹配会提示警告，但不会退出当前进程。
-- `"error"` 或 `2`：开启规则，如果规则匹配会报错，并退出当前进程。
-
-如果规则提供了额外的配置选项，就需要使用数组。如 `"quotes": ["error", "double"]`，数组第一个元素永远是规则的取值，其他元素则是该规则特有的配置选项。
+- `"warn"` 或 `1`：开启规则。如果规则匹配会提示警告，但不会退出当前进程。
+- `"error"` 或 `2`：开启规则。如果规则匹配会报错，并退出当前进程。
+当规则提供了额外的配置选项，就需要使用数组形式使用。如 `"quotes": ["error", "double"]`，数组第一个元素永远是规则的取值（`"error"`），其他元素则是该规则特有的配置选项（`"double"`）。
 
 除了可以在配置文件中定制规则外，还可以通过如下方式
 - 注释方式定制：
@@ -298,7 +299,7 @@ ESLint 默认只会处理 ECMAScript 5。如果需要支持其他 ECMAScript 版
     }
 }
 ```
-如果使用的执行环境来自第三方插件，配置与定制插件规则类似：
+使用第三方插件提供的执行环境：
 ```js
 {
     "plugins": ["example"], // example 插件
@@ -429,7 +430,7 @@ build/*
 }
 ```
 
-ESLint 在执行后，如果存在错误或警告。可以在 ESLint 执行时增加 `--fix` 选项来自动修复。但并不是所有错误或警告都能修复。只有规则前有个 🔧 才能修复，[更多……](https://eslint.org/docs/rules/)
+ESLint 在执行后，如果存在错误或警告。可以在 ESLint 执行时增加 `--fix` 选项来自动修复。但并不是所有错误或警告都能修复。只有规则前有个 🔧 才能被修复，[更多……](https://eslint.org/docs/rules/)
 
 ## ESLint + IDE
 
@@ -438,10 +439,10 @@ ESLint 在执行后，如果存在错误或警告。可以在 ESLint 执行时�
 要将 ESLint 集成到 Visual Studio Code 中，需要依赖 [vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) 插件。集成步骤如下：
 
 - 安装 ESLint(全局或本地)
-- 安装 vscode-eslint 插件
+- 安装 [vscode-eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) 插件
 - 创建 `.eslintrc.*` 配置文件
 
-如果不想手动修复 ESLint 报出的错误，可以配合格式化工具自动修复。这里以 [prettier](https://github.com/prettier/prettier) 为例。
+如果不想手动修复 ESLint 报出的错误，可以配合格式化工具自动修复（只能修复规则前有个 🔧 的规则，其他错误还需手动修复）。这里以 [prettier](https://github.com/prettier/prettier) 为例。
 
 - 安装 vscode 插件 [prettier-vscode](https://github.com/prettier/prettier-vscode)
 
