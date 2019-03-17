@@ -4,11 +4,17 @@
   "description": "a tool creating a fes app",
   "author": "zhansingsong <zhansingsong@gmail.com>",
   "homepage": "https://github.com/zhansingsong/create-fes/tree/master/packages/create-fes#readme",
-  "license": "ISC",
-  "main": "index.js",
+  "license": "MIT",
   "files": [
-    "index.js"
+    "bin",
+    "lib"
   ],
+  "bin": {
+    "create-fes": "./bin/createFes.js"
+  },
+  "engines": {
+    "node": ">=8"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhansingsong/create-fes.git"
@@ -18,5 +24,13 @@
   },
   "bugs": {
     "url": "https://github.com/zhansingsong/create-fes/issues"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.19.0",
+    "cross-spawn": "^6.0.5",
+    "fs-extra": "^7.0.1",
+    "semver": "^5.6.0",
+    "validate-npm-package-name": "^3.0.0"
   }
 }
