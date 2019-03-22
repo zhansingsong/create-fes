@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+/**
+ * @description: site settings
+ * @author: zhanxingxiang
+ * @date: 2016.4.19
+ */
+
+/**
+ * font scheme
+ */
+$yfont: '\5FAE\8F6F\96C5\9ED1'; //雅黑
+$hfont: '\9ED1\4F53'; //黑体
+$sfont: '\5B8B\4F53'; //宋体
+
+/**
+ * dimension scheme
+ */
+$swidth: 1200px;
+
+/**
+ * color scheme
+ */
+// theme
+// $tcolor1: #ea544a;
+
+// border
+// $bcolor1: #f5f5f5;
+
+// version
+$version: floor(random() * 100000) !default;

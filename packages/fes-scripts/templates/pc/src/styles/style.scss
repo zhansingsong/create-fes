@@ -1,0 +1,51 @@
+@import "./base/reset";
+@import "./base/config";
+@import "./base/helper";
+@import "./base/imgs";
+@import "./modules/test";
+
+body {
+  margin: 0;
+
+  a {
+    text-decoration: none;
+  }
+
+  p {
+    background-color: rgb(192, 98, 36);
+    color: #0cf546;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  div {
+    background-color: rgb(37, 241, 30);
+    color: rgb(100, 3, 8);
+    font-size: 18px;
+  }
+}
+
+.icons {
+  @extend %icons;
+
+  position: relative;
+  overflow: hidden;
+  padding: 10px 40px;
+  background-color: #cbce08;
+
+  .ant {
+    width: 64px;
+    height: 64px;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    float: left;
+    transform: scale(1);
+    @extend %ant;
+
+    &:hover {
+      @extend %ant-hover;
+
+      transform: scale(1.2);
+    }
+  }
+}

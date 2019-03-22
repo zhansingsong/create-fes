@@ -1,3 +1,6 @@
 {
-  "eslint.alwaysShowStatus": false
+  "eslint.alwaysShowStatus": false,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.eslintIntegration": true
 }

@@ -1,2 +1,5 @@
 # /node_modules/* and /bower_components/* in the project root are ignored by default.
 packages/*/node_modules
+packages/fes-scripts/config/plugins/*
+packages/fes-scripts/config/loaders/*
+
