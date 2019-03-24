@@ -33,7 +33,7 @@ module.exports = (env) => {
     };
 
     if (env === 'development') {
-      config.filename = join(paths.appConfig, '.temp', `${metas.name}.html`);
+      config.filename = join(paths.appNodeModules, 'fes-scripts', 'config', '.temp', `${metas.name}.html`);
       config.alwaysWriteToDisk = true;
     } else {
       config.filename = `${metas.name}.html`;

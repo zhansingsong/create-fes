@@ -1,8 +1,8 @@
 const fesData = require('./fesData.js');
 
-export default (router) => {
+module.exports = (router, Mock) => {
   router.get('/fes_api', (ctx, next) => {
-    ctx.body = fesData;
+    ctx.body = Mock.mock(fesData);
     return next();
   });
 };

@@ -37,6 +37,7 @@
     "chalk": "^2.4.1",
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.1.6",
+    "cross-spawn": "^6.0.5",
     "css-loader": "^0.28.11",
     "debug": "^4.1.1",
     "detect-port-alt": "^1.1.6",

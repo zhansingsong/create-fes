@@ -3,7 +3,6 @@ const Twig = require('twig');
 const { join, parse, normalize } = require('path');
 // import hashGenerator from 'hasha';
 
-
 function addDependencies(dir, callback) {
   const mockFiles = glob.sync(dir, {});
   const mapNameTofile = {};
@@ -33,9 +32,6 @@ function getMockData(name, map, ctx) {
   return result;
 }
 
-/* eslint global-require: [0] */
-/* eslint import/no-dynamic-require: [0] */
-/* eslint no-unused-expressions: [0] */
 function loader(source) {
   Twig.cache(false);
   this.cacheable && this.cacheable();
@@ -52,7 +48,6 @@ function loader(source) {
     path: currentFilePath,
   });
 
-  /* eslint no-param-reassign: [0] */
   // 去掉缓存
   Twig.extend((T) => {
     if (T.Templates && T.Templates.registry) {
@@ -61,14 +56,7 @@ function loader(source) {
   });
 
   const mockData = getMockData(currentPathInfo.name, mapNameTofile, this);
-  console.log(mockData);
-  // let mockData = {};
-  // if (mapNameTofile[currentPathInfo.name]) {
-  //   mockData = require(mapNameTofile[currentPathInfo.name]);
-  //   delete require.cache[mapNameTofile[currentPathInfo.name]];
-  //   // 不能去掉，因为loader需要对其进行依赖，即使dealing with it by AddDependency plugin
-  //   this.addDependency(mapNameTofile[currentPathInfo.name]);
-  // }
+
   const output = template.render(mockData);
   this.callback(null, output);
 }

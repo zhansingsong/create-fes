@@ -17,6 +17,7 @@ module.exports = (env, appConfig) => {
   const commonChunks = [
     resolve(paths.appNodeModules, 'fes-scripts', 'config', 'utils', 'fesContext.js'),
   ];
+
   if (env === 'development' && appConfig.isHot) {
     commonChunks.push(join(
       paths.appNodeModules,

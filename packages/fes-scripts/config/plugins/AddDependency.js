@@ -13,7 +13,6 @@ AddDependency.prototype.apply = function (compiler) { // eslint-disable-line
   const fileDependencies = new Set();
   // compiler.hooks.afterCompile.tapAsync('AddDependency', (compilation, callback) => {
   compiler.hooks.afterCompile.tapAsync('AddDependency', (compilation, callback) => {
-    console.log(this);
     this.options.dirs.forEach((dir) => {
       const files = glob.sync(dir, {});
       files.forEach((f) => {

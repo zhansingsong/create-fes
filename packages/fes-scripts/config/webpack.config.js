@@ -26,7 +26,7 @@ const BuildTmpl = require('./plugins/BuildTmpl');
 
 // utils
 const outputPathFn = require('./utils/outputPath');
-const entry = require('./utils/getEntry');
+const getEntry = require('./utils/getEntry');
 const paths = require('../utils/paths');
 
 const { join, parse } = require('path');
@@ -89,32 +89,32 @@ const getPlugins = (env) => {
     plugins.push(new CleanWebpackPlugin(paths.appBuild, { root: process.cwd() }));
     // 解决IE低版本：https://github.com/zuojj/fedlab/issues/5
     plugins.push(...[
-      new UglifyJsPlugin({
-        test: /\.js($|\?)/i,
-        parallel: true,
-        uglifyOptions: {
-          compress: {
-            properties: false,
-            warnings: false,
-            // Disabled because of an issue with Uglify breaking seemingly valid code:
-            // https://github.com/facebookincubator/create-react-app/issues/2376
-            // Pending further investigation:
-            // https://github.com/mishoo/UglifyJS2/issues/2011
-            comparisons: false,
-            pure_funcs: ['console.log', 'console.dir'],
-          },
-          // 可能引起IE低版本不正常运行
-          mangle: false,
-          output: {
-            comments: false,
-            // Turned on because emoji and regex is not minified properly using default
-            // https://github.com/facebookincubator/create-react-app/issues/2488
-            ascii_only: true,
-            quote_keys: true,
-          },
-        },
-        sourceMap: false,
-      }),
+      // new UglifyJsPlugin({
+      //   test: /\.js($|\?)/i,
+      //   parallel: true,
+      //   uglifyOptions: {
+      //     compress: {
+      //       properties: false,
+      //       warnings: false,
+      //       // Disabled because of an issue with Uglify breaking seemingly valid code:
+      //       // https://github.com/facebookincubator/create-react-app/issues/2376
+      //       // Pending further investigation:
+      //       // https://github.com/mishoo/UglifyJS2/issues/2011
+      //       comparisons: false,
+      //       pure_funcs: ['console.log', 'console.dir'],
+      //     },
+      //     // 可能引起IE低版本不正常运行
+      //     mangle: false,
+      //     output: {
+      //       comments: false,
+      //       // Turned on because emoji and regex is not minified properly using default
+      //       // https://github.com/facebookincubator/create-react-app/issues/2488
+      //       ascii_only: true,
+      //       quote_keys: true,
+      //     },
+      //   },
+      //   sourceMap: false,
+      // }),
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
         seed: { name: 'sed' },
@@ -214,7 +214,7 @@ const getRules = (env) => {
   ];
   if (appConfig.isBabel) {
     oneOf.push({
-      test: /\.(js|jsx|mjs)$/,
+      test: /\.m?js$/,
       include: paths.appSrc,
       loader: require.resolve('babel-loader'),
       options: {
@@ -306,12 +306,6 @@ const getRules = (env) => {
     },
   });
   const rules = [
-    // {
-    //   test: /\.(js|jsx|mjs)$/,
-    //   include: paths.appSrc,
-    //   loader: resolve(paths.appNodeModules, 'fes-scripts', 'config', 'loaders', 'es3Loader.js'),
-    //   enforce: 'post',
-    // },
     {
       oneOf,
     },
@@ -332,6 +326,14 @@ const getRules = (env) => {
     //   ],
     // },
   ];
+  if (env === 'produnction') {
+    rules.push({
+      test: /\.m?js$/,
+      include: paths.appSrc,
+      loader: require.resolve('./loaders/es3Loader.js'),
+      enforce: 'post',
+    });
+  }
 
   return rules;
 };
@@ -344,7 +346,7 @@ const getRules = (env) => {
 module.exports = (env) => {
   const finalConfig = {
     mode: env,
-    entry,
+    entry: getEntry(env, appConfig),
     output: getOutput(env),
     module: {
       rules: getRules(env),

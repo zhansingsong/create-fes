@@ -1,6 +1,4 @@
-const Mock = require('mockjs');
-
-const data = Mock.mock({
+const data = {
   code: 0,
   msg: '',
   data: {
@@ -91,6 +89,6 @@ const data = Mock.mock({
       },
     ],
   },
-});
+};
 
 module.exports = data;
