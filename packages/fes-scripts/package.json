@@ -8,10 +8,13 @@
   "author": "zhansingsong <zhansingsong@gmail.com>",
   "homepage": "https://github.com/zhansingsong/create-fes/tree/master/packages/fes-scripts#readme",
   "license": "ISC",
-  "main": "index.js",
   "files": [
-    "index.js",
-    "scripts"
+    "bin",
+    "config",
+    "scripts",
+    "templates",
+    "utils",
+    ".babelrc"
   ],
   "bin": {
     "fes-scripts": "./bin/fes-scripts.js"
