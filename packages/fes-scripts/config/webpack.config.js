@@ -14,8 +14,7 @@ const getHtmlWebpackPluginConfigs = require('./utils/getHtmlWebpackPluginConfig'
 const sprites = require('./plugins/sprites');
 
 // dev plugins
-const AddDependency = require('./plugins/AddDependency');
-const HotReload = require('./plugins/HotReload');
+const AddExtraEntryFile = require('./plugins/AddExtraEntryFile');
 
 // build plugins
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -27,7 +26,7 @@ const BuildTmpl = require('./plugins/BuildTmpl');
 // utils
 const outputPathFn = require('./utils/outputPath');
 const getEntry = require('./utils/getEntry');
-const paths = require('../utils/paths');
+const paths = require('../scripts/utils/paths');
 
 const { join, parse } = require('path');
 
@@ -80,7 +79,7 @@ const getPlugins = (env) => {
   // extract a mini css file
   plugins.push(new MiniCssExtractPlugin({ filename: 'static/media/index.[name].css' }));
   // generate htmls
-  const htmlWebpackPluginConfigs = getHtmlWebpackPluginConfigs(env);
+  const htmlWebpackPluginConfigs = getHtmlWebpackPluginConfigs(env, paths);
   htmlWebpackPluginConfigs.forEach((config) => {
     plugins.push(new HtmlWebpackPlugin(config));
   });
@@ -172,20 +171,14 @@ const getPlugins = (env) => {
       plugins.push(new BundleAnalyzer.BundleAnalyzerPlugin(report));
     }
   } else {
-    // add dependencies
-    plugins.push(new AddDependency({
+    plugins.push(new HtmlWebpackHarddiskPlugin());
+    plugins.push(new AddExtraEntryFile({
       dirs: [
         join(paths.appSrc, '/mock/*.+(js|json)'),
-        join(paths.appSrc, '/styles/**/**.scss'),
         join(paths.appSrc, '/views/**/**.html'),
-        join(paths.appSrc, '/api/*.+(js|json)'),
       ],
     }));
-    plugins.push(new HtmlWebpackHarddiskPlugin());
-    if (appConfig.isHot) {
-      plugins.push(new HotReload());
-      plugins.push(...[new optimize.OccurrenceOrderPlugin(), new HotModuleReplacementPlugin()]);
-    }
+    plugins.push(...[new optimize.OccurrenceOrderPlugin(), new HotModuleReplacementPlugin()]);
   }
   // other plugins
   plugins.push(...[
@@ -231,13 +224,20 @@ const getRules = (env) => {
   oneOf.push({
     test: /\.scss$/,
     use: [
-      MiniCssExtractPlugin.loader,
+      // style-loader support hmr but MiniCssExtractPlugin not
+      env === 'development' ? {
+        loader: require.resolve('style-loader'),
+        options: {
+          // hmr: false
+          sourceMap: true,
+        },
+      } : MiniCssExtractPlugin.loader,
       {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders: 2,
           minimize: true,
-          sourceMap,
+          sourceMap: true,
         },
       },
       {
@@ -266,13 +266,13 @@ const getRules = (env) => {
               ...appConfig.spritesConfig,
             }),
           ],
-          sourceMap,
+          sourceMap: true,
         },
       },
       {
         loader: require.resolve('sass-loader'),
         options: {
-          sourceMap,
+          sourceMap: true,
         },
       },
     ],
@@ -330,7 +330,7 @@ const getRules = (env) => {
 module.exports = (env) => {
   const finalConfig = {
     mode: env,
-    entry: getEntry(env, appConfig),
+    entry: getEntry(env, appConfig, paths),
     output: getOutput(env),
     module: {
       rules: getRules(env),

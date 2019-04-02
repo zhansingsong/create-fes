@@ -1,4 +1,4 @@
-require('../utils/pre')('development'); // eslint-disable-line
+require('./utils/pre')('development'); // eslint-disable-line
 
 // const chalk = require('chalk');
 const c2k = require('koa2-connect');
@@ -6,17 +6,17 @@ const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
 
-const paths = require('../utils/paths');
-const getDevServer = require('../utils/devServer');
+const paths = require('./utils/paths');
+const getDevServer = require('./utils/devServer');
 
-const choosePort = require('../utils/choosePort');
+const choosePort = require('./utils/choosePort');
 
 const config = require('../config/webpack.config')('development');
 
 const appConfig = require(paths.appConfig); // eslint-disable-line
 const { proxy, isHot, routerConfig } = appConfig;
 
-const devServer = getDevServer(routerConfig, proxy);
+const devServer = getDevServer(routerConfig, paths, proxy);
 const compiler = webpack(config);
 
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || appConfig.dev.port;
@@ -40,20 +40,22 @@ choosePort(HOST, DEFAULT_PORT)
     if (isHot) {
       // bind hotMiddleware to compiler
       const hot = hotMiddleware(compiler);
-      compiler.fesHotMiddleware = hot;
       devServer.use(c2k(hot));
     }
 
     const server = devServer.listen(p, () => {
       // https://github.com/webpack-contrib/webpack-hot-middleware/issues/210
       // solve a hmr bug
-      devServer.keepAliveTimeout = 0;
-      // console.log(chalk.blue(`devServer is running on ${chalk.bold.cyan(p)} in ${chalk.italic.gray(process.cwd())}`));
+      server.keepAliveTimeout = 0;
     });
-
-    dev.waitUntilValid(() => {
-      devServer.emit('qrcode-and-open-browser', p, appConfig);
+    compiler.hooks.done.tap('qrcode-and-open-browser', () => {
+      setTimeout(() => {
+        devServer.emit('qrcode-and-open-browser', p, appConfig);
+      }, 100);
     });
+    // dev.waitUntilValid(() => {
+    //   devServer.emit('qrcode-and-open-browser', p, appConfig);
+    // });
     // singnal
     ['SIGINT', 'SIGTERM'].forEach((sig) => {
       process.on(sig, () => {
@@ -68,4 +70,3 @@ choosePort(HOST, DEFAULT_PORT)
     }
     process.exit(1);
   });
-

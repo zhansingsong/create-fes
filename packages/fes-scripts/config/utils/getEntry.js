@@ -5,12 +5,11 @@
 
 const glob = require('glob');
 const { join, parse, resolve } = require('path');
-const paths = require('../../utils/paths');
 
-const viewFiles = glob.sync(join(paths.appSrc, 'views/*.html'), {});
-const jsFiles = glob.sync(join(paths.appSrc, 'javascripts/*.+(js)'), {});
+module.exports = (env, appConfig, paths) => {
+  const viewFiles = glob.sync(join(paths.appSrc, 'views/*.html'), {});
+  const jsFiles = glob.sync(join(paths.appSrc, 'javascripts/*.+(js)'), {});
 
-module.exports = (env, appConfig) => {
   // 处理 entry 配置项
   const entry = {};
 
@@ -22,9 +21,9 @@ module.exports = (env, appConfig) => {
     commonChunks.push(join(
       paths.appNodeModules,
       'fes-scripts',
-      'config',
-      'middlewares',
-      'hotClient/index?path=/__webpack_hmr&reload=true'
+      'node_modules',
+      'webpack-hot-middleware',
+      'client?path=/__webpack_hmr&reload=true',
     ));
   }
 

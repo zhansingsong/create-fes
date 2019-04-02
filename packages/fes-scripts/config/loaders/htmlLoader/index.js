@@ -163,7 +163,7 @@ module.exports = function(content) {
     // 缓存media资源
     mediaSource.push(...Object.values(data));
     mediaSource = [...new Set(mediaSource)];
-    fes.outputFileSync(path.join(__dirname, '..', '..', 'media.json'),  JSON.stringify(mediaSource));
+    fes.outputFileSync(path.join(__dirname, '..', '..', '..', '.temp', 'media.json'),  JSON.stringify(mediaSource));
 		return '" + require(' + JSON.stringify(urlToRequest) + ') + "';
   }) + ";";
   return result;
