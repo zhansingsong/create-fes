@@ -1,5 +1,5 @@
 
-require('../utils/pre')('production'); // eslint-disable-line
+require('./utils/pre')('production'); // eslint-disable-line
 
 const webpack = require('webpack');
 const { copySync } = require('fs-extra');

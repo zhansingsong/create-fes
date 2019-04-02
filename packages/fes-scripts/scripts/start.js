@@ -5,12 +5,9 @@ const c2k = require('koa2-connect');
 const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
-
 const paths = require('./utils/paths');
 const getDevServer = require('./utils/devServer');
-
 const choosePort = require('./utils/choosePort');
-
 const config = require('../config/webpack.config')('development');
 
 const appConfig = require(paths.appConfig); // eslint-disable-line
