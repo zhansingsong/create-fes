@@ -8,7 +8,7 @@ const webpack = require('webpack');
 const paths = require('./utils/paths');
 const getDevServer = require('./utils/devServer');
 const choosePort = require('./utils/choosePort');
-const config = require('../config/webpack.config')('development');
+
 const address = require('address');
 const qrcodeTerminal = require('qrcode-terminal');
 
@@ -16,7 +16,7 @@ const appname = require(paths.appPackageJson).name; // eslint-disable-line
 
 const clearConsole = require('./utils/clearConsole');
 const openBrowser = require('./utils/openBrowser');
-
+const config = require('./utils/getConfig')('development', paths);
 
 const appConfig = require(paths.appConfig); // eslint-disable-line
 const { proxy, isHot, routerConfig } = appConfig;
@@ -92,11 +92,11 @@ choosePort(HOST, DEFAULT_PORT)
       // clear staff
       if (limitExecution === 2) {
         doneCallbackTimer && clearTimeout(doneCallbackTimer); // eslint-disable-line
-        limitExecution = void(0); // eslint-disable-line
+        limitExecution = void (0); // eslint-disable-line
         doneCallbackTimer = null;
         return;
       }
-      doneCallbackTimer = setTimeout(function(){// eslint-disable-line
+      doneCallbackTimer = setTimeout(function () {// eslint-disable-line
         if (limitExecution === 0) {
           autoOpenBrowser(p, appConfig.dev.autoOpen, devServer.mapRoutes);
         }

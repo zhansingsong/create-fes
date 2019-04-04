@@ -46,7 +46,7 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
   inquirer.prompt([{
     type: 'list',
     name: 'tmpl',
-    message: 'what template do you need',
+    message: 'What template do you need',
     choices: [
       {
         name: 'pc',
@@ -66,7 +66,7 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
       return inquirer.prompt({
         type: 'input',
         name: 'tmpl',
-        message: 'please input a valid path of template?',
+        message: 'Please input a valid path of template?',
         validate: (value) => {
           if (fs.existsSync(value)) {
             return true;
@@ -77,7 +77,6 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     }
     return path.join(ownPath, 'templates', tmpl);
   }).then((templatePath) => {
-    console.log('singsong: ', templatePath);
     fs.copySync(templatePath, appPath);
 
     // Display the most elegant way to cd.

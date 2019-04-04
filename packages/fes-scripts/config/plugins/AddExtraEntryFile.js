@@ -1,11 +1,22 @@
 const glob = require('glob');
-const { normalize, parse } = require('path');
+const { normalize, parse, join } = require('path');
 
 function AddExtraEntryFile(options) {
   this.options = options;
 }
 
 AddExtraEntryFile.prototype.apply = function (compiler) {
+  let extraDependenciesFiles = [];
+  const base = this.options.base;
+  if(this.options.extra.length > 0){
+    const extraDependencies = this.options.extra;
+    try {
+      extraDependencies.forEach(dependency => {
+        extraDependenciesFiles = extraDependenciesFiles.concat(glob.sync(join(base, dependency), {}));
+      });
+    } catch (error) {}
+  }
+
   compiler.hooks.entryOption.tap('AddExtraEntryFile', () => {
     const extraFilesArr = this.options.dirs.map((dir) => {
       const files = glob.sync(dir, {});
@@ -30,6 +41,7 @@ AddExtraEntryFile.prototype.apply = function (compiler) {
             entry[name].push(f);
           }
         }));
+        entry[name].push(...extraDependenciesFiles);
       })
     }
   })

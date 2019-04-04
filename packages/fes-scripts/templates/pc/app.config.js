@@ -7,6 +7,10 @@ module.exports = {
   spritesConfig: {
     // dpr: v => `${v / 48}rem`, 调整单位及dpr
   },
+  // 增加依赖文件，方便开发修改时，能自动编译
+  // 相对于 'src' 目录
+  // 支持 "**/*.js" 形式，更多参考 glob：https://github.com/isaacs/node-glob
+  extraDedenpencies: [],
   // alias
   alias: {},
   // 自动加载模块配置
@@ -36,6 +40,7 @@ module.exports = {
     devtool: 'cheap-module-source-map',
   },
   build: {
+    mode: 'multi', // 'single', 'multi',
     publicPath: '/',
     outputhPath: {
       // 是否开启hash

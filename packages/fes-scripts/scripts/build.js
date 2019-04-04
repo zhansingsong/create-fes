@@ -4,8 +4,9 @@ require('./utils/pre')('production'); // eslint-disable-line
 const webpack = require('webpack');
 const { copySync } = require('fs-extra');
 const chalk = require('chalk');
-const config = require('../config/webpack.config')('production');
 const paths = require('./utils/paths');
+
+const config = require('./utils/getConfig')('production', paths);
 
 function copyPublicFolder() {
   copySync(paths.appPublic, paths.appBuild, {

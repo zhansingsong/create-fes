@@ -39,7 +39,6 @@ const alias = {
   ...appConfig.alias,
 };
 
-
 const { sourceMap = true, devtool } = appConfig.build;
 const outputhPath = outputPathFn(appConfig.build.outputhPath);
 
@@ -177,6 +176,8 @@ const getPlugins = (env) => {
         join(paths.appSrc, '/mock/*.+(js|json)'),
         join(paths.appSrc, '/views/**/**.html'),
       ],
+      extra: appConfig.extraDedenpencies || [],
+      base: paths.appSrc,
     }));
     plugins.push(...[new optimize.OccurrenceOrderPlugin(), new HotModuleReplacementPlugin()]);
   }

@@ -1,3 +1,3 @@
 export default function (name) {
-  console.log(name, 'singsong');
+  console.log(name, 'fes');
 }
