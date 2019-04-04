@@ -25,6 +25,7 @@ module.exports = (env, paths) => {
 
     const config = {
       template: templateFile,
+      // avoid FOUC to inject script head tag
       inject: true,
       chunks: getChunks(metas.name, jsFilesName),
       // excludeChunks: entryNameArr.filter(i => i !== metas.name),

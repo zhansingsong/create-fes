@@ -40,7 +40,7 @@ const alias = {
 };
 
 
-const { sourceMap, devtool } = appConfig.build;
+const { sourceMap = true, devtool } = appConfig.build;
 const outputhPath = outputPathFn(appConfig.build.outputhPath);
 
 
@@ -224,20 +224,17 @@ const getRules = (env) => {
   oneOf.push({
     test: /\.scss$/,
     use: [
+      // solve css-file hot load
+      require.resolve('css-hot-loader'),
       // style-loader support hmr but MiniCssExtractPlugin not
-      env === 'development' ? {
-        loader: require.resolve('style-loader'),
-        options: {
-          // hmr: false
-          sourceMap: true,
-        },
-      } : MiniCssExtractPlugin.loader,
+      // however, style-loader leading to FOUC
+      MiniCssExtractPlugin.loader,
       {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders: 2,
           minimize: true,
-          sourceMap: true,
+          sourceMap,
         },
       },
       {
@@ -266,13 +263,13 @@ const getRules = (env) => {
               ...appConfig.spritesConfig,
             }),
           ],
-          sourceMap: true,
+          sourceMap,
         },
       },
       {
         loader: require.resolve('sass-loader'),
         options: {
-          sourceMap: true,
+          sourceMap,
         },
       },
     ],

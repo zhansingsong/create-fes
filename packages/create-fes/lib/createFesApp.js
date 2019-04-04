@@ -127,7 +127,7 @@ function createApp(name, verbose, version) {
 
 
   let useYarn = shouldUseYarn(); // eslint-disable-line
-  useYarn = false;
+  useYarn = false; // test
   if (!useYarn) {
     const npmInfo = checkNpmVersion();
     if (!npmInfo.hasMinNpm) {

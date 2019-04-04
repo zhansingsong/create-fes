@@ -7,10 +7,6 @@ const glob = require('glob');
 const proxyMiddleware = require('http-proxy-middleware');
 const c2k = require('koa2-connect');
 
-const address = require('address');
-const opn = require('opn');
-const qrcodeTerminal = require('qrcode-terminal');
-
 const mapRoutes = [];
 
 const softExit = (msg, code = 1) => {
@@ -123,41 +119,10 @@ module.exports = (app, routerConfig, paths, proxy = {}) => {
   // routes
   generateRoutes(router, validateRouterConfig(routerConfig));
   router.redirect('/', mapRoutes[0]);
+  // In order to validate open_url to store 'mapRoutes' into app.mapRoutes
+  app.mapRoutes = mapRoutes; // eslint-disable-line
   // invoke
   app.use(router.routes()).use(router.allowedMethods());
-  // generate qr code and open browser with a specific url
-  let logTwice = 0;
 
-
-  const openBrowserCallback = (port, config) => {
-    console.log('-----------_~~~~~~~~~~~~~~~~~~~~~_~~~~~~~~~~~~');
-    const { qrcode, autoOpen } = config.dev;
-    const LOCA = `http://localhost:${port}`;
-    const ADDR = `http://${address.ip()}:${port}`;
-    if (logTwice === 1) {
-      app.removeAllListeners('qrcode-and-open-browser');
-      console.log(chalk.green(`server is running on:  ${chalk.blueBright(`${LOCA}`)}`));
-      console.log(chalk.green(`server is running on:  ${chalk.blueBright(`${ADDR}`)}`));
-
-      if (qrcode) {
-        qrcodeTerminal.generate(ADDR, { small: true }, (qr) => {
-          console.log(chalk.green('scan the QR code below:'));
-          console.log(chalk.blue(qr));
-        });
-      }
-    }
-
-    let OPEN_URL = LOCA;
-    if (autoOpen && logTwice === 0) {
-      if (typeof autoOpen === 'string') {
-        if (mapRoutes.indexOf(autoOpen) > -1) {
-          OPEN_URL += autoOpen;
-        }
-      }
-      opn(OPEN_URL);
-    }
-    logTwice += 1;
-  };
-  app.on('qrcode-and-open-browser', openBrowserCallback);
   return (ctx, next) => next();
 };
