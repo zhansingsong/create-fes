@@ -7,7 +7,7 @@ const glob = require('glob');
 const { join, parse } = require('path');
 
 const getChunks = (chunk, jsFilesName) => {
-  const chunks = ['vendors', 'common'];
+  const chunks = ['vendors', 'common', 'runtime'];
   if (jsFilesName.indexOf(chunk) > -1) {
     chunks.push(chunk);
   }

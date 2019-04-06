@@ -21,9 +21,14 @@ module.exports = {
     '/fes/aboutme': 'about.html',
     '/fes/info': 'info.html',
   },
+  devtool: 'cheap-module-source-map',
+  sourceMap: true,
   // devtool会导致recompile变慢，特别是source-map
   // devtool: false,
+  // devtool: 'eval',
   // devtool: 'source-map',
+  // devtool: 'eval-source-map',
+  // devtool: 'hidden-source-map',
   // devtool: 'inline-source-map',
   // devtool: 'cheap-module-source-map',
   // devtool: 'inline-eval-cheap-source-map',
@@ -36,8 +41,6 @@ module.exports = {
     // 就当成路径处理。如果路径不存在会回退到bool
     autoOpen: true,
     qrcode: true,
-    sourceMap: true,
-    devtool: 'cheap-module-source-map',
   },
   build: {
     mode: 'multi', // 'single', 'multi',
@@ -56,8 +59,6 @@ module.exports = {
         chunck: '[name].[chunkhash:8].chunk.js',
       },
     },
-    sourceMap: false,
-    devtool: false,
     // 支持 boolean 、object
     // 如果为boolean，使用默认配置生成分析报告
     // 如果为object, 会根据该配置对象生成分析报告

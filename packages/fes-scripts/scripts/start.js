@@ -33,6 +33,7 @@ choosePort(HOST, DEFAULT_PORT)
     }
     const dev = devMiddleware(compiler, {
       // lazy: true,
+      // writeToDisk: true,
       logTime: true,
       stats: {
         colors: true,

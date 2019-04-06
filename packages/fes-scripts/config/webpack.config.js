@@ -1,4 +1,5 @@
 // common plugins
+const isWsl = require('is-wsl');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -19,7 +20,9 @@ const AddExtraEntryFile = require('./plugins/AddExtraEntryFile');
 // build plugins
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+// const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const safePostCssParser = require('postcss-safe-parser');
 const BundleAnalyzer = require('webpack-bundle-analyzer');
 const BuildTmpl = require('./plugins/BuildTmpl');
 
@@ -39,9 +42,8 @@ const alias = {
   ...appConfig.alias,
 };
 
-const { sourceMap = true, devtool } = appConfig.build;
+const { sourceMap = true, devtool } = appConfig;
 const outputhPath = outputPathFn(appConfig.build.outputhPath);
-
 
 /**
  * get config.output
@@ -50,6 +52,7 @@ const outputhPath = outputPathFn(appConfig.build.outputhPath);
 const getOutput = (env) => {
   let output = {
     path: paths.appBuild,
+    pathinfo: false,
     publicPath: appConfig.build.publicPath,
     filename: `${outputhPath.js}`,
     chunkFilename: `${outputhPath.jschunk}`,
@@ -66,7 +69,6 @@ const getOutput = (env) => {
   return output;
 };
 
-
 /**
  * get config.plugins
  * @param {String} env 'development' or 'production'
@@ -76,7 +78,11 @@ const getPlugins = (env) => {
   // provide global variables
   plugins.push(new ProvidePlugin(appConfig.provide));
   // extract a mini css file
-  plugins.push(new MiniCssExtractPlugin({ filename: 'static/media/index.[name].css' }));
+  // because of css-hot-loader，file name without [hash] and [hashcontent]
+  plugins.push(new MiniCssExtractPlugin({
+    filename: 'static/media/[name].css',
+    chunkFilename: 'static/css/[name].chunk.css',
+  }));
   // generate htmls
   const htmlWebpackPluginConfigs = getHtmlWebpackPluginConfigs(env, paths);
   htmlWebpackPluginConfigs.forEach((config) => {
@@ -87,32 +93,6 @@ const getPlugins = (env) => {
     plugins.push(new CleanWebpackPlugin(paths.appBuild, { root: process.cwd() }));
     // 解决IE低版本：https://github.com/zuojj/fedlab/issues/5
     plugins.push(...[
-      new UglifyJsPlugin({
-        test: /\.js($|\?)/i,
-        parallel: true,
-        uglifyOptions: {
-          compress: {
-            properties: false,
-            warnings: false,
-            // Disabled because of an issue with Uglify breaking seemingly valid code:
-            // https://github.com/facebookincubator/create-react-app/issues/2376
-            // Pending further investigation:
-            // https://github.com/mishoo/UglifyJS2/issues/2011
-            comparisons: false,
-            pure_funcs: ['console.log', 'console.dir'],
-          },
-          // 可能引起IE低版本不正常运行
-          mangle: false,
-          output: {
-            comments: false,
-            // Turned on because emoji and regex is not minified properly using default
-            // https://github.com/facebookincubator/create-react-app/issues/2488
-            ascii_only: true,
-            quote_keys: true,
-          },
-        },
-        sourceMap: false,
-      }),
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
         seed: { name: 'sed' },
@@ -157,7 +137,6 @@ const getPlugins = (env) => {
           });
           return manifestFile;
         },
-
       }),
     ]);
 
@@ -172,24 +151,17 @@ const getPlugins = (env) => {
   } else {
     plugins.push(new HtmlWebpackHarddiskPlugin());
     plugins.push(new AddExtraEntryFile({
-      dirs: [
-        join(paths.appSrc, '/mock/*.+(js|json)'),
-        join(paths.appSrc, '/views/**/**.html'),
-      ],
+      dirs: [join(paths.appSrc, '/mock/*.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
       extra: appConfig.extraDedenpencies || [],
       base: paths.appSrc,
     }));
     plugins.push(...[new optimize.OccurrenceOrderPlugin(), new HotModuleReplacementPlugin()]);
   }
   // other plugins
-  plugins.push(...[
-    new NamedModulesPlugin(),
-    new IgnorePlugin(/^\.\/locale$/, /moment$/, /\.json$/),
-  ]);
+  plugins.push(...[new NamedModulesPlugin(), new IgnorePlugin(/^\.\/locale$/, /moment$/, /\.json$/)]);
 
   return plugins;
 };
-
 
 /**
  * get config.module.rules
@@ -247,7 +219,6 @@ const getRules = (env) => {
           plugins: () => [
             require('postcss-flexbugs-fixes'), //eslint-disable-line
             autoprefixer({
-              browsers: ['>0%'],
               flexbox: 'no-2009',
             }),
             sprites({
@@ -316,44 +287,78 @@ const getRules = (env) => {
       enforce: 'post',
     });
   }
-
   return rules;
 };
 
-
-/**
- * get config
- * @param {String} env 'development' or 'production'
- */
-module.exports = (env) => {
-  const finalConfig = {
-    mode: env,
-    entry: getEntry(env, appConfig, paths),
-    output: getOutput(env),
-    module: {
-      rules: getRules(env),
-    },
-    resolve: {
-      // These are the reasonable defaults supported by the Node ecosystem.
-      // We also include JSX as a common component filename extension to support
-      // some tools, although we do not recommend using it, see:
-      // https://github.com/facebookincubator/create-react-app/issues/290
-      // `web` extension prefixes have been added for better support
-      // for React Native Web.
-      extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
-      alias,
-    },
-    devtool,
-    plugins: getPlugins(env),
-    // cache: true,
-    performance: {
-      hints: false,
-    },
-  };
-
-  if (env === 'production') {
-    finalConfig.optimization = {
-      minimize: false,
+const getOptimization = env =>
+  (env === 'development'
+    ? {
+      removeAvailableModules: false,
+      removeEmptyChunks: false,
+      splitChunks: false,
+      // extract webpack runtime
+      runtimeChunk: {
+        name: 'runtime',
+      },
+    }
+    : {
+      removeAvailableModules: true,
+      removeEmptyChunks: true,
+      minimize: true,
+      minimizer: [
+        // This is only used in production mode
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              properties: false,
+              // Disabled because of an issue with Terser breaking valid code:
+              // https://github.com/facebook/create-react-app/issues/5250
+              // Pending futher investigation:
+              // https://github.com/terser-js/terser/issues/120
+              warnings: false,
+              // Disabled because of an issue with Uglify breaking seemingly valid code:
+              // https://github.com/facebookincubator/create-react-app/issues/2376
+              // Pending further investigation:
+              // https://github.com/mishoo/UglifyJS2/issues/2011
+              comparisons: false,
+              pure_funcs: ['console.log', 'console.dir'],
+            },
+            // 可能引起IE低版本不正常运行
+            mangle: false,
+            output: {
+              comments: false,
+              // Turned on because emoji and regex is not minified properly using default
+              // https://github.com/facebookincubator/create-react-app/issues/2488
+              ascii_only: true,
+              quote_keys: true,
+            },
+          },
+          // Use multi-process parallel running to improve the build speed
+          // Default number of concurrent runs: os.cpus().length - 1
+          // Disabled on WSL (Windows Subsystem for Linux) due to an issue with Terser
+          // https://github.com/webpack-contrib/terser-webpack-plugin/issues/21
+          parallel: !isWsl,
+          // Enable file caching
+          cache: true,
+          sourceMap,
+        }),
+        // This is only used in production mode
+        // new OptimizeCSSAssetsPlugin({
+        //   cssProcessorOptions: {
+        //     parser: safePostCssParser,
+        //     map: sourceMap
+        //       ? {
+        //         // `inline: false` forces the sourcemap to be output into a
+        //         // separate file
+        //         inline: false,
+        //         // `annotation: true` appends the sourceMappingURL to the end of
+        //         // the css file, helping the browser find the sourcemap
+        //         annotation: true,
+        //       }
+        //       : false,
+        //   },
+        // }),
+      ],
       runtimeChunk: 'single', // 将runtime提出来便于缓存
       splitChunks: {
         chunks: 'all',
@@ -374,7 +379,52 @@ module.exports = (env) => {
           },
         },
       },
-    };
-  }
+    });
+
+/**
+ * get config
+ * @param {String} env 'development' or 'production'
+ */
+module.exports = (env) => {
+  const finalConfig = {
+    mode: env,
+    bail: env === 'production',
+    entry: getEntry(env, appConfig, paths),
+    output: getOutput(env),
+    module: {
+      rules: getRules(env),
+    },
+    resolve: {
+      // These are the reasonable defaults supported by the Node ecosystem.
+      // We also include JSX as a common component filename extension to support
+      // some tools, although we do not recommend using it, see:
+      // https://github.com/facebookincubator/create-react-app/issues/290
+      // `web` extension prefixes have been added for better support
+      // for React Native Web.
+      extensions: ['.js', '.web.js', '.mjs', '.json', '.web.jsx', '.jsx'],
+      alias,
+    },
+    devtool,
+    plugins: getPlugins(env),
+    // Some libraries import Node modules but don't use them in the browser.
+    // Tell Webpack to provide empty mocks for them so importing them works.
+    node: {
+      module: 'empty',
+      dgram: 'empty',
+      dns: 'mock',
+      fs: 'empty',
+      http2: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      child_process: 'empty',
+    },
+
+    optimization: getOptimization(env),
+    // cache: true,
+    performance: {
+      hints: false,
+    },
+  };
+
   return finalConfig;
 };
