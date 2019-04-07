@@ -120,7 +120,7 @@ const getPlugins = (env) => {
               }
             }
             if (/.js$/.test(item.name)) {
-              if (item.chunk && item.chunk.chunkReason) {
+              if ((item.chunk && item.chunk.chunkReason) || ['common', 'vendors', 'runtime'].some(i => item.name.split('.')[0] === i)) {
                 commonScripts[item.name] = item.path;
               } else {
                 scriptFiles[item.name] = item.path;
