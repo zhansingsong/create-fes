@@ -6,10 +6,10 @@ const fse = require('fs-extra');
 
 const base = new Base('tmpl');
 
-base.run((paths) => {
+base.run((paths, chalk) => {
   if (!fse.existsSync(join(paths.appBuild, 'tmpl'))) {
-    base.softExit(null, 0, ((chalk) => {
-      console.error(chalk.redBright(`please ensure ${chalk.greenBright('isTmpl')} is set to true first, and ${chalk.blueBright('npm run build')} to build tmpls for it!`));
+    base.softExit(null, 0, (() => {
+      console.error(chalk.redBright(`please ensure ${chalk.greenBright('build')} generated, and ${chalk.blueBright('npm run build')} to build tmpls for it!`));
     }));
   }
 

@@ -67,13 +67,12 @@ class Base {
     this.router = new Router();
     this.router.mapRoutes = [];
     this.views = views;
-    this.send = send;
     this.serve = serve;
     this.clearConsole = clearConsole;
   }
   softExit(msg, code = 1, customMsg) { // eslint-disable-line
     msg && console.error(chalk.bold.red(msg)); // eslint-disable-line
-    customMsg(chalk);
+    customMsg();
     process.exit(code);
   }
   run(runCallback) {
