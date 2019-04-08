@@ -5,7 +5,7 @@ const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
 
-const Base = require('./utils/base/Base');
+const Base = require('./utils/Base');
 const { join, parse } = require('path');
 const glob = require('glob');
 

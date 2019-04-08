@@ -1,4 +1,4 @@
-const Base = require('./utils/base/Base');
+const Base = require('./utils/Base');
 const { join, parse } = require('path');
 const glob = require('glob');
 const Twig = require('twig');
@@ -14,7 +14,7 @@ base.run((paths) => {
   }
 
   const mockFiles = glob.sync(join(paths.appSrc, 'mock/*.+(js|json)'));
-  base.app.use(base.views(join(paths.appNodeModules, 'fes-scripts', 'scripts', 'utils', 'base'), {
+  base.app.use(base.views(join(paths.appNodeModules, 'fes-scripts', 'scripts', 'utils', 'tmpl'), {
     map: {
       html: 'twig',
     },

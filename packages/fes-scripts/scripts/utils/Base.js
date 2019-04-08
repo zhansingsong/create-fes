@@ -10,13 +10,13 @@ const proxyMiddleware = require('http-proxy-middleware');
 const address = require('address');
 const qrcodeTerminal = require('qrcode-terminal');
 const c2k = require('koa2-connect');
-const paths = require('../paths');
-const clearConsole = require('../clearConsole');
+const paths = require('./paths');
+const clearConsole = require('./clearConsole');
 
 const appConfig = require(paths.appConfig); // eslint-disable-line
 const appname = require(paths.appPackageJson).name; // eslint-disable-line
-const openBrowser = require('../openBrowser');
-const choosePort = require('../choosePort');
+const openBrowser = require('./openBrowser');
+const choosePort = require('./choosePort');
 
 // const softExit = (msg, code = 1) => {
 //   msg && console.error(chalk.bold.red(msg)); // eslint-disable-line
