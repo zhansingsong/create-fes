@@ -7,7 +7,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-// const spawn = require('cross-spawn');
 
 module.exports = (appPath, appName, verbose, originalDirectory, template) => { // eslint-disable-line
   // fes-scripts
@@ -17,8 +16,6 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
   const appPackage = require(path.join(appPath, 'package.json')); // eslint-disable-line
   const useYarn = fs.existsSync(path.join(appPath, 'yarn.lock'));
 
-  console.log(appPath, appName, verbose, originalDirectory);
-  console.log(ownPackageName, ownPath, appPackage, useYarn);
   // Copy over some of the devDependencies
   appPackage.dependencies = appPackage.dependencies || {};
 
@@ -34,15 +31,6 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     path.join(appPath, 'package.json'),
     JSON.stringify(appPackage, null, 2)
   );
-
-  // 如果存在 README.md 将其重命名 README.old.md
-  // const readmeExists = fs.existsSync(path.join(appPath, 'README.md'));
-  // if (readmeExists) {
-  //   fs.renameSync(
-  //     path.join(appPath, 'README.md'),
-  //     path.join(appPath, 'README.old.md')
-  //   );
-  // }
 
   inquirer.prompt([{
     type: 'list',
@@ -93,7 +81,7 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     const displayedCommand = useYarn ? 'yarn' : 'npm';
 
     console.log();
-    console.log(`Success! Created ${appName} at ${appPath}`);
+    console.log(`Success! Created ${chalk.green(appName)} at ${chalk.underline(appPath)}`);
     console.log('Inside that directory, you can run several commands:');
     console.log();
     console.log(chalk.cyan(`  ${displayedCommand} start`));
@@ -101,26 +89,18 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     console.log();
     console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`));
     console.log('    Bundles the app into static files for production.');
+    console.log('    and views the app built by running the following commands.');
     console.log();
-    // console.log(chalk.cyan(`  ${displayedCommand} test`));
-    // console.log('    Starts the test runner.');
-    // console.log();
-    console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eject`));
-    console.log('    Removes this tool and copies build dependencies, configuration files');
-    console.log('    and scripts into the app directory. If you do this, you can’t go back!');
+    console.log(chalk.cyan(`    - ${displayedCommand} ${useYarn ? '' : 'run '}preview`));
+    console.log('        Previews the app built for production before publish.');
     console.log();
-    console.log('We suggest that you begin by typing:');
+    console.log(chalk.cyan(`    - ${displayedCommand} ${useYarn ? '' : 'run '}tmpl`));
+    console.log('        Previews templates generated to backend.');
+    console.log();
+    console.log('suggesting that you begin by typing:');
     console.log();
     console.log(chalk.cyan('  cd'), cdpath);
     console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
-    // if (readmeExists) {
-    //   console.log();
-    //   console.log(
-    //     chalk.yellow(
-    //       'You had a `README.md` file, we renamed it to `README.old.md`'
-    //     )
-    //   );
-    // }
     console.log();
     console.log('Happy hacking!');
   });
