@@ -1,7 +1,8 @@
 /* eslint-disable */
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
+  Author Tobias Koppers @sokra
+  version 0.5.5
 */
 var htmlMinifier = require("html-minifier");
 var attrParse = require("./lib/attributesParser");

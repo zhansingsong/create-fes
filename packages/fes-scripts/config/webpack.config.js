@@ -204,7 +204,6 @@ const getRules = (env) => {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders: 2,
-          minimize: true,
           sourceMap,
         },
       },
