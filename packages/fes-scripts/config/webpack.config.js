@@ -4,6 +4,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+
 const {
   IgnorePlugin,
   NamedModulesPlugin,
@@ -120,7 +122,10 @@ const getPlugins = (env) => {
               }
             }
             if (/.js$/.test(item.name)) {
-              if ((item.chunk && item.chunk.chunkReason) || ['common', 'vendors', 'runtime'].some(i => item.name.split('.')[0] === i)) {
+              if (
+                (item.chunk && item.chunk.chunkReason) ||
+                  ['common', 'vendors', 'runtime'].some(i => item.name.split('.')[0] === i)
+              ) {
                 commonScripts[item.name] = item.path;
               } else {
                 scriptFiles[item.name] = item.path;
@@ -137,6 +142,18 @@ const getPlugins = (env) => {
         },
       }),
     ]);
+    plugins.push(new WorkboxWebpackPlugin.GenerateSW(Object.assign({
+      clientsClaim: true,
+      exclude: [/\.map$/, /asset-manifest\.json$/],
+      navigateFallback: '/',
+      navigateFallbackBlacklist: [
+        // Exclude URLs starting with /_, as they're likely an API call
+        new RegExp('^/_'),
+        // Exclude URLs containing a dot, as they're likely a resource in
+        // public/ and not a SPA route
+        new RegExp('/[^/]+\\.[^/]+$'),
+      ],
+    }, appConfig.sw)));
 
     if (appConfig.build.isTmpl) {
       plugins.push(new BuildTmpl());
