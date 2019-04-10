@@ -1,5 +1,4 @@
 module.exports = {
-  isBabel: true,
   isHot: true,
   // 更多配置参考：https://github.com/chimurai/http-proxy-middleware
   proxy: {},
@@ -12,6 +11,9 @@ module.exports = {
   sw: {
     navigateFallback: '/index',
   },
+  // fork-ts-checker-webpack-plugin 配置设置。
+  // 详细配置参考：https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme
+  tsChecker: {},
   // 增加依赖文件，方便开发修改时，能自动编译
   // 相对于 'src' 目录
   // 支持 "**/*.js" 形式，更多参考 glob：https://github.com/isaacs/node-glob

@@ -1,7 +1,5 @@
 const path = require('path');
-const fs = require('fs-extra');
 const url = require('url');
-const f = require('fs');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
@@ -53,6 +51,8 @@ module.exports = {
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   appApi: resolveApp('src/api'),
+  appBabelrc: resolveApp('.babelrc'),
+  appTsConfig: resolveApp('tsconfig.json'),
   yarnLockFile: resolveApp('yarn.lock'),
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),

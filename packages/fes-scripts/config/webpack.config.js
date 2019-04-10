@@ -1,5 +1,6 @@
 // common plugins
 const isWsl = require('is-wsl');
+const fs = require('fs-extra');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -24,6 +25,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzer = require('webpack-bundle-analyzer');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BuildTmpl = require('./plugins/BuildTmpl');
 
 // utils
@@ -32,6 +34,9 @@ const getEntry = require('./utils/getEntry');
 const paths = require('../scripts/utils/paths');
 
 const { join, parse } = require('path');
+
+const useBabel = fs.existsSync(paths.appBabelrc);
+const useTypescript = fs.existsSync(paths.appTsConfig);
 
 const appConfig = require(join(process.cwd(), 'app.config.js')); //eslint-disable-line
 
@@ -142,18 +147,21 @@ const getPlugins = (env) => {
         },
       }),
     ]);
-    plugins.push(new WorkboxWebpackPlugin.GenerateSW(Object.assign({
-      clientsClaim: true,
-      exclude: [/\.map$/, /asset-manifest\.json$/],
-      navigateFallback: '/',
-      navigateFallbackBlacklist: [
-        // Exclude URLs starting with /_, as they're likely an API call
-        new RegExp('^/_'),
-        // Exclude URLs containing a dot, as they're likely a resource in
-        // public/ and not a SPA route
-        new RegExp('/[^/]+\\.[^/]+$'),
-      ],
-    }, appConfig.sw)));
+    plugins.push(new WorkboxWebpackPlugin.GenerateSW(Object.assign(
+      {
+        clientsClaim: true,
+        exclude: [/\.map$/, /asset-manifest\.json$/],
+        navigateFallback: '/',
+        navigateFallbackBlacklist: [
+          // Exclude URLs starting with /_, as they're likely an API call
+          new RegExp('^/_'),
+          // Exclude URLs containing a dot, as they're likely a resource in
+          // public/ and not a SPA route
+          new RegExp('/[^/]+\\.[^/]+$'),
+        ],
+      },
+      appConfig.sw
+    )));
 
     if (appConfig.build.isTmpl) {
       plugins.push(new BuildTmpl());
@@ -172,8 +180,23 @@ const getPlugins = (env) => {
     }));
     plugins.push(...[new optimize.OccurrenceOrderPlugin(), new HotModuleReplacementPlugin()]);
   }
+  if (useTypescript) {
+    plugins.push(new ForkTsCheckerWebpackPlugin(Object.assign(
+      {
+        async: env === 'development',
+        useTypescriptIncrementalApi: true,
+        checkSyntacticErrors: true,
+        tsconfig: paths.appTsConfig,
+        reportFiles: ['**/*.{ts,tsx}'],
+        watch: paths.appSrc,
+        silent: true,
+      },
+      appConfig.tsChecker
+    )));
+  }
   // other plugins
   plugins.push(...[new NamedModulesPlugin(), new IgnorePlugin(/^\.\/locale$/, /moment$/, /\.json$/)]);
+
 
   return plugins;
 };
@@ -193,7 +216,7 @@ const getRules = (env) => {
       },
     },
   ];
-  if (appConfig.isBabel) {
+  if (useBabel) {
     oneOf.push({
       test: /\.(js|mjs|jsx|ts|tsx)$/,
       include: paths.appSrc,
