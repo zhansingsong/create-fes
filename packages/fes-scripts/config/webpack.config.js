@@ -195,7 +195,7 @@ const getRules = (env) => {
   ];
   if (appConfig.isBabel) {
     oneOf.push({
-      test: /\.m?js$/,
+      test: /\.(js|mjs|jsx|ts|tsx)$/,
       include: paths.appSrc,
       loader: require.resolve('babel-loader'),
       options: {
