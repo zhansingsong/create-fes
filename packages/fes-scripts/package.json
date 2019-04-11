@@ -1,6 +1,6 @@
 {
   "name": "fes-scripts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a dependency of create-fes",
   "keywords": [
     "fes-scripts"
@@ -30,10 +30,10 @@
     "url": "https://github.com/zhansingsong/create-fes/issues"
   },
   "devDependencies": {
+    "node-sass": "^4.11.0",
     "prettier-eslint": "^8.8.1",
     "prettier-stylelint": "^0.4.2",
-    "spritesmith": "^3.3.1",
-    "node-sass": "^4.11.0"
+    "spritesmith": "^3.3.1"
   },
   "dependencies": {
     "address": "^1.0.3",
