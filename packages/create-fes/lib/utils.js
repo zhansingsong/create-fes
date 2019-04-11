@@ -41,6 +41,7 @@ function install(useYarn, dependencies, verbose, isOnline) {
       args = [
         'install',
         '--save',
+        '--production=false',
         '--save-exact',
         '--loglevel',
         'error',
