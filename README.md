@@ -1,6 +1,8 @@
 # CREATE-FES
 
-Set up a modern multiple pages by running one command for fes. inspired by [crete-react-app](https://github.com/facebook/create-react-app).
+![logo](./media/logo.png)
+
+Set up a modern multiple pages by running one command for fes. inspired by [create-react-app](https://github.com/facebook/create-react-app).
 
 ## install
 ```js
