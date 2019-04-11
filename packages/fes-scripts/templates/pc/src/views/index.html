@@ -1,16 +1,14 @@
 {% extends "./layout/layout.html" %}
-
-{% block header %}
-{{ name }}
-<img src="@/assets/puppy.jpg" alt="">
-<div style="background-image: url('${require(`@/assets/puppy.jpg`)}')">
-<img src="https://i.pinimg.com/564x/1a/8d/1c/1a8d1cd3cc6fc8c4ccae4f3f497d8fcb.jpg" alt="">
-<div class="icons">
-<i class="ant" style="-webkit-transform: scale(1);-moz-transform: scale(1);-ms-transform: scale(1);-o-transform: scale(1); transform: scale(1);"></i>...lovely bee
-<div></div>
+{% block main %}
+<div class="page">
+  <i class="page-bg iconfont icon-home"></i>
+  <div class="page-wp">
+    <h1 class="page-tt">{{ name }} </h1>
+    <p class="page-desc"></p>
+  </div>
 </div>
 <script>
-  var d={{ o|json_encode() }}
+  var data = {{ data | json_encode() }}
 </script>
-{% include './modules/show.html' %}
 {% endblock %}
+

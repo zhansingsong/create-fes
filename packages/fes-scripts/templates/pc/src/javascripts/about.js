@@ -7,17 +7,18 @@ function component() {
   return element;
 }
 let element = component();
-document.body.appendChild(element);
+const container = document.querySelector('.page-desc');
+container.appendChild(element);
 
 if (module.hot) {
   module.hot.accept();
   module.hot.dispose(() => {
-    document.body.removeChild(element);
+    container.removeChild(element);
   });
 
   module.hot.accept('./modules/a', () => {
-    document.body.removeChild(element);
+    container.removeChild(element);
     element = component();
-    document.body.appendChild(element);
+    container.appendChild(element);
   });
 }

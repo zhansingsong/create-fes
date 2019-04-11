@@ -1,11 +1,11 @@
 {% extends "./layout/layout.html" %}
-
-{% block left %}
-This is the left!!!
-{{ title1 }}
-{% endblock %}
-
-{% block right %}
-{{ title2 }}
-This is the right side!
+{% block main %}
+<div class="page">
+  <i class="page-bg iconfont icon-info"></i>
+  <div class="page-wp">
+    <h1 class="page-tt">{{ name }} </h1>
+    <p class="page-desc"></p>
+  </div>
+</div>
+{% include './modules/footer.html' %}
 {% endblock %}

@@ -6,9 +6,10 @@
 const glob = require('glob');
 const { join, parse } = require('path');
 
-const getChunks = (chunk, jsFilesName) => {
+const getChunks = (chunk, entryFiles) => {
+  const filesName = entryFiles.map(file => parse(file).name);
   const chunks = ['vendors', 'common', 'runtime'];
-  if (jsFilesName.indexOf(chunk) > -1) {
+  if (filesName.indexOf(chunk) > -1) {
     chunks.push(chunk);
   }
   return chunks;
@@ -17,7 +18,6 @@ const getChunks = (chunk, jsFilesName) => {
 module.exports = (env, paths) => {
   const viewFiles = glob.sync(join(paths.appSrc, 'views/*.html'), {});
   const jsFiles = glob.sync(join(paths.appSrc, 'javascripts/*.+(js)'), {});
-  const jsFilesName = jsFiles.map(file => parse(file).name);
   // html-webpack-plugin 配置
   const pageConfigs = [];
   viewFiles.forEach((templateFile) => {
@@ -27,7 +27,7 @@ module.exports = (env, paths) => {
       template: templateFile,
       // avoid FOUC to inject script head tag
       inject: true,
-      chunks: getChunks(metas.name, jsFilesName),
+      chunks: getChunks(metas.name, env === 'development' ? viewFiles : jsFiles),
       // excludeChunks: entryNameArr.filter(i => i !== metas.name),
     };
 

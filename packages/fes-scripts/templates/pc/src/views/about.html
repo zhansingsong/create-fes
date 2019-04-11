@@ -1,11 +1,14 @@
 {% extends "./layout/layout.html" %}
-
-{% block left %}
-This is the left!!!
-{{ title1 }}
-{% endblock %}
-
-{% block right %}
-{{ title2 }}
-This is the right side!
+{% block main %}
+<div class="page">
+  <i class="page-bg iconfont icon-about"></i>
+  <div class="page-wp">
+      <h1 class="page-tt">{{ name }} </h1>
+      <p class="page-desc"></p>
+    </div>
+</div>
+<script>
+  var name = {{ data | json_encode() }}
+</script>
+{% include './modules/footer.html' %}
 {% endblock %}

@@ -1,49 +1,91 @@
 @import "./base/reset";
 @import "./base/config";
 @import "./base/helper";
+@import "./lib/iconfont";
 @import "./base/imgs";
-@import "./modules/test";
+@import "./modules/footer";
 
-body {
-  margin: 0;
-
-  a {
-    text-decoration: none;
+html,
+body{
+  height: 100%;
+}
+html{
+  font-size: 1vw;
+}
+.header{
+  position: absolute;
+  width: 100%;
+  display: block;
+  z-index: 2;
+  text-align: center;
+  padding-top: 4rem;
+  height: 40rem;
+  box-sizing: border-box;
+  .icons{
+    top: 2rem;
   }
-
-  p {
-    background-color: rgb(192, 98, 36);
-    color: #0cf546;
-    font-weight: 800;
-    text-align: center;
+  .img{
+    width: 50%;
+    display: inline-block;
   }
-
-  div {
-    background-color: rgb(37, 241, 30);
-    color: rgb(100, 3, 8);
-    font-size: 18px;
+  .header-desc{
+    font-size: 3rem;
+    color: #808080;
+  }
+}
+.main{
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 20rem;
+  padding-bottom: 24rem;
+}
+.page{
+  position: relative;
+  min-height: 100%;
+  .page-bg{
+    position: absolute;
+    font-size: 16rem;
+    left: 50%;
+    color: #dddddd;
+    top: 50%;
+    transform: translate(-150%, -66%);
+  }
+  .page-wp{
+    position: absolute;
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -80%);
+  }
+  .page-tt{
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 0px 1px 1px;
+    color: #595959;
+  }
+  .page-desc{
+    font-size: 2rem;
+    color: #aaa;
   }
 }
 
 .icons {
-  @extend %icons;
-
-  position: relative;
+  position: absolute;
   overflow: hidden;
-  padding: 10px 40px;
-  background-color: #cbce08;
-
-  .ant {
+  padding: 1rem 2rem;
+  color: #aaa;
+  .bee {
     width: 64px;
     height: 64px;
     background-position: 0 0;
     background-repeat: no-repeat;
     float: left;
     transform: scale(1);
-    @extend %ant;
+    @extend %bee;
 
     &:hover {
-      @extend %ant-hover;
+      @extend %bee-hover;
 
       transform: scale(1.2);
     }

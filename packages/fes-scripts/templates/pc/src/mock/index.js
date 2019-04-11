@@ -1,6 +1,6 @@
 module.exports = {
-  name: 'singsong\'s home😁',
-  o: {
-    name: 1111
-  }
-}
+  name: 'fes-index-page',
+  data: {
+    name: 'fes',
+  },
+};

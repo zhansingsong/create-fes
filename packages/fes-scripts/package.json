@@ -32,7 +32,8 @@
   "devDependencies": {
     "prettier-eslint": "^8.8.1",
     "prettier-stylelint": "^0.4.2",
-    "spritesmith": "^3.3.1"
+    "spritesmith": "^3.3.1",
+    "node-sass": "^4.11.0"
   },
   "dependencies": {
     "address": "^1.0.3",
@@ -78,7 +79,6 @@
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "^0.5.0",
     "mockjs": "^1.0.1-beta3",
-    "node-sass": "^4.11.0",
     "opn": "^5.3.0",
     "postcss": "^7.0.14",
     "postcss-flexbugs-fixes": "^3.3.1",
