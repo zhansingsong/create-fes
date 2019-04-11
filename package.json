@@ -4,7 +4,8 @@
   "description": "Set up a modern multiple pages by running one command",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-fes": "FES_DEV=true node packages/create-fes/bin/createFes.js"
   },
   "lint-staged": {
     "*.js": [

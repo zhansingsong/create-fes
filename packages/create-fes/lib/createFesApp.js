@@ -78,7 +78,7 @@ function run(root, appName, version, verbose, originalDirectory, useYarn, useBab
 
         return install(useYarn, allDependencies, verbose, isOnline).then(() => packageName);
       })
-      .then((packageName) => { // eslint-disable-line
+      .then((packageName) => {// eslint-disable-line
         checkNodeVersion(packageName);
         setCaretRangeForRuntimeDeps(packageName);
 
@@ -132,7 +132,10 @@ function createApp(name, verbose, version, useBabel, useTypescript) {
   process.chdir(root);
 
   let useYarn = shouldUseYarn(); // eslint-disable-line
-  useYarn = false; // test
+  // as yarn is disable to install locale package，it is intetional to set to false for test.
+  if (process.env.FES_DEV) {
+    useYarn = false; // test
+  }
   if (!useYarn) {
     const npmInfo = checkNpmVersion();
     if (!npmInfo.hasMinNpm) {

@@ -11,7 +11,7 @@ const validateProjectName = require('validate-npm-package-name');
 const FES_SCRIPTS_INSTALL_PATH = '../packages/fes-scripts';
 
 function install(useYarn, dependencies, verbose, isOnline) {
-  if (FES_SCRIPTS_INSTALL_PATH) {
+  if (process.env.FES_DEV && FES_SCRIPTS_INSTALL_PATH) {
     dependencies = dependencies.map((dep) => { // eslint-disable-line
       if (dep.indexOf('fes-scripts') >= 0) {
         return FES_SCRIPTS_INSTALL_PATH;
