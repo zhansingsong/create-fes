@@ -42,10 +42,6 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
         value: 'pc',
       },
       {
-        name: 'h5',
-        value: 'h5',
-      },
-      {
         name: 'other custom template(<path-to-template>)?',
         value: 'other',
       }],

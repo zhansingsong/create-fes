@@ -46,7 +46,7 @@ module.exports = {
   // The sourceMap option is ignored, instead sourceMaps are automatically
   // enabled when webpack is configured to use them (via the devtool config option).
   dev: {
-    port: 3002,
+    port: 3000,
     // 如果bool，默认打开index，或其中某个页面。如果是字符串(如: '/home')
     // 就当成路径处理。如果路径不存在会回退到bool
     autoOpen: true,
