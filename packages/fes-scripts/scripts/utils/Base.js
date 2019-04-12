@@ -10,25 +10,21 @@ const proxyMiddleware = require('http-proxy-middleware');
 const address = require('address');
 const qrcodeTerminal = require('qrcode-terminal');
 const c2k = require('koa2-connect');
+
 const paths = require('./paths');
 const clearConsole = require('./clearConsole');
-
-const appConfig = require(paths.appConfig); // eslint-disable-line
-const appname = require(paths.appPackageJson).name; // eslint-disable-line
 const openBrowser = require('./openBrowser');
 const choosePort = require('./choosePort');
 
-// const softExit = (msg, code = 1) => {
-//   msg && console.error(chalk.bold.red(msg)); // eslint-disable-line
-//   process.exit(code);
-// };
+const appConfig = require(paths.appConfig); // eslint-disable-line
+const appname = require(paths.appPackageJson).name; // eslint-disable-line
 
 const isPlainObject = obj => Object(obj) === obj;
 // Object(obj) === obj && Object.prototype.toString.call(obj) === '[object Object]';
 
-const mockApi = async (ctx, next) => { // eslint-disable-line
+const mockApi = async (ctx, next) => {
   if (!ctx.path.includes('/static')) {
-    // avoid delaying loading static resources
+    // avoid loading static resources with delay
     const mockContext = {
       mock(path) {
         const url = join(paths.appSrc, 'api', path);
@@ -91,7 +87,7 @@ class Base {
         }
         this.port = p;
         this.app.on('error', (err, ctx) => console.error(`\n${chalk.bold.red('Error: ')} ${chalk.red(err)}\n`, ctx, '\n'));
-        // this.app.use(mockApi());
+        this.app.use(mockApi);
         runCallback(paths, chalk);
       })
       .catch((err) => {

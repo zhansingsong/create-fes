@@ -1,6 +1,6 @@
-const Base = require('./utils/Base');
 const { join, parse } = require('path');
 const glob = require('glob');
+const Base = require('./utils/Base');
 
 const base = new Base('preview');
 base.run((paths) => {
