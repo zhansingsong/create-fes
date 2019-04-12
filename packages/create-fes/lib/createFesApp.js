@@ -26,6 +26,10 @@ program
   .action((name) => {
     projectName = name;
   })
+  .option(
+    '--scripts-version <alternative-package>',
+    'use a non-standard version of fes-scripts'
+  )
   .option('-t, --typescript', 'use typescript')
   .option('-B, --no-babel', 'not use babel')
   .option('--verbose', 'print additional logs')
@@ -50,7 +54,7 @@ function run(root, appName, version, verbose, originalDirectory, useYarn, useBab
   let babelrc = {};
 
   if (useBabel || useTypescript) {
-    allDependencies.push('@babel/core', '@babel/preset-env');
+    allDependencies.push('@babel/core', '@babel/preset-env', 'babel-loader');
     babelrc = { presets: ['@babel/preset-env'] };
   }
   if (useTypescript) {

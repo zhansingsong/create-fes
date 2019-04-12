@@ -2,6 +2,9 @@ module.exports = {
   isHot: true,
   // 更多配置参考：https://github.com/chimurai/http-proxy-middleware
   proxy: {},
+  // babel-loader config
+  // 更多配置参考：https://github.com/babel/babel-loader
+  babelLoader: {},
   // 更多配置项参考：https://github.com/2createStudio/postcss-sprites
   spritesConfig: {
     // dpr: v => `${v / 48}rem`, 调整单位及dpr

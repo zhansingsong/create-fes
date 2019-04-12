@@ -11,6 +11,7 @@ const validateProjectName = require('validate-npm-package-name');
 const FES_SCRIPTS_INSTALL_PATH = '../packages/fes-scripts';
 
 function install(useYarn, dependencies, verbose, isOnline) {
+  // for dev test
   if (process.env.FES_DEV && FES_SCRIPTS_INSTALL_PATH) {
     dependencies = dependencies.map((dep) => { // eslint-disable-line
       if (dep.indexOf('fes-scripts') >= 0) {
@@ -25,8 +26,7 @@ function install(useYarn, dependencies, verbose, isOnline) {
     let args;
     if (useYarn) {
       command = 'yarnpkg';
-      // args = ['add', '--exact'];
-      args = ['add', '--production=false'];
+      args = ['add', '--exact'];
       if (!isOnline) {
         args.push('--offline');
       }
