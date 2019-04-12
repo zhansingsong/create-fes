@@ -53,7 +53,11 @@ const mockApi = async (ctx, next) => { // eslint-disable-line
         } catch (error) {
           console.log(`${chalk.bold.red('Error: ')}`, error);
         }
-        console.log(`${chalk.black.bgYellow('MOCK-APIs')}   ${chalk.bold.green(ctx.method)}  ${chalk.gray('--->')}  ${chalk.dim(ctx.url)}`);
+        console.log(
+          `${chalk.black.bgYellow('MOCK-APIs')}   ${chalk.bold.green(ctx.method)}  ${chalk.gray(
+            '--->'
+          )}  ${chalk.dim(ctx.url)}`
+        );
       }
     }
   }
@@ -70,11 +74,13 @@ class Base {
     this.serve = serve;
     this.clearConsole = clearConsole;
   }
+
   softExit(msg, code = 1, customMsg) { // eslint-disable-line
     msg && console.error(chalk.bold.red(msg)); // eslint-disable-line
     customMsg();
     process.exit(code);
   }
+
   run(runCallback) {
     const DEFAULT_PORT = parseInt(process.env.PORT, 10) || this.config.port;
     const HOST = process.env.HOST || '0.0.0.0';
@@ -84,8 +90,7 @@ class Base {
           return;
         }
         this.port = p;
-        this.app.on('error', (err, ctx) =>
-          console.error(`\n${chalk.bold.red('Error: ')} ${chalk.red(err)}\n`, ctx, '\n'));
+        this.app.on('error', (err, ctx) => console.error(`\n${chalk.bold.red('Error: ')} ${chalk.red(err)}\n`, ctx, '\n'));
         // this.app.use(mockApi());
         runCallback(paths, chalk);
       })
@@ -119,7 +124,7 @@ class Base {
      * @param {Object} routerConfig
      * @return {Object} newRouterConfig
      */
-    const validateRouterConfig = (routerConfig, root) => {// eslint-disable-line
+    const validateRouterConfig = (routerConfig, root) => { // eslint-disable-line
       if (!isPlainObject(routerConfig)) {
         this.softExit('\nTypeError: routerConfig expected is a Object.');
       }
@@ -149,7 +154,6 @@ class Base {
     };
 
     const generateRoutes = (config) => {
-      // eslint-disable-line
       config.forEach(({ method, path, middleware }) => {
         this.router[method](path, middleware);
       });

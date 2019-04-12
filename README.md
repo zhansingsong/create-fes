@@ -2,7 +2,7 @@
 
 ![logo](./media/logo.png)
 
-Set up a modern multiple pages by running one command. inspired by [create-react-app](https://github.com/facebook/create-react-app).
+Set up a modern multiple-page app by running one command. inspired by [create-react-app](https://github.com/facebook/create-react-app).
 
 ## install
 ```js
@@ -32,6 +32,12 @@ create-fes example -t
 // or
 create-fes example --typescript
 ```
+- `--scripts-version <alternative-package>` indicates to use a non-standard version of fes-scripts.
+
+```js
+create-fes example --scripts-version 1.0.x
+```
+
 - `-h, --help` indicates to get help info.
 
 ```js

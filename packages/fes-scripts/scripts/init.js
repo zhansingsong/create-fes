@@ -21,7 +21,7 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
 
   // Setup the script rules
   appPackage.scripts = {
-    start: 'fes-scripts start',
+    start: `${process.env.FES_DEV ? 'FES_DEV=true' : ''} fes-scripts start`,
     build: 'fes-scripts build',
     preview: 'fes-scripts preview',
     tmpl: 'fes-scripts tmpl',

@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/zhansingsong/create-fes#readme",
   "devDependencies": {
-    "eslint": "^5.15.1",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "husky": "^1.3.1",

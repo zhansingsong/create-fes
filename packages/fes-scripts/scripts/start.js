@@ -4,10 +4,10 @@ const c2k = require('koa2-connect');
 const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
-
-const Base = require('./utils/Base');
 const { join, parse } = require('path');
 const glob = require('glob');
+const Base = require('./utils/Base');
+
 
 const base = new Base('dev');
 base.run((paths, chalk) => {
@@ -30,7 +30,10 @@ base.run((paths, chalk) => {
     });
   };
   base.createRouter(base.appConfig.routerConfig || getDefaultRouterConfig(), viewsTemp, true);
+  // app dir
   base.app.use(base.serve(paths.appDirectory));
+  // public
+  base.app.use(base.serve(paths.appPublic));
 
   const dev = devMiddleware(compiler, {
     // lazy: true,
@@ -40,7 +43,6 @@ base.run((paths, chalk) => {
       colors: true,
     },
   });
-
   // webpack-dev-middleware
   base.app.use(c2k(dev));
 
