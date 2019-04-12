@@ -18,13 +18,14 @@ module.exports = (env, appConfig, paths) => {
   ];
 
   if (env === 'development' && appConfig.isHot) {
-    commonChunks.push(join(
-      paths.appNodeModules,
-      'fes-scripts',
-      'node_modules',
-      'webpack-hot-middleware',
-      'client?path=/__webpack_hmr&reload=true',
-    ));
+    // commonChunks.push(join(
+    //   paths.appNodeModules,
+    //   'fes-scripts',
+    //   'node_modules',
+    //   'webpack-hot-middleware',
+    //   'client?path=/__webpack_hmr&reload=true',
+    // ));
+    commonChunks.push('webpack-hot-middleware/client?path=/__webpack_hmr&reload=true');
   }
 
   jsFiles.forEach((f) => {
