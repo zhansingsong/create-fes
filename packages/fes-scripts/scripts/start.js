@@ -15,10 +15,9 @@ base.run((paths, chalk) => {
   const compiler = webpack(config);
   // paths
   const viewsTemp = join(paths.appNodeModules, 'fes-scripts', '.temp', 'views');
-  const views = join(paths.appSrc, 'views/*.html');
 
   const getDefaultRouterConfig = () => {
-    const viewsFiles = glob.sync(views);
+    const viewsFiles = glob.sync(paths.appViews);
     viewsFiles.map((file) => {
       const metas = parse(file);
       const path = `/${metas.name}`;

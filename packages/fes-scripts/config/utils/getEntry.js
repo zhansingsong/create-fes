@@ -7,8 +7,8 @@ const glob = require('glob');
 const { join, parse, resolve } = require('path');
 
 module.exports = (env, appConfig, paths) => {
-  const viewFiles = glob.sync(join(paths.appSrc, 'views/*.html'), {});
-  const jsFiles = glob.sync(join(paths.appSrc, 'javascripts/*.+(js)'), {});
+  const viewFiles = glob.sync(paths.appViews, {});
+  const jsFiles = glob.sync(paths.appJsFiles, {});
 
   // 处理 entry 配置项
   const entry = {};

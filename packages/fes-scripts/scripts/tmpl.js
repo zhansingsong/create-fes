@@ -13,7 +13,7 @@ base.run((paths, chalk) => {
     }));
   }
 
-  const mockFiles = glob.sync(join(paths.appSrc, 'mock/*.+(js|json)'));
+  const mockFiles = glob.sync(paths.appMocks);
   base.app.use(base.views(join(paths.appNodeModules, 'fes-scripts', 'scripts', 'utils', 'tmpl'), {
     map: {
       html: 'twig',

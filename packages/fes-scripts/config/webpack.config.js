@@ -38,7 +38,7 @@ const paths = require('../scripts/utils/paths');
 const useBabel = fs.existsSync(paths.appBabelrc);
 const useTypescript = fs.existsSync(paths.appTsConfig);
 
-const appConfig = require(join(process.cwd(), 'app.config.js')); //eslint-disable-line
+const appConfig = require(paths.appConfig); //eslint-disable-line
 
 const alias = {
   // Support React Native Web

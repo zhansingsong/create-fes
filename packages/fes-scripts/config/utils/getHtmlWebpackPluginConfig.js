@@ -16,8 +16,8 @@ const getChunks = (chunk, entryFiles) => {
 };
 
 module.exports = (env, paths) => {
-  const viewFiles = glob.sync(join(paths.appSrc, 'views/*.html'), {});
-  const jsFiles = glob.sync(join(paths.appSrc, 'javascripts/*.+(js)'), {});
+  const viewFiles = glob.sync(paths.appViews, {});
+  const jsFiles = glob.sync(paths.appJsFiles, {});
   // html-webpack-plugin 配置
   const pageConfigs = [];
   viewFiles.forEach((templateFile) => {
