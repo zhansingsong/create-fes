@@ -7,6 +7,19 @@
   <link rel="icon" href="/favicon.ico?v=1" type="image/x-icon">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fes</title>
+  <script>
+    const MAX_WIDTH = 1800;
+    let fontSize;
+    const fitCB = () => {
+      if(window.innerWidth > MAX_WIDTH){
+        fontSize = '180px';
+      } else {
+        fontSize = '10vw';
+      }
+      document.documentElement.style.fontSize = fontSize;
+    }
+    window.addEventListener('size', fitCB, false);
+  </script>
 </head>
 
 <body>
