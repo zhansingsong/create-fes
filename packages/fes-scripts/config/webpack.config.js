@@ -317,7 +317,7 @@ const getRules = (env) => {
       oneOf,
     },
   ];
-  if (env === 'produnction') {
+  if (appConfig.build.IE8 && env === 'produnction') {
     rules.push({
       test: /\.m?js$/,
       include: paths.appSrc,

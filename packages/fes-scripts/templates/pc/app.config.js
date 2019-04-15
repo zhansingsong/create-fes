@@ -53,6 +53,7 @@ module.exports = {
     qrcode: true,
   },
   build: {
+    IE8: false,
     mode: 'multi', // 'single', 'multi',
     publicPath: '/',
     outputhPath: {
