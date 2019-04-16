@@ -91,9 +91,8 @@ BuildTmpl.prototype.apply = function (compiler) {
   }
 
   compiler.hooks.afterEmit.tapAsync('BuildTmpl', (compilation, callback) => {
-    // console.log(compilation);
     const manifest = require(join(process.cwd(), 'build', 'asset-manifest.json')); // eslint-disable-line
-    const media = require(join(process.cwd(), 'node_modules', 'fes-scripts', '.temp', 'media.json')); // eslint-disable-line
+    const media = this.options.sharedData.mediaSource || {};
     const entry = getEntry(manifest);
     const files = glob.sync(join(process.cwd(), 'src/views/**/**.html'), {});
     files.forEach((f) => {

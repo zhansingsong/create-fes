@@ -19,8 +19,8 @@ function randomIdent() {
 }
 
 function getLoaderConfig(context) {
-	var query = loaderUtils.getOptions(context) || {};
-	var configKey = query.config || 'htmlLoader';
+  var query = loaderUtils.getOptions(context) || {};
+  var configKey = query.config || 'htmlLoader';
 	var config = context.options && context.options.hasOwnProperty(configKey) ? context.options[configKey] : {};
 
 	delete query.config;
@@ -31,7 +31,8 @@ function getLoaderConfig(context) {
 module.exports = function(content) {
   const self = this;
 	this.cacheable && this.cacheable();
-	var config = getLoaderConfig(this);
+  var config = getLoaderConfig(this);
+  console.log(config.sharedData);
 	var attributes = ["img:src"];
 	if(config.attrs !== undefined) {
 		if(typeof config.attrs === "string")
@@ -162,9 +163,11 @@ module.exports = function(content) {
 			urlToRequest = loaderUtils.urlToRequest(data[match], root);
     }
     // 缓存media资源
-    mediaSource.push(...Object.values(data));
-    mediaSource = [...new Set(mediaSource)];
-    fes.outputFileSync(path.join(__dirname, '..', '..', '..', '.temp', 'media.json'),  JSON.stringify(mediaSource));
+    if(config.sharedData){
+      mediaSource.push(...Object.values(data));
+      mediaSource = [...new Set(mediaSource)];
+      config.sharedData.mediaSource = mediaSource;
+    }
 		return '" + require(' + JSON.stringify(urlToRequest) + ') + "';
   }) + ";";
   return result;

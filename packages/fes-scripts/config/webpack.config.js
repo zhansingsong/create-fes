@@ -34,6 +34,9 @@ const outputPathFn = require('./utils/outputPath');
 const getEntry = require('./utils/getEntry');
 const paths = require('../scripts/utils/paths');
 
+// share data
+const sharedData = {};
+
 
 const useBabel = fs.existsSync(paths.appBabelrc);
 const useTypescript = fs.existsSync(paths.appTsConfig);
@@ -164,7 +167,7 @@ const getPlugins = (env) => {
     )));
 
     if (appConfig.build.isTmpl) {
-      plugins.push(new BuildTmpl());
+      plugins.push(new BuildTmpl({ sharedData }));
     }
     /* eslint no-extra-boolean-cast: [0] */
     if (!!appConfig.build.report) {
@@ -294,6 +297,7 @@ const getRules = (env) => {
         options: {
           interpolate: 'require',
           attrs: ['img:src', 'img:data-src', 'img:data-original'],
+          sharedData: env === 'development' ? null : sharedData,
         },
       },
       { loader: require.resolve('./loaders/twigLoader.js'), options: {} },
