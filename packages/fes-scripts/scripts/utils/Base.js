@@ -49,11 +49,7 @@ const mockApi = async (ctx, next) => {
         } catch (error) {
           console.log(`${chalk.bold.red('Error: ')}`, error);
         }
-        console.log(
-          `${chalk.black.bgYellow('MOCK-APIs')}   ${chalk.bold.green(ctx.method)}  ${chalk.gray(
-            '--->'
-          )}  ${chalk.dim(ctx.url)}`
-        );
+        console.log(`${chalk.black.bgYellow('MOCK-APIs')}   ${chalk.bold.green(ctx.method)}  ${chalk.gray('--->')}  ${chalk.dim(ctx.url)}`);
       }
     }
   }
@@ -61,6 +57,7 @@ const mockApi = async (ctx, next) => {
 };
 class Base {
   constructor(mode) {
+    this.mode = mode;
     this.appConfig = appConfig;
     this.config = appConfig[mode];
     this.app = new Koa();
@@ -140,8 +137,12 @@ class Base {
         const { middleware } = route;
         if (typeof middleware === 'string') {
           route.middleware = async (ctx) => { // eslint-disable-line
-            // 这里需要对文件做一些处理，统一输入
-            await send(ctx, normolMiddleware(middleware), { root });
+            if (this.mode === 'dev') {
+              ctx.body = global.__fes_bind_views_data__[middleware]; // eslint-disable-line
+            } else {
+              // 这里需要对文件做一些处理，统一输入
+              await send(ctx, normolMiddleware(middleware), { root });
+            }
           };
         }
         return route;
@@ -170,6 +171,7 @@ class Base {
       console.log(error);
     }
     generateRoutes(validateRouterConfig(routerConfig, root));
+
     isIndex && this.router.redirect('/', this.router.mapRoutes[0]); // eslint-disable-line
     // invoke
     this.app.use(this.router.routes()).use(this.router.allowedMethods());

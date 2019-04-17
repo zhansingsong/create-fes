@@ -4,7 +4,7 @@ const c2k = require('koa2-connect');
 const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
-const { join, parse } = require('path');
+const { parse } = require('path');
 const glob = require('glob');
 const Base = require('./utils/Base');
 
@@ -13,9 +13,6 @@ const base = new Base('dev');
 base.run((paths, chalk) => {
   const config = require('./utils/getConfig')('development', paths); // eslint-disable-line
   const compiler = webpack(config);
-  // paths
-  const viewsTemp = join(paths.appNodeModules, 'fes-scripts', '.temp', 'views');
-
   const getDefaultRouterConfig = () => {
     const viewsFiles = glob.sync(paths.appViews);
     viewsFiles.map((file) => {
@@ -28,7 +25,7 @@ base.run((paths, chalk) => {
       };
     });
   };
-  base.createRouter(base.appConfig.routerConfig || getDefaultRouterConfig(), viewsTemp, true);
+  base.createRouter(base.appConfig.routerConfig || getDefaultRouterConfig(), '', true);
   // app dir
   base.app.use(base.serve(paths.appDirectory));
   // public
@@ -67,7 +64,7 @@ base.run((paths, chalk) => {
   let limitExecution = 0;
   let doneCallbackTimer;
   const doneCallback = () => {
-    // clear staff
+    // clear stuff
     if (limitExecution === 2) {
       doneCallbackTimer && clearTimeout(doneCallbackTimer); // eslint-disable-line
       limitExecution = void (0); // eslint-disable-line

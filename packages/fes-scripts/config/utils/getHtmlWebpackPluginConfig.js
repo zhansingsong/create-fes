@@ -4,7 +4,7 @@
  */
 
 const glob = require('glob');
-const { join, parse } = require('path');
+const { parse } = require('path');
 
 const getChunks = (chunk, entryFiles) => {
   const filesName = entryFiles.map(file => parse(file).name);
@@ -31,24 +31,19 @@ module.exports = (env, paths) => {
       // excludeChunks: entryNameArr.filter(i => i !== metas.name),
     };
 
-    if (env === 'development') {
-      config.filename = join(paths.appNodeModules, 'fes-scripts', '.temp', 'views', `${metas.name}.html`);
-      config.alwaysWriteToDisk = true;
-    } else {
-      config.filename = `${metas.name}.html`;
-      config.minify = {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      };
-    }
+    config.filename = `${metas.name}.html`;
+    config.minify = {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJS: true,
+      minifyCSS: true,
+      minifyURLs: true,
+    };
     pageConfigs.push({ ...config });
   });
   return pageConfigs;

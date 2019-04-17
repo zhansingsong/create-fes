@@ -32,7 +32,6 @@ module.exports = function(content) {
   const self = this;
 	this.cacheable && this.cacheable();
   var config = getLoaderConfig(this);
-  console.log(config.sharedData);
 	var attributes = ["img:src"];
 	if(config.attrs !== undefined) {
 		if(typeof config.attrs === "string")

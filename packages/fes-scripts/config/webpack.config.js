@@ -25,6 +25,7 @@ const sprites = require('./plugins/sprites');
 
 // dev plugins
 const AddExtraEntryFile = require('./plugins/AddExtraEntryFile');
+const BindViewsData = require('./plugins/BindViewsData');
 
 // build plugins
 const BuildTmpl = require('./plugins/BuildTmpl');
@@ -176,6 +177,7 @@ const getPlugins = (env) => {
     }
   } else {
     plugins.push(new HtmlWebpackHarddiskPlugin());
+    plugins.push(new BindViewsData());
     plugins.push(new AddExtraEntryFile({
       dirs: [join(paths.appSrc, '/mock/*.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
       extra: appConfig.extraDedenpencies || [],
