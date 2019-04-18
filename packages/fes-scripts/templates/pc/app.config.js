@@ -31,8 +31,10 @@ module.exports = {
     '/fes/aboutme': 'about.html',
     '/fes/info': 'info.html',
   },
-  devtool: 'cheap-module-source-map',
+  // css-modules: https://github.com/css-modules/postcss-modules
+  cssModules: {},
   sourceMap: true,
+  devtool: 'cheap-module-source-map',
   // devtool会导致recompile变慢，特别是source-map
   // devtool: false,
   // devtool: 'eval',

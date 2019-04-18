@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+// const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const {
@@ -18,7 +18,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzer = require('webpack-bundle-analyzer');
-const { join, parse } = require('path');
+const { join, parse, resolve } = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getHtmlWebpackPluginConfigs = require('./utils/getHtmlWebpackPluginConfig');
 const sprites = require('./plugins/sprites');
@@ -176,10 +176,10 @@ const getPlugins = (env) => {
       plugins.push(new BundleAnalyzer.BundleAnalyzerPlugin(report));
     }
   } else {
-    plugins.push(new HtmlWebpackHarddiskPlugin());
+    // plugins.push(new HtmlWebpackHarddiskPlugin());
     plugins.push(new BindViewsData());
     plugins.push(new AddExtraEntryFile({
-      dirs: [join(paths.appSrc, '/mock/*.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
+      dirs: [join(paths.appSrc, '/mock/**/**.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
       extra: appConfig.extraDedenpencies || [],
       base: paths.appSrc,
     }));
@@ -237,6 +237,52 @@ const getRules = (env) => {
     }, appConfig.babelLoader));
   }
 
+  const postcssPlugins = () => {
+    const finalPlugins = [];
+    if (appConfig.cssModules) {
+      finalPlugins.push(require('postcss-modules')(Object.assign({ //eslint-disable-line
+        scopeBehaviour: 'global',
+        // globalModulePaths: [resolve(process.cwd(), 'src/styles/style.scss'), resolve(process.cwd(), 'src/styles/lib/_iconfont.scss')],
+        getJSON: (cssFileName, json) => {
+          const regex = /[_]?([-_a-zA-Z0-9]*)\.(scss|sass|less|css|styl)/;
+          let match = null;
+          let temp = {};
+          try {
+            match = regex.exec(cssFileName);
+          } catch (error) {};  // eslint-disable-line
+          if (match) {
+            temp[match[1]] = json;
+          } else {
+            temp = json;
+          }
+          const jsonFileName = resolve(process.cwd(), 'src/mock/common/cssmodules.json');
+          fs.ensureFileSync(jsonFileName);
+          global._css_modules_ = global._css_modules_ || {}; // eslint-disable-line
+          global._css_modules_ = { ...global._css_modules_, ...temp }; // eslint-disable-line
+          fs.writeFileSync(jsonFileName, JSON.stringify(global._css_modules_)); // eslint-disable-line
+        },
+      }, appConfig.cssModules)));
+      finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
+      finalPlugins.push(autoprefixer({
+        flexbox: 'no-2009',
+      }));
+      finalPlugins.push(sprites({
+        ...{
+          alias,
+          spritePath: join(paths.appSrc, 'assets/'),
+          filterBy: (image) => {
+            if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
+              return Promise.resolve();
+            }
+            return Promise.reject();
+          },
+        },
+        ...appConfig.spritesConfig,
+      }));
+    }
+    return finalPlugins;
+  };
+
   // scss
   oneOf.push({
     test: /\.scss$/,
@@ -250,6 +296,8 @@ const getRules = (env) => {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders: 2,
+          // modules: appConfig.cssModules,
+          // localIdentName: '[local]__[hash:base64:5]',
           sourceMap,
         },
       },
@@ -259,25 +307,7 @@ const getRules = (env) => {
           // Necessary for external CSS imports to work
           // https://github.com/facebookincubator/create-react-app/issues/2677
           ident: 'postcss',
-          plugins: () => [
-            require('postcss-flexbugs-fixes'), //eslint-disable-line
-            autoprefixer({
-              flexbox: 'no-2009',
-            }),
-            sprites({
-              ...{
-                alias,
-                spritePath: join(paths.appSrc, 'assets/'),
-                filterBy: (image) => {
-                  if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject();
-                },
-              },
-              ...appConfig.spritesConfig,
-            }),
-          ],
+          plugins: postcssPlugins,
           sourceMap,
         },
       },

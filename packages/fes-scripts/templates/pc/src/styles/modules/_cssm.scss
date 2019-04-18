@@ -1,0 +1,15 @@
+:local(.cnt){
+  position: fixed;
+  left: 0;
+  top: 30%;
+  background-color: rgba(54, 54, 54, 0.486);
+  box-shadow: 1px 1px 0.2rem rgba(2, 2, 2, 0.568);
+  :local(.tt){
+    font-size: 1rem;
+    color: rgb(133, 233, 150);
+  }
+  :local(.des){
+    background-color: rgb(19, 19, 19);
+    color: #fff;
+  }
+}
