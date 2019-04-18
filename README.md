@@ -4,6 +4,8 @@ fes(front end scaffold)，发音：/fes/。它是基于 webpack4、koa2 搭建�
 
 **create-fes** 是一个构建多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
 
+[English Readme](./README_EN.md)
+
 ## 安装
 ```js
 npm install create-fes -g
@@ -46,7 +48,6 @@ create-fes example --help
 ```
 
 
-
 ## structure
 
 ```css
@@ -79,7 +80,7 @@ create-fes example --help
 └── views --->twig源代码文件夹: 根据该目录下直接twig文件来生成页面，即页面需要与twig文件保持一致
 ```
 
-## 配置
+### 配置
 
 `app.config.js`提供如下配置项：
 
@@ -132,7 +133,7 @@ create-fes example --help
   - autoOpen：是否浏览器自动打开，默认为`true`
   - qrcode：是否生成预览二维码，默认为`true`
 
-## usage
+### usage
 
 - 安装依赖包
 
@@ -268,3 +269,8 @@ scss：绝对路径引用
 - [CSS modules break build if used with `~`](https://github.com/webpack-contrib/css-loader/issues/589#issuecomment-365942989)
 - [@imports not resolving when css-modules enabled ](https://github.com/webpack-contrib/css-loader/issues/436)
 - [CSS Modules & Sass in Create React App](https://medium.com/@kswanie21/css-modules-sass-in-create-react-app-37c3152de9)
+
+## TODO-LIST
+
+- 支持其他常用的模板引擎，同时增加对应的模板。
+- 完善文档，增加 examples

@@ -4,6 +4,8 @@
 
 Set up a modern multiple-page app by running one command. inspired by [create-react-app](https://github.com/facebook/create-react-app).
 
+[中文文档](./README.md)
+
 ## install
 ```js
 npm install create-fes -g
