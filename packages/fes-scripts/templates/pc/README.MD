@@ -38,19 +38,19 @@ fes(front end scaffold)，发音：/fes/。它是基于 webpack4、koa2 搭建�
 
 `app.config.js`提供如下配置项：
 
-- babelLoader：配置babel-loader，默认为`{}`。[详细配置参考](https://github.com/2createStudio/postcss-sprites)。
+- babelLoader：配置babel-loader，默认为`{}`。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
 
 - isHot：是否开启热加载，默认为`true`。只在开发模式下有效。
-- cssModules：配置css modules，默认为`{}`。[详细配置参考](https://github.com/css-modules/postcss-modules)。
-- sw：service worker 配置，默认为`{}`。[详细配置参考](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)。
-- proxy：配置 proxy。[更多参考](https://github.com/chimurai/http-proxy-middleware)。
-- provide：自动加载模块配置，默认为`{}`。[更多参考](https://webpack.js.org/plugins/provide-plugin/)
-- spritesConfig：配置 sprites。[更多参考](https://github.com/2createStudio/postcss-sprites)。
-- extraDedenpencies：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[更多参考 glob](https://github.com/isaacs/node-glob)。
-- tsChecker：fork-ts-checker-webpack-plugin 配置设置，默认为`{}`。[详细配置参考](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)。
+- cssModules：配置css modules，默认为`{}`。[详细配置参考……](https://github.com/css-modules/postcss-modules)
+- sw：service worker 配置，默认为`{}`。[详细配置参考……](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
+- proxy：配置 proxy。[详细配置参考……](https://github.com/chimurai/http-proxy-middleware)
+- provide：自动加载模块配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
+- spritesConfig：配置 sprites。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
+- extraDedenpencies：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
+- tsChecker：fork-ts-checker-webpack-plugin 配置设置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
 - alias：alias配置项。
 - sourceMap：是否开启 sourceMap，默认为`true`。
-- devtool：配置 devtool。[更多参考](https://webpack.js.org/configuration/devtool/#root)
+- devtool：配置 devtool。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
 - routerConfig：路由配置项，可以自定义页面的路由映射。
   ```js
   // 重新定义不会启动默认配置。即需要指定项目所有的页面路由
