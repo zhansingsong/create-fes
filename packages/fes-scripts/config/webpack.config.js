@@ -288,10 +288,18 @@ const getRules = (env) => {
     test: /\.scss$/,
     use: [
       // solve css-file hot load
-      require.resolve('css-hot-loader'),
+      // require.resolve('css-hot-loader'),
       // style-loader support hmr but MiniCssExtractPlugin not
       // however, style-loader leading to FOUC
-      MiniCssExtractPlugin.loader,
+      {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+          // only enable hot in development
+          hmr: env === 'development',
+          // if hmr does not work, this is a forceful method.
+          reloadAll: true,
+        },
+      },
       {
         loader: require.resolve('css-loader'),
         options: {

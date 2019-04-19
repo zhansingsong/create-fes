@@ -1,4 +1,5 @@
 import a from './modules/a';
+import '../styles/modules/_cssm.scss';
 
 function component() {
   const element = document.createElement('div');
