@@ -27,7 +27,7 @@ function getMockData(name, map, ctx, commonMap) {
       const item = require(finalMap[key]); // eslint-disable-line
       result = Object.assign(result, item);
       // 不能去掉，因为loader需要对其进行依赖，即使dealing with it by AddDependency plugin
-      ctx.addDependency(finalMap[key]);
+      // ctx.addDependency(finalMap[key]);
     });
   }
   return result;
@@ -35,6 +35,7 @@ function getMockData(name, map, ctx, commonMap) {
 
 
 function loader(source) {
+  this.addContextDependency(join(process.cwd(), 'src', 'views'));
   Twig.cache(false);
   this.cacheable && this.cacheable();  // eslint-disable-line
   const currentFilePath = require.resolve(this.resource);
