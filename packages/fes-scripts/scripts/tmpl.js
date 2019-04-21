@@ -1,8 +1,8 @@
-const Base = require('./utils/Base');
 const { join, parse } = require('path');
 const glob = require('glob');
 const Twig = require('twig');
 const fse = require('fs-extra');
+const Base = require('./utils/Base');
 
 const base = new Base('tmpl');
 
