@@ -10,7 +10,9 @@ module.exports = {
     // dpr: v => `${v / 48}rem`, 调整单位及dpr
   },
   // 更多配置项参考：https://github.com/webpack-contrib/url-loader
-  urlLoader: {},
+  urlLoader: {
+    limit: 1000,
+  },
   // service worker 配置
   // 详细配置参考：https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
   sw: {
