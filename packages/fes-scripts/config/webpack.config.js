@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const {
@@ -37,7 +36,6 @@ const paths = require('../scripts/utils/paths');
 
 // share data
 const sharedData = {};
-
 
 const useBabel = fs.existsSync(paths.appBabelrc);
 const useTypescript = fs.existsSync(paths.appTsConfig);
@@ -285,12 +283,8 @@ const getRules = (env) => {
 
   // scss
   oneOf.push({
-    test: /\.scss$/,
+    test: /\.(scss|sass)$/,
     use: [
-      // solve css-file hot load
-      // require.resolve('css-hot-loader'),
-      // style-loader support hmr but MiniCssExtractPlugin not
-      // however, style-loader leading to FOUC
       {
         loader: MiniCssExtractPlugin.loader,
         options: {
