@@ -1,6 +1,6 @@
 {
   "name": "create-fes",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "a tool creating a fes app",
   "author": "zhansingsong <zhansingsong@gmail.com>",
   "homepage": "https://github.com/zhansingsong/create-fes/tree/master/packages/create-fes#readme",
