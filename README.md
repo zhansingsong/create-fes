@@ -152,7 +152,7 @@ $ /path/to/your/template #输入模板绝对路径
   - autoOpen：是否浏览器自动打开，默认为`true`
   - qrcode：是否生成预览二维码，默认为`true`
 
-### 使用
+### 项目使用
 
 - 安装依赖包
 
