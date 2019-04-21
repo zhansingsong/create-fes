@@ -1,6 +1,6 @@
 # `fes-scripts`
 
-> TODO: description
+> a dependency of create-fes
 
 ## Usage
 

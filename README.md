@@ -92,6 +92,7 @@ create-fes example --help
 - proxy：配置 proxy。[详细配置参考……](https://github.com/chimurai/http-proxy-middleware)
 - provide：自动加载模块配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
 - spritesConfig：配置 sprites。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
+- urlLoader：配置url-loader。[详细配置参考……](https://github.com/webpack-contrib/url-loader)
 - extraDedenpencies：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
 - tsChecker：fork-ts-checker-webpack-plugin 配置设置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
 - alias：alias配置项。

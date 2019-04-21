@@ -1,6 +1,6 @@
 # `create-fes`
 
-> TODO: description
+> a tool creating a fes app
 
 ## Usage
 
