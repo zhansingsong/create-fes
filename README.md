@@ -1,6 +1,6 @@
 ![logo](./media/logo.png)
 
-fes(front end scaffold)，发音：/fes/。它是基于 webpack4、koa2 搭建的多页面开发环境。高效开发，快速打包。
+**fes(front end scaffold)**，发音：/fes/。它是基于 webpack4、koa2 搭建的多页面开发环境。高效开发，快速打包。
 
 **create-fes** 是一个构建多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
 
@@ -52,9 +52,21 @@ create-fes example -h
 // or
 create-fes example --help
 ```
+## 自定义模板
+在使用`create-fes`命令创建 fes-app 过程中，会提供模板选择功能:
+```
+What template do you need?
+pc
+other custom template(<path-to-template>)
+```
+选择`other custom template(<path-to-template>)`选项，提示
+```
+Please input a valid path of template?
+$ /path/to/your/template #输入模板绝对路径
+```
 
 
-## structure
+## 项目目录结构
 
 ```css
 ├── .babelrc ---> babel配置文件
@@ -140,7 +152,7 @@ create-fes example --help
   - autoOpen：是否浏览器自动打开，默认为`true`
   - qrcode：是否生成预览二维码，默认为`true`
 
-### usage
+### 使用
 
 - 安装依赖包
 
@@ -281,3 +293,4 @@ scss：绝对路径引用
 
 - 支持其他常用的模板引擎，同时增加对应的模板。
 - 完善文档，增加 examples
+- 完善英文文档
