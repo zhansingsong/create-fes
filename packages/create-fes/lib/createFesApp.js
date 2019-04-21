@@ -32,6 +32,7 @@ program
   )
   .option('-t, --typescript', 'use typescript')
   .option('-B, --no-babel', 'not use babel')
+  .option('-n, --npm', 'use npm')
   .option('--verbose', 'print additional logs')
   // .allowUnknownOption()
   .version(packageJson.version, '-v, --version')
@@ -110,7 +111,7 @@ function run(root, appName, version, verbose, originalDirectory, useYarn, useBab
   });
 }
 
-function createApp(name, verbose, version, useBabel, useTypescript) {
+function createApp(name, verbose, version, useBabel, useTypescript, useNpm) {
   const root = path.resolve(name);
   const appName = path.basename(root);
 
@@ -135,7 +136,7 @@ function createApp(name, verbose, version, useBabel, useTypescript) {
   const originalDirectory = process.cwd();
   process.chdir(root);
 
-  let useYarn = shouldUseYarn(); // eslint-disable-line
+  let useYarn = useNpm ? false : shouldUseYarn(); // eslint-disable-line
   // as yarn is disable to install locale package，it is intetional to set to false for test.
   if (process.env.FES_DEV) {
     useYarn = false; // test
@@ -165,5 +166,6 @@ createApp(
   program.verbose,
   program.scriptsVersion || packageJson.version,
   program.babel,
-  program.typescript
+  program.typescript,
+  program.npm
 );

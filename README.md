@@ -33,6 +33,12 @@ create-fes example -t
 // or
 create-fes example --typescript
 ```
+- `-n, --npm` 表示直接使用 `npm` 安装依赖包。
+```js
+create-fes example -n
+// or
+create-fes example --npm
+```
 - `--scripts-version <alternative-package>` 表示使用一个自己自定义的模板。需要使用绝对路径。
 
 ```js

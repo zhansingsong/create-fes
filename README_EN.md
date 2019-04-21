@@ -34,6 +34,13 @@ create-fes example -t
 // or
 create-fes example --typescript
 ```
+- `-n, --npm` indicates to direct use npm install modules.
+
+```js
+create-fes example -n
+// or
+create-fes example --npm
+```
 - `--scripts-version <alternative-package>` indicates to use a non-standard version of fes-scripts.
 
 ```js
