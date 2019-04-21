@@ -39,7 +39,7 @@ create-fes example -n
 // or
 create-fes example --npm
 ```
-- `--scripts-version <alternative-package>` 表示使用一个自己自定义的模板。需要使用绝对路径。
+- `--scripts-version <alternative-package>` 表示使用一个自定义 `fes-scripts` 版本。
 
 ```js
 create-fes example --scripts-version 1.0.x
