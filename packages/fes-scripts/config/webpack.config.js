@@ -69,8 +69,8 @@ const getOutput = (env) => {
     output = {
       publicPath: '/',
       // path: paths.appBuild,
-      filename: 'static/js/[name].[hash:8].js',
-      chunkFilename: 'static/js/[name].[hash:8].chunk.js',
+      filename: 'static/js/[name].js',
+      chunkFilename: 'static/js/[name].chunk.js',
     };
   }
   return output;
@@ -213,10 +213,10 @@ const getRules = (env) => {
     {
       test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
       loader: require.resolve('url-loader'),
-      options: {
-        limit: 10,
+      options: Object.assign({
+        limit: 1000,
         name: `${outputhPath.img}`,
-      },
+      }, appConfig.urlLoader),
     },
   ];
   if (useBabel) {
@@ -298,8 +298,6 @@ const getRules = (env) => {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders: 2,
-          // modules: appConfig.cssModules,
-          // localIdentName: '[local]__[hash:base64:5]',
           sourceMap,
         },
       },
@@ -327,7 +325,6 @@ const getRules = (env) => {
     use: [
       {
         loader: require.resolve('./loaders/htmlLoader/index.js'),
-        // loader: require.resolve(paths.appNodeModules, 'fes-scripts', 'config', 'loaders', 'htmlLoader/index.js'),
         options: {
           interpolate: 'require',
           attrs: ['img:src', 'img:data-src', 'img:data-original'],
@@ -335,7 +332,6 @@ const getRules = (env) => {
         },
       },
       { loader: require.resolve('./loaders/twigLoader.js'), options: {} },
-      // { loader: require.resolve(paths.appNodeModules, 'fes-scripts', 'config', 'loaders', 'twigLoader.js'), options: {} },
     ],
   });
   // other resource
