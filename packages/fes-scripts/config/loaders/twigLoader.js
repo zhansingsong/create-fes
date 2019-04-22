@@ -36,6 +36,7 @@ function getMockData(name, map, ctx, commonMap) {
 
 function loader(source) {
   this.addContextDependency(join(process.cwd(), 'src', 'views'));
+  this.addContextDependency(join(process.cwd(), 'src', 'mock'));
   Twig.cache(false);
   this.cacheable && this.cacheable();  // eslint-disable-line
   const currentFilePath = require.resolve(this.resource);
