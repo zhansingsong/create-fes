@@ -120,12 +120,14 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
   '/your/path': 'index.html' // default: /index: 'index.html'
 ```
 - **dev**: development mode.
-  - **port**: server port. default value is `3000`.
-  - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.
+  - **port**: server port. Default value is `3000`.
+  - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`. Support boolean, String type. The `/index` is turned on by default if exist, or one of the pages. If it is a string (such as: '/home'), it will be the open path. if the path does not exist, it will fall back to boolean.
   - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
 - **build**: production mode.
+  - **IE8**: Indicates whether es3ify-loader is used. Default value is `false`.
   - **publicPath**: public path. default value is '/'.
   - **outputPath**: output path config. the config can be `String` or `Object` type.
+      - isHash: Indicates whether to enable hash in filename. Default value is `true`.
       - css: css output path.
       - others: assets apart from css、img、js files output path.
       - img: img output path.
@@ -137,7 +139,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
           chunck: '[name].[chunkhash:8].chunk.js',
         }
         ```
-  - **report**: Indicates whether a report is generated automatically. default value is `false`.
+  - **report**: Indicates whether a report is generated automatically. default value is `false`. Support Boolean and Object type. if `true`, generating an analysis report on the default configuration. if `object`, generating an analysis report on the config object.[config object](https://github.com/webpack-contrib/webpack-bundle-analyzer)
   - **isTmpl**: Indicates whether backend template is generated automatically. default value is `true`.
 - **tmpl**: backend template preview mode. **note：the mode only works on `isTmpl: true`**
   - **port**: server port. default value is `3100`.

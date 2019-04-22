@@ -120,11 +120,13 @@ $ /path/to/your/template #输入模板绝对路径
 
 - **dev**：开发模式
   - **port**：端口号，默认为`3000`
-  - **autoOpen**：是否自动打开浏览器，默认为`true`
+  - **autoOpen**：是否自动打开浏览器，默认为`true`。支持 boolean 、String。如果存在`/index`, 默认打开`/index`，否则其中某个页面。如果是字符串(如: '/home')，就当成打开路径。如果路径不存在会回退到 boolean。
   - **qrcode**：是否生成预览二维码，默认为`true`
 - **build**：生产模式
+  - **IE8**：是否开启 es3ify-loader 编译代码，默认为`false`
   - **publicPath**：输出路径，默认为'/'
   - **outputPath**：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
+    - isHash：是否开启 hash。默认为`true`
     - css：css 输出路径
     - others：除了 css、img、js 文件外的资源输出路径
     - img：img 输出路径
@@ -136,7 +138,7 @@ $ /path/to/your/template #输入模板绝对路径
       chunck: '[name].[chunkhash:8].chunk.js',
     }
     ```
-  - **report**：是否生成打包分析报告，默认为`false`
+  - **report**：是否生成打包分析报告，默认为`false`。支持 boolean 、object。如果为`true`，使用默认配置生成分析报告。如果为配置 object， 会根据该配置对象生成分析报告。[配置object](https://github.com/webpack-contrib/webpack-bundle-analyzer)
   - **isTmpl**：是否输出后端模板，默认为`false`
 
 - **tmpl**：tmpl预览模式，**注意：该模式只能在`isTmpl: true`生效**
