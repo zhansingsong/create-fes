@@ -4,7 +4,7 @@
 
 **create-fes** 是一个构建多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
 
-[English DOC](./README_EN.md)
+[English DOC](./README.md)
 
 ## 安装
 ```js
