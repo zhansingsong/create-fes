@@ -52,7 +52,7 @@ module.exports = {
   appSrc: resolveApp('src'),
   appApi: resolveApp('src/api'),
   appViews: resolveApp('src/views/*.html'),
-  appMocks: resolveApp('src/mock/*.+(js|json)'),
+  appMocks: resolveApp('src/mock/**/**.+(js|json)'),
   appJsFiles: resolveApp('src/javascripts/*.+(js)'),
   appBabelrc: resolveApp('.babelrc'),
   appTsConfig: resolveApp('tsconfig.json'),

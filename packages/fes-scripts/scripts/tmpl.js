@@ -24,14 +24,14 @@ base.run((paths, chalk) => {
   const pages = glob.sync(pagePath, {});
   const mapPageToRoute = [];
   const routes = [];
-
   pages.forEach((f) => {
     const metas = parse(f);
     let mock = {};
     mockFiles.forEach((mf) => {
-      if (metas.name === parse(mf).name.split('.')[0]) {
+      const mfMetas = parse(mf);
+      if (metas.name === mfMetas.name.split('.')[0] || mfMetas.dir.indexOf('common') > -1) {
         try {
-          mock = require(mf); // eslint-disable-line
+          mock = Object.assign({}, mock, require(mf)); // eslint-disable-line
         } catch (error) {
           mock = {};
         }

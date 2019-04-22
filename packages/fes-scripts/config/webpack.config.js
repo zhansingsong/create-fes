@@ -166,7 +166,7 @@ const getPlugins = (env) => {
     )));
 
     if (appConfig.build.isTmpl) {
-      plugins.push(new BuildTmpl({ sharedData }));
+      plugins.push(new BuildTmpl({ sharedData, isCssModules: appConfig.cssModules }));
     }
     /* eslint no-extra-boolean-cast: [0] */
     if (!!appConfig.build.report) {
