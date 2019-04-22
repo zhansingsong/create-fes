@@ -6,7 +6,7 @@ Set up a modern multiple-page app by running one command. inspired by [create-re
 
 **Fes**(front end scaffold), pronunciation: /fes/. It is build with webpack4 and koa2, which is fast、lightweight、powerful and easy to use.
 
-[中文文档](./README.md)
+[中文文档](./README_CN.md)
 
 ## Install
 ```js
