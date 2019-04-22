@@ -3,7 +3,8 @@
 ![logo](./media/logo.png)
 
 Set up a modern multiple-page app by running one command. inspired by [create-react-app](https://github.com/facebook/create-react-app). 
-**Fes** is build with webpack-4 and koa-2, which is fast、lightweight、powerful and easy to use.
+
+**Fes**(front end scaffold), pronunciation: /fes/. It is build with webpack4 and koa2, which is fast、lightweight、powerful and easy to use.
 
 [中文文档](./README.md)
 
@@ -56,13 +57,13 @@ create-fes example -h
 create-fes example --help
 ```
 ## Custom template
-Creating fes-app process with `create-fes` command，which offers to choice templates function:
+Creating fes-app process with `create-fes` command, which offers to choice templates function:
 ```
 What template do you need?
 pc
 other custom template(<path-to-template>)
 ```
-choosing `other custom template(<path-to-template>)` option，and then:
+Choosing `other custom template(<path-to-template>)` option, and then:
 ```
 Please input a valid path of template?
 $ /path/to/your/template #absolute path
@@ -72,7 +73,7 @@ $ /path/to/your/template #absolute path
 
 ```css
 ├── .babelrc ---> babel config
-├── .browserslistrc ---> browserslist config。postcss、babel compiling source code with browserslist。More info：https://github.com/browserslist/browserslist
+├── .browserslistrc ---> browserslist config. postcss、babel compiling source code with browserslist. More info: https://github.com/browserslist/browserslist
 ├── tsconfig.js ---> typeScript config
 ├── README.MD
 ├── package.json
@@ -101,27 +102,27 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 ```
 
 ### `app.config.js`
-- **isHot**: indicates whether the hmr is enabled. default value is `true`(only dev mode).
-- **proxy**: proxy config. [detailed configuration reference...](https://github.com/chimurai/http-proxy-middleware)
-- **babelLoader**：babel-loader config. default value is `{}`. [detailed configuration reference...](https://github.com/babel/babel-loader)
-- spritesConfig: postcss sprites config. default value is `{}`. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
+- **isHot**: Indicates whether the hmr is enabled. Default value is `true`(only dev mode).
+- **proxy**: Proxy config. [detailed configuration reference...](https://github.com/chimurai/http-proxy-middleware)
+- **babelLoader**：babel-loader config. Default value is `{}`. [detailed configuration reference...](https://github.com/babel/babel-loader)
+- spritesConfig: postcss sprites config. Default value is `{}`. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
 - **urlLoader**: url-loader config. [detailed configuration reference...](https://github.com/webpack-contrib/url-loader)
-- **sw**: service worker config. default value is `{}`. [detailed configuration reference...](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
+- **sw**: service worker config. Default value is `{}`. [detailed configuration reference...](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 - **tsChecker**: fork-ts-checker-webpack-plugin config, default value is `{}`. [detailed configuration reference...](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
-- **extraDependencies**: add other files as dependencies to watch for dev. glob pattern is available(the path is relative to `src`). [glob info](https://github.com/isaacs/node-glob)
+- **extraDependencies**: Add other files as dependencies to watch for dev. glob pattern is available(the path is relative to `src`). [glob info](https://github.com/isaacs/node-glob)
 - **alias**: webpack `resolve.alias` config.
 - **provide**: webpack provide plugin config. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
 - **cssModules**: css modules config. default value is `{}`. [detailed configuration reference...](https://github.com/css-modules/postcss-modules)
-- **sourceMap**: indicates whether sourceMap is enabled. default value is `true`.
-- **devtool**: devtool config. default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
-- **routerConfig**: router config. it is able to customize route map.
+- **sourceMap**: Indicates whether sourceMap is enabled. default value is `true`.
+- **devtool**: devtool config. Default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
+- **routerConfig**: router config. It is able to customize route map.
 ```js
   '/your/path': 'index.html' // default: /index: 'index.html'
 ```
 - **dev**: development mode.
   - **port**: server port. default value is `3000`.
-  - **autoOpen**: indicates whether the browser is opened automatically. default value is `true`.
-  - **qrcode**: indicates whether the qrcode is generated automatically. default value is `true`.
+  - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.
+  - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
 - **build**: production mode.
   - **publicPath**: public path. default value is '/'.
   - **outputPath**: output path config. the config can be `String` or `Object` type.
@@ -136,16 +137,16 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
           chunck: '[name].[chunkhash:8].chunk.js',
         }
         ```
-  - **report**: indicates whether a report is generated automatically. default value is `false`.
-  - **isTmpl**: indicates whether backend template is generated automatically. default value is `true`.
+  - **report**: Indicates whether a report is generated automatically. default value is `false`.
+  - **isTmpl**: Indicates whether backend template is generated automatically. default value is `true`.
 - **tmpl**: backend template preview mode. **note：the mode only works on `isTmpl: true`**
   - **port**: server port. default value is `3100`.
-  - **autoOpen**: indicates whether the browser is opened automatically. default value is `true`.
-  - **qrcode**: indicates whether the qrcode is generated automatically. default value is `true`.
+  - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.
+  - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
 - **preview**: preview mode.
   - **port**: server port. default value is `3030`.
-  - **autoOpen**: indicates whether the browser is opened automatically. default value is `true`.
-  - **qrcode**: indicates whether the qrcode is generated automatically. default value is `true`.
+  - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.
+  - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
 
 ### Usage in project by `create-fes` command
 

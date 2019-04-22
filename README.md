@@ -4,7 +4,7 @@
 
 **create-fes** 是一个构建多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
 
-[English Readme](./README_EN.md)
+[English DOC](./README_EN.md)
 
 ## 安装
 ```js
@@ -14,6 +14,7 @@ npm install create-fes -g
 ```js
 npx create-fes <project-name>
 ```
+
 ## 使用
 - 默认
 ```js
@@ -74,7 +75,7 @@ $ /path/to/your/template #输入模板绝对路径
 ├── tsconfig.js ---> typeScript配置文件
 ├── README.MD
 ├── package.json
-├── app.config.js ---> 定制文件
+├── app.config.js ---> app 配置文件
 ├── build ---> 打包文件夹
 ├── config ---> 配置文件夹
 ├── public ---> 公用资源
@@ -90,12 +91,12 @@ $ /path/to/your/template #输入模板绝对路径
 ### src 文件夹
 
 ```js
-├── api --->使用mockjs模拟api
-├── assets --->资源文件
-├── javascripts --->js源代码文件夹: 根据该目录下直接js文件生成entry
-├── mock ---> 模板变量数据，支持js、json格式，及多文件数据(index.1.json, index.2.json.....)。其中`common`是公用 mock 数据
-├── styles --->scss源代码文件夹
-└── views --->twig源代码文件夹: 根据该目录下直接twig文件来生成页面，即页面需要与twig文件保持一致
+├── api ---> 使用 mockjs 模拟 api
+├── assets ---> 资源文件
+├── javascripts ---> js 源代码文件夹（根据该目录下直接 js 文件生成 entry）
+├── mock ---> 模板变量数据。支持 js、json 格式，及多文件数据(index.1.json, index.2.json.....)。其中`common`是公用 mock 数据。
+├── styles ---> scss 源代码文件夹
+└── views ---> template 源代码文件夹
 ```
 
 ### `app.config.js`配置
@@ -108,43 +109,43 @@ $ /path/to/your/template #输入模板绝对路径
 - **tsChecker**：fork-ts-checker-webpack-plugin 配置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
 - **extraDependencies**：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
 - **alias**：alias配置项。
-- **provide**：自动加载模块配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
+- **provide**：provide plugin 配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
 - **routerConfig**：路由配置项，可以自定义页面的路由映射。
   ```js
-  // 重新定义不会启动默认配置。即需要指定项目所有的页面路由
-  '/your/path': 'index.html'
+  '/your/path': 'index.html' // 默认：'/index': 'index.html'
   ```
 - **cssModules**：配置css modules，默认为`{}`。[详细配置参考……](https://github.com/css-modules/postcss-modules)
 - **sourceMap**：是否开启 sourceMap，默认为`true`。
-- **devtool**：配置 devtool。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
+- **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
+
 - **dev**：开发模式
   - **port**：端口号，默认为`3000`
-  - **autoOpen**：是否浏览器自动打开，默认为`true`
+  - **autoOpen**：是否自动打开浏览器，默认为`true`
   - **qrcode**：是否生成预览二维码，默认为`true`
 - **build**：生产模式
   - **publicPath**：输出路径，默认为'/'
   - **outputPath**：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
-
-        - css：css 输出路径
-        - others：除了 css、img、js 文件外的资源输出路径
-        - img：img 输出路径
-        - js：js 输出路径
-        `{
-          path: 'static/css/',
-          filename: '[name].[chunkhash:8].js',
-          chunck: '[name].[chunkhash:8].chunk.js',
-        }`
-
-  - **report**：是否开启打包分析报告，默认为`false`
-  - **isTmpl**：是否输出模板，默认为`false`
+    - css：css 输出路径
+    - others：除了 css、img、js 文件外的资源输出路径
+    - img：img 输出路径
+    - js：js 输出路径
+    ```js
+    {
+      path: 'static/css/',
+      filename: '[name].[chunkhash:8].js',
+      chunck: '[name].[chunkhash:8].chunk.js',
+    }
+    ```
+  - **report**：是否生成打包分析报告，默认为`false`
+  - **isTmpl**：是否输出后端模板，默认为`false`
 
 - **tmpl**：tmpl预览模式，**注意：该模式只能在`isTmpl: true`生效**
   - **port**：端口号，默认为`3100`
-  - **autoOpen**：是否浏览器自动打开，默认为`true`
+  - **autoOpen**：是否自动打开浏览器，默认为`true`
   - **qrcode**：是否生成预览二维码，默认为`true`
 - **preview**：预览模式
   - **port**：端口号，默认为`3030`
-  - **autoOpen**：是否浏览器自动打开，默认为`true`
+  - **autoOpen**：是否自动打开浏览器，默认为`true`
   - **qrcode**：是否生成预览二维码，默认为`true`
 
 ### 项目使用
@@ -167,7 +168,7 @@ npm run build
 npm run preview
 ```
 
-- 模板输出预览
+- 预览后端输出模板
 
 ```js
 npm run tmpl
