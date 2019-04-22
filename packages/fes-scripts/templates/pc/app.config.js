@@ -24,7 +24,7 @@ module.exports = {
   // 增加依赖文件，方便开发修改时，能自动编译
   // 相对于 'src' 目录
   // 支持 "**/*.js" 形式，更多参考 glob：https://github.com/isaacs/node-glob
-  extraDedenpencies: [],
+  extraDependencies: [],
   // alias
   alias: {},
   // 自动加载模块配置

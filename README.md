@@ -93,42 +93,37 @@ $ /path/to/your/template #输入模板绝对路径
 ├── api --->使用mockjs模拟api
 ├── assets --->资源文件
 ├── javascripts --->js源代码文件夹: 根据该目录下直接js文件生成entry
-├── mock --->mock数据，支持js、json格式，及多文件数据(index.1.json, index.2.json.....)。其中`common`是公用 mock 数据
+├── mock ---> 模板变量数据，支持js、json格式，及多文件数据(index.1.json, index.2.json.....)。其中`common`是公用 mock 数据
 ├── styles --->scss源代码文件夹
 └── views --->twig源代码文件夹: 根据该目录下直接twig文件来生成页面，即页面需要与twig文件保持一致
 ```
 
-### 配置
-
-`app.config.js`提供如下配置项：
-
-- babelLoader：配置babel-loader，默认为`{}`。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
-
-- isHot：是否开启热加载，默认为`true`。只在开发模式下有效。
-- cssModules：配置css modules，默认为`{}`。[详细配置参考……](https://github.com/css-modules/postcss-modules)
-- sw：service worker 配置，默认为`{}`。[详细配置参考……](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
-- proxy：配置 proxy。[详细配置参考……](https://github.com/chimurai/http-proxy-middleware)
-- provide：自动加载模块配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
-- spritesConfig：配置 sprites。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
-- urlLoader：配置url-loader。[详细配置参考……](https://github.com/webpack-contrib/url-loader)
-- extraDedenpencies：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
-- tsChecker：fork-ts-checker-webpack-plugin 配置设置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
-- alias：alias配置项。
-- sourceMap：是否开启 sourceMap，默认为`true`。
-- devtool：配置 devtool。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
-- routerConfig：路由配置项，可以自定义页面的路由映射。
+### `app.config.js`配置
+- **isHot**：是否开启热加载，默认为`true`。只在开发模式下有效。
+- **proxy**：配置 proxy。[详细配置参考……](https://github.com/chimurai/http-proxy-middleware)
+- **babelLoader**：配置babel-loader，默认为`{}`。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
+- **spritesConfig**：配置 sprites。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
+- **urlLoader**：配置url-loader。[详细配置参考……](https://github.com/webpack-contrib/url-loader)
+- **sw**：service worker 配置，默认为`{}`。[详细配置参考……](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
+- **tsChecker**：fork-ts-checker-webpack-plugin 配置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
+- **extraDependencies**：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
+- **alias**：alias配置项。
+- **provide**：自动加载模块配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
+- **routerConfig**：路由配置项，可以自定义页面的路由映射。
   ```js
   // 重新定义不会启动默认配置。即需要指定项目所有的页面路由
   '/your/path': 'index.html'
   ```
-
-- dev：开发模式
-  - port：端口号，默认为`3000`
-  - autoOpen：是否浏览器自动打开，默认为`true`
-  - qrcode：是否生成预览二维码，默认为`true`
-- build：生成模式
-  - publicPath：输出路径，默认为'/'
-  - outputPath：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
+- **cssModules**：配置css modules，默认为`{}`。[详细配置参考……](https://github.com/css-modules/postcss-modules)
+- **sourceMap**：是否开启 sourceMap，默认为`true`。
+- **devtool**：配置 devtool。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
+- **dev**：开发模式
+  - **port**：端口号，默认为`3000`
+  - **autoOpen**：是否浏览器自动打开，默认为`true`
+  - **qrcode**：是否生成预览二维码，默认为`true`
+- **build**：生产模式
+  - **publicPath**：输出路径，默认为'/'
+  - **outputPath**：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
 
         - css：css 输出路径
         - others：除了 css、img、js 文件外的资源输出路径
@@ -140,25 +135,19 @@ $ /path/to/your/template #输入模板绝对路径
           chunck: '[name].[chunkhash:8].chunk.js',
         }`
 
-  - report：是否开启打包分析报告，默认为`false`
-  - isTmpl：是否输出模板，默认为`false`
+  - **report**：是否开启打包分析报告，默认为`false`
+  - **isTmpl**：是否输出模板，默认为`false`
 
-- tmpl：开发模式，**注意：该模式只能在`isTmpl: true`生效**
-  - port：端口号，默认为`3100`
-  - autoOpen：是否浏览器自动打开，默认为`true`
-  - qrcode：是否生成预览二维码，默认为`true`
-- preview：开发模式
-  - port：端口号，默认为`3030`
-  - autoOpen：是否浏览器自动打开，默认为`true`
-  - qrcode：是否生成预览二维码，默认为`true`
+- **tmpl**：tmpl预览模式，**注意：该模式只能在`isTmpl: true`生效**
+  - **port**：端口号，默认为`3100`
+  - **autoOpen**：是否浏览器自动打开，默认为`true`
+  - **qrcode**：是否生成预览二维码，默认为`true`
+- **preview**：预览模式
+  - **port**：端口号，默认为`3030`
+  - **autoOpen**：是否浏览器自动打开，默认为`true`
+  - **qrcode**：是否生成预览二维码，默认为`true`
 
 ### 项目使用
-
-- 安装依赖包
-
-```js
-npm install
-```
 
 - 开发
 
@@ -293,4 +282,3 @@ scss：绝对路径引用
 
 - 支持其他常用的模板引擎，同时增加对应的模板。
 - 完善文档，增加 examples
-- 完善英文文档

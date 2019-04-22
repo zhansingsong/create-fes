@@ -178,7 +178,7 @@ const getPlugins = (env) => {
     plugins.push(new BindViewsData());
     plugins.push(new AddExtraEntryFile({
       dirs: [join(paths.appSrc, '/mock/**/**.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
-      extra: appConfig.extraDedenpencies || [],
+      extra: appConfig.extraDependencies || [],
       base: paths.appSrc,
     }));
     plugins.push(...[new optimize.OccurrenceOrderPlugin(), new HotModuleReplacementPlugin()]);
