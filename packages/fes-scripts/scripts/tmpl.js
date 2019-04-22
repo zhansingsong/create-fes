@@ -9,7 +9,7 @@ const base = new Base('tmpl');
 base.run((paths, chalk) => {
   if (!fse.existsSync(join(paths.appBuild, 'tmpl'))) {
     base.softExit(null, 0, (() => {
-      console.error(chalk.redBright(`please ensure ${chalk.greenBright('build')} generated, and ${chalk.blueBright('npm run build')} to build tmpls for it!`));
+      console.error(chalk.redBright(`Please make sure ${chalk.greenBright('build dir')} generated, and ${chalk.blueBright('npm run build')} to build tmpl for it!`));
     }));
   }
 
