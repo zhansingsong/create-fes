@@ -1,8 +1,8 @@
 ![logo](./media/logo.png)
 
-**fes(front end scaffold)**，发音：/fes/。它是基于 webpack4、koa2 搭建的多页面开发环境。高效开发，快速打包。
+**fes(front end scaffold)**，发音：**/fes/**。它是基于 [webpack4](https://github.com/webpack/webpack)、[koa2](https://github.com/koajs/koa) 搭建的多页面开发环境。高效开发，快速打包。
 
-**create-fes** 是一个构建多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
+**create-fes** 是一个构建 **fes** 多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
 
 [English DOC](./README.md)
 

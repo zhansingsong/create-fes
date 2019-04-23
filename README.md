@@ -4,7 +4,7 @@
 
 Set up a modern multiple-page app by running one command. inspired by [create-react-app](https://github.com/facebook/create-react-app). 
 
-**Fes**(front end scaffold), pronunciation: /fes/. It is build with webpack4 and koa2, which is fast、lightweight、powerful and easy to use.
+**Fes**(front end scaffold), pronunciation: **/fes/**. It is build with [webpack4](https://github.com/webpack/webpack) and [koa2](https://github.com/koajs/koa), which is fast、lightweight、powerful and easy to use.
 
 [中文文档](./README_CN.md)
 
