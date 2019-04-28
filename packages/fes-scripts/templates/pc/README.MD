@@ -19,14 +19,14 @@
 └── src ---> source code dir
 ```
 
-## Config dir
+### Config dir
 If it is disable to meet your project demands that `app.config.js` is applied, you can overwrite webpack config through `webpack.dev.config.js` and `webpack.prod.config.js`.
 ```js
 ├── webpack.dev.config.js
 └── webpack.prod.config.js
 ```
 
-## Source code dir
+### Source code dir
 ```js
 ├── api ---> mock api by mockjs
 ├── assets ---> assets dir
@@ -36,7 +36,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 └── views ---> twig source code dir
 ```
 
-## `app.config.js`
+### `app.config.js`
 - **isHot**: Indicates whether the hmr is enabled. Default value is `true`(only dev mode).
 - **proxy**: Proxy config. [detailed configuration reference...](https://github.com/chimurai/http-proxy-middleware)
 - **babelLoader**：babel-loader config. Default value is `{}`. [detailed configuration reference...](https://github.com/babel/babel-loader)
@@ -47,7 +47,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 - **extraDependencies**: Add other files as dependencies to watch for dev. glob pattern is available(the path is relative to `src`). [glob info](https://github.com/isaacs/node-glob)
 - **alias**: webpack `resolve.alias` config.
 - **provide**: webpack provide plugin config. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
-- **cssModules**: css modules config. default value is `{}`. [detailed configuration reference...](https://github.com/css-modules/postcss-modules)
+- **cssModules**: css modules config. default value is `'global'`. [detailed configuration reference...](https://github.com/webpack-contrib/css-loader#modules)。_It is recommended to turn off if not needed. This will make webpack compile faster._
 - **sourceMap**: Indicates whether sourceMap is enabled. default value is `true`.
 - **devtool**: devtool config. Default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
 - **routerConfig**: router config. It is able to customize route map.
@@ -85,7 +85,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
   - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.
   - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
 
-## Usage in project by `create-fes` command
+### Usage in project by `create-fes` command
 
 - dev
 
@@ -136,11 +136,21 @@ _Note: The `global` mode is enabled by default. To use it, you need to declare `
 ```
 - html
 ```html
-<!-- file name as reference object: cssm -->
-<div class="{{ cssm.cnt }}">
-  <h3 class="{{ cssm.tt }}">css-module</h3>
-  <p class="{{ cssm.des }}">Introduce usage of css-modules in fes</p>
-</div>
+<div class="cssm"></div>
+```
+- JS
+```js
+import cssm from '../styles/modules/_cssm.scss';
+
+const getCssmHtml = cssmObj => (`
+    <div class="${cssmObj.cnt}">
+    <h3 class="${cssmObj.tt}">css-module</h3>
+    <p class="${cssmObj.des}">介绍fes中css-modules的使用</p>
+    </div>
+  `);
+
+const cssmContainer = document.querySelector('.cssm');
+cssmContainer.innerHTML = getCssmHtml(cssm);
 ```
 
 ### Way of referring to pictures

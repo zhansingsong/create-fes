@@ -17,14 +17,14 @@
 ├── public ---> 公用资源
 └── src ---> 源代码文件夹
 ```
-## config 配置文件夹
+### config 配置文件夹
 如果`app.config.js`提供的配置项不能满足你的项目需要，可以通过`webpack.dev.config.js`和`webpack.prod.config.js`进行重写定制。
 ```js
 ├── webpack.dev.config.js
 └── webpack.prod.config.js
 ```
 
-## src 文件夹
+### src 文件夹
 
 ```js
 ├── api ---> 使用 mockjs 模拟 api
@@ -35,7 +35,7 @@
 └── views ---> template 源代码文件夹
 ```
 
-## `app.config.js`配置
+### `app.config.js`配置
 - **isHot**：是否开启热加载，默认为`true`。只在开发模式下有效。
 - **proxy**：配置 proxy。[详细配置参考……](https://github.com/chimurai/http-proxy-middleware)
 - **babelLoader**：配置babel-loader，默认为`{}`。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
@@ -50,7 +50,7 @@
   ```js
   '/your/path': 'index.html' // 默认：'/index': 'index.html'
   ```
-- **cssModules**：配置css modules，默认为`{}`。[详细配置参考……](https://github.com/css-modules/postcss-modules)
+- **cssModules**：配置css modules，默认为`'global'`。[详细配置参考……](https://github.com/webpack-contrib/css-loader#modules)。_如果不需要，建议关闭。这样可让 webpack 编译更快。_
 - **sourceMap**：是否开启 sourceMap，默认为`true`。
 - **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
 
@@ -86,7 +86,7 @@
   - **autoOpen**：是否自动打开浏览器，默认为`true`
   - **qrcode**：是否生成预览二维码，默认为`true`
 
-## 项目使用
+### 项目使用
 
 - 开发
 
@@ -112,7 +112,7 @@ npm run preview
 npm run tmpl
 ```
 
-## css modules
+### css modules
 _注意：默认开启 `global` 模式，要使用需要主动声明 `local`_
 
 - scss
@@ -137,13 +137,23 @@ _注意：默认开启 `global` 模式，要使用需要主动声明 `local`_
 ```
 - html
 ```html
-<!-- 引用以文件名为引用对象: cssm -->
-<div class="{{ cssm.cnt }}">
-  <h3 class="{{ cssm.tt }}">css-module</h3>
-  <p class="{{ cssm.des }}">介绍fes中css-modules的使用</p>
-</div>
+<div class="cssm"></div>
 ```
-## 引用图片的方式
+- JS
+```js
+import cssm from '../styles/modules/_cssm.scss';
+
+const getCssmHtml = cssmObj => (`
+    <div class="${cssmObj.cnt}">
+    <h3 class="${cssmObj.tt}">css-module</h3>
+    <p class="${cssmObj.des}">介绍fes中css-modules的使用</p>
+    </div>
+  `);
+
+const cssmContainer = document.querySelector('.cssm');
+cssmContainer.innerHTML = getCssmHtml(cssm);
+```
+### 引用图片的方式
 
 _注意：图片的引用必须相对于入口页面_
 
@@ -209,7 +219,7 @@ scss：绝对路径引用
 }
 ```
 
-## 注意事项
+### 注意事项
 
 可以开启`css modules`，不过它更适合与 js 混合开发模式，如css-in-js、react、vue 开发。
 
