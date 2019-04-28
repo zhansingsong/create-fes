@@ -17,7 +17,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzer = require('webpack-bundle-analyzer');
-const { join, parse, resolve } = require('path');
+const { join, parse } = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getHtmlWebpackPluginConfigs = require('./utils/getHtmlWebpackPluginConfig');
 const sprites = require('./plugins/sprites');
@@ -237,47 +237,23 @@ const getRules = (env) => {
 
   const postcssPlugins = () => {
     const finalPlugins = [];
-    if (appConfig.cssModules) {
-      finalPlugins.push(require('postcss-modules')(Object.assign({ //eslint-disable-line
-        scopeBehaviour: 'global',
-        // globalModulePaths: [resolve(process.cwd(), 'src/styles/style.scss'), resolve(process.cwd(), 'src/styles/lib/_iconfont.scss')],
-        getJSON: (cssFileName, json) => {
-          const regex = /[_]?([-_a-zA-Z0-9]*)\.(scss|sass|less|css|styl)/;
-          let match = null;
-          let temp = {};
-          try {
-            match = regex.exec(cssFileName);
-          } catch (error) {};  // eslint-disable-line
-          if (match) {
-            temp[match[1]] = json;
-          } else {
-            temp = json;
+    finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
+    finalPlugins.push(autoprefixer({
+      flexbox: 'no-2009',
+    }));
+    finalPlugins.push(sprites({
+      ...{
+        alias,
+        spritePath: join(paths.appSrc, 'assets/'),
+        filterBy: (image) => {
+          if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
+            return Promise.resolve();
           }
-          const jsonFileName = resolve(process.cwd(), 'src/mock/common/cssmodules.json');
-          fs.ensureFileSync(jsonFileName);
-          global._css_modules_ = global._css_modules_ || {}; // eslint-disable-line
-          global._css_modules_ = { ...global._css_modules_, ...temp }; // eslint-disable-line
-          fs.writeFileSync(jsonFileName, JSON.stringify(global._css_modules_)); // eslint-disable-line
+          return Promise.reject();
         },
-      }, appConfig.cssModules)));
-      finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
-      finalPlugins.push(autoprefixer({
-        flexbox: 'no-2009',
-      }));
-      finalPlugins.push(sprites({
-        ...{
-          alias,
-          spritePath: join(paths.appSrc, 'assets/'),
-          filterBy: (image) => {
-            if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
-              return Promise.resolve();
-            }
-            return Promise.reject();
-          },
-        },
-        ...appConfig.spritesConfig,
-      }));
-    }
+      },
+      ...appConfig.spritesConfig,
+    }));
     return finalPlugins;
   };
 
@@ -299,6 +275,7 @@ const getRules = (env) => {
         options: {
           importLoaders: 2,
           sourceMap,
+          modules: appConfig.cssModules,
         },
       },
       {

@@ -119,7 +119,7 @@ $ /path/to/your/template #输入模板绝对路径
   ```js
   '/your/path': 'index.html' // 默认：'/index': 'index.html'
   ```
-- **cssModules**：配置css modules，默认为`{}`。[详细配置参考……](https://github.com/css-modules/postcss-modules)
+- **cssModules**：配置css modules，默认为`'global'`。[详细配置参考……](https://github.com/webpack-contrib/css-loader#modules)。_如果不需要，建议关闭。这样可让 webpack 编译更快。_
 - **sourceMap**：是否开启 sourceMap，默认为`true`。
 - **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
 
@@ -206,11 +206,21 @@ _注意：默认开启 `global` 模式，要使用需要主动声明 `local`_
 ```
 - html
 ```html
-<!-- 引用以文件名为引用对象: cssm -->
-<div class="{{ cssm.cnt }}">
-  <h3 class="{{ cssm.tt }}">css-module</h3>
-  <p class="{{ cssm.des }}">介绍fes中css-modules的使用</p>
-</div>
+<div class="cssm"></div>
+```
+- JS
+```js
+import cssm from '../styles/modules/_cssm.scss';
+
+const getCssmHtml = cssmObj => (`
+    <div class="${cssmObj.cnt}">
+    <h3 class="${cssmObj.tt}">css-module</h3>
+    <p class="${cssmObj.des}">介绍fes中css-modules的使用</p>
+    </div>
+  `);
+
+const cssmContainer = document.querySelector('.cssm');
+cssmContainer.innerHTML = getCssmHtml(cssm);
 ```
 ### 引用图片的方式
 

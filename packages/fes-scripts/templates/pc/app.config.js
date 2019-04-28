@@ -23,8 +23,8 @@ module.exports = {
     '/fes/aboutme': 'about.html',
     '/fes/info': 'info.html',
   },
-  // css-modules: https://github.com/css-modules/postcss-modules
-  cssModules: {},
+  // https://github.com/webpack-contrib/css-loader#modules
+  cssModules: 'global',
   sourceMap: true,
   devtool: 'cheap-module-source-map',
   dev: {
