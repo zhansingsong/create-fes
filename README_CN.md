@@ -6,7 +6,9 @@
 
 [English DOC](./README.md)
 ## 设计架构
+
 ![fes](./media/FES.svg)
+
 **fes** 以 HTML 的文件名来关联 JS 和 DATA。 其中 JS 和 DATA 是可选的。而 SCSS 则通过 JS 引入，然后再使用 `mini-css-extract-plugin` 做优化。另外，**fes** 还提供了 `build`、`start`、`preview`、`tmpl` 脚本命令。
 - 页面
 ## 安装

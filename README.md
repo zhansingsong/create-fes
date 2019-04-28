@@ -9,6 +9,7 @@ Set up a modern multiple-page app by running one command. inspired by [create-re
 [中文文档](./README_CN.md)
 
 ## Architecture
+
 ![fes](./media/FES.svg)
 
 **fes** Associates JS and DATA with the filename of the HTML. Where JS and DATA are optional. SCSS is introduced through JS and then optimized using `mini-css-extract-plugin`. In addition, **fes** also provides `build`, `start`, `preview`, `tmpl` script commands.
