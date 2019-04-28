@@ -260,24 +260,24 @@ const getRules = (env) => {
           fs.writeFileSync(jsonFileName, JSON.stringify(global._css_modules_)); // eslint-disable-line
         },
       }, appConfig.cssModules)));
-      finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
-      finalPlugins.push(autoprefixer({
-        flexbox: 'no-2009',
-      }));
-      finalPlugins.push(sprites({
-        ...{
-          alias,
-          spritePath: join(paths.appSrc, 'assets/'),
-          filterBy: (image) => {
-            if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
-              return Promise.resolve();
-            }
-            return Promise.reject();
-          },
-        },
-        ...appConfig.spritesConfig,
-      }));
     }
+    finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
+    finalPlugins.push(autoprefixer({
+      flexbox: 'no-2009',
+    }));
+    finalPlugins.push(sprites({
+      ...{
+        alias,
+        spritePath: join(paths.appSrc, 'assets/'),
+        filterBy: (image) => {
+          if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
+            return Promise.resolve();
+          }
+          return Promise.reject();
+        },
+      },
+      ...appConfig.spritesConfig,
+    }));
     return finalPlugins;
   };
 
