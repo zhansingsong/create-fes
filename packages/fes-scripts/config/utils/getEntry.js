@@ -3,12 +3,10 @@
  * @author zhansingsong
  */
 
-const glob = require('glob');
-const { join, parse, resolve } = require('path');
+const { join, resolve } = require('path');
 
 module.exports = (env, appConfig, paths) => {
-  const viewFiles = glob.sync(paths.appViews, {});
-  const jsFiles = glob.sync(paths.appJsFiles, {});
+  const { entryNames } = paths.fesMap;
 
   // 处理 entry 配置项
   const entry = {};
@@ -31,21 +29,13 @@ module.exports = (env, appConfig, paths) => {
     commonChunks.push(hotClient);
   }
 
-  jsFiles.forEach((f) => {
-    const metas = parse(f);
-    entry[metas.name] = commonChunks.slice(0); // init and copy
-    entry[metas.name].push(f);
+  Object.keys(entryNames).forEach((f) => {
+    const { name, isExist } = entryNames[f];
+    entry[name] = commonChunks.slice(0); // init and copy
+    // 确保没有对应的js文件时不会报错
+    if (isExist) {
+      entry[name].push(f);
+    }
   });
-
-  // 确保没有对应的js文件时不会报错
-  if (jsFiles.length !== viewFiles.length) {
-    viewFiles.forEach((f) => {
-      const metas = parse(f);
-      if (!entry[metas.name]) {
-        entry[metas.name] = commonChunks.slice(0);
-      }
-    });
-  }
-
   return entry;
 };

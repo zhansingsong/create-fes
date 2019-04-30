@@ -4,28 +4,13 @@ const c2k = require('koa2-connect');
 const devMiddleware = require('webpack-dev-middleware');
 const hotMiddleware = require('webpack-hot-middleware');
 const webpack = require('webpack');
-const { parse } = require('path');
-const glob = require('glob');
 const Base = require('./utils/Base');
-
 
 const base = new Base('dev');
 base.run((paths, chalk) => {
   const config = require('./utils/getConfig')('development', paths); // eslint-disable-line
   const compiler = webpack(config);
-  const getDefaultRouterConfig = () => {
-    const viewsFiles = glob.sync(paths.appViews);
-    viewsFiles.map((file) => {
-      const metas = parse(file);
-      const path = `/${metas.name}`;
-      return {
-        path,
-        method: 'get',
-        middleware: `/${metas.name}.html`,
-      };
-    });
-  };
-  base.createRouter(base.appConfig.routerConfig || getDefaultRouterConfig(), '', true);
+  base.createRouter(paths.fesMap.routes, '', true);
   // app dir
   base.app.use(base.serve(paths.appDirectory));
   // public

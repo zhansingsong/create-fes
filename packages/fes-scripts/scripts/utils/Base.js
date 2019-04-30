@@ -15,6 +15,7 @@ const paths = require('./paths');
 const clearConsole = require('./clearConsole');
 const openBrowser = require('./openBrowser');
 const choosePort = require('./choosePort');
+const getFesMap = require('./getFesMap');
 
 const appConfig = require(paths.appConfig); // eslint-disable-line
 const appname = require(paths.appPackageJson).name; // eslint-disable-line
@@ -27,13 +28,13 @@ const mockApi = async (ctx, next) => {
     // avoid loading static resources with delay
     const mockContext = {
       mock(path) {
-        const url = join(paths.appSrc, 'api', path);
+        const url = join(paths.appApis, path);
         delete require.cache[url];
         return Mock.mock(require(url)); // eslint-disable-line
       },
     };
-    delete require.cache[join(paths.appApi, 'index.js')];
-    const api = require(paths.appApi); // eslint-disable-line
+    delete require.cache[join(paths.appApis, 'index.js')];
+    const api = require(paths.appApis); // eslint-disable-line
     const mockData = api.call(mockContext);
     const responseBody = mockData[ctx.url];
 
@@ -55,6 +56,10 @@ const mockApi = async (ctx, next) => {
   }
   await next();
 };
+// 将fesMap绑定到paths减少传递到下游的参数数量
+const fesMap = getFesMap(appConfig.routerConfig, paths);
+paths.fesMap = fesMap;
+
 class Base {
   constructor(mode) {
     this.mode = mode;
@@ -74,7 +79,11 @@ class Base {
     process.exit(code);
   }
 
-  run(runCallback) {
+  run(runCallback = () => {}, isCtx) {
+    if (isCtx) {
+      runCallback(paths, chalk);
+      return;
+    }
     const DEFAULT_PORT = parseInt(process.env.PORT, 10) || this.config.port;
     const HOST = process.env.HOST || '0.0.0.0';
     choosePort(HOST, DEFAULT_PORT)
@@ -104,10 +113,10 @@ class Base {
     const normolMiddleware = (middleware) => {
       const metas = parse(middleware);
       if (metas.root === '') {
-        middleware = `/${middleware}`; // eslint-disable-line
+        middleware = `/${middleware}`;
       }
       if (metas.ext === '') {
-        middleware = `${middleware}.html`; // eslint-disable-line
+        middleware = `${middleware}.html`;
       }
       return middleware;
     };
@@ -124,7 +133,7 @@ class Base {
       let newRouterConfig = routerConfig;
       if (!Array.isArray(newRouterConfig)) {
         newRouterConfig = Object.keys(routerConfig).map((key) => {
-          this.router.mapRoutes.push(key); // eslint-disable-line
+          this.router.mapRoutes.push(routerConfig[key]); // eslint-disable-line
           // 对 key 处理： a/b => /a/b
           return {
             path: key,

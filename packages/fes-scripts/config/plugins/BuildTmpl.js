@@ -65,7 +65,8 @@ BuildTmpl.prototype.apply = function (compiler) {
 
   function getEntry(manifest) {
     const { htmlFiles } = manifest;
-    return Object.keys(htmlFiles).map(item => parse(item).name);
+    // return Object.values(htmlFiles);
+    return Object.values(htmlFiles).map(item => join(process.cwd(), 'src', 'views', item));
   }
 
   function outputTmpl(content, metas) {
@@ -89,17 +90,12 @@ BuildTmpl.prototype.apply = function (compiler) {
     );
     return `${scriptStr}{% block script %}{% endblock %}`;
   }
-  function cssModulesJson(ctx) {
-    if (ctx.options.isCssModules) {
-      fse.copyFile(join(process.cwd(), 'src/mock/common/cssmodules.json'), join(process.cwd(), '/build/tmpl/cssmodules.json'), (err) => { if (err) { console.error(err); } });
-    }
-  }
   const self = this;
   compiler.hooks.afterEmit.tapAsync('BuildTmpl', (compilation, callback) => {
     const manifest = require(join(process.cwd(), 'build', 'asset-manifest.json')); // eslint-disable-line
     const media = self.options.sharedData.mediaSource || {};
     const entry = getEntry(manifest);
-    const files = glob.sync(join(process.cwd(), 'src/views/**/**.html'), {});
+    const files = glob.sync(join(process.cwd(), 'src', 'views', '**', '**.html'), {});
     files.forEach((f) => {
       // normalize解决Windows下路径分隔符bug
       // const normalizeFile = normalize(f);
@@ -119,14 +115,13 @@ BuildTmpl.prototype.apply = function (compiler) {
           match => genreateScripts(manifest.commonScripts) + match
         );
       }
-      if (entry.indexOf(metas.name) > -1) {
+      if (entry.indexOf(f) > -1) {
         fileContent += insertLinks(manifest, metas);
         fileContent += insertSript(manifest, metas);
       }
       fileContent = handleAssets(fileContent, manifest, media);
       outputTmpl(fileContent, metas);
     });
-    cssModulesJson(self);
     callback(null);
   });
 };

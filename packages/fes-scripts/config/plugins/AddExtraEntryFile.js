@@ -1,5 +1,5 @@
 const glob = require('glob');
-const { normalize, parse, join } = require('path');
+const { normalize, join } = require('path');
 
 function AddExtraEntryFile(options) {
   this.options = options;
@@ -7,14 +7,14 @@ function AddExtraEntryFile(options) {
 
 AddExtraEntryFile.prototype.apply = function (compiler) {
   let extraDependenciesFiles = [];
-  const base = this.options.base;
-  if(this.options.extra.length > 0){
+  const { base } = this.options;
+  if (this.options.extra.length > 0) {
     const extraDependencies = this.options.extra;
     try {
-      extraDependencies.forEach(dependency => {
+      extraDependencies.forEach((dependency) => {
         extraDependenciesFiles = extraDependenciesFiles.concat(glob.sync(join(base, dependency), {}));
       });
-    } catch (error) {}
+    } catch (error) {} // eslint-disable-line
   }
 
   compiler.hooks.entryOption.tap('AddExtraEntryFile', () => {
@@ -30,21 +30,15 @@ AddExtraEntryFile.prototype.apply = function (compiler) {
     const { options } = compiler;
     const { entry, mode } = options;
     const entries = Object.keys(entry);
-    if(mode === 'development'){
-      entries.forEach(name => {
-        extraFilesArr.forEach(files => files.forEach(f => {
-          const metas = parse(f);
-          if(metas.ext === '.html' && !entries.includes(metas.name)) {
-            entry[name].push(f);
-          }
-          if(metas.name.split('.')[0] === name){
-            entry[name].push(f);
-          }
+    if (mode === 'development') {
+      entries.forEach((name) => {
+        extraFilesArr.forEach(files => files.forEach((f) => {
+          entry[name].push(f);
         }));
         entry[name].push(...extraDependenciesFiles);
-      })
+      });
     }
-  })
+  });
 };
 
 module.exports = AddExtraEntryFile;

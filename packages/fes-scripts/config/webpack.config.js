@@ -166,7 +166,7 @@ const getPlugins = (env) => {
     )));
 
     if (appConfig.build.isTmpl) {
-      plugins.push(new BuildTmpl({ sharedData, isCssModules: appConfig.cssModules }));
+      plugins.push(new BuildTmpl({ sharedData }));
     }
     /* eslint no-extra-boolean-cast: [0] */
     if (!!appConfig.build.report) {
@@ -177,7 +177,7 @@ const getPlugins = (env) => {
     // plugins.push(new HtmlWebpackHarddiskPlugin());
     plugins.push(new BindViewsData());
     plugins.push(new AddExtraEntryFile({
-      dirs: [join(paths.appSrc, '/mock/**/**.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
+      dirs: [join(paths.appSrc, '/mocks/**/**.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
       extra: appConfig.extraDependencies || [],
       base: paths.appSrc,
     }));
@@ -308,7 +308,7 @@ const getRules = (env) => {
           sharedData: env === 'development' ? null : sharedData,
         },
       },
-      { loader: require.resolve('./loaders/twigLoader.js'), options: {} },
+      { loader: require.resolve('./loaders/twigLoader.js'), options: { fesMap: paths.fesMap } },
     ],
   });
   // other resource

@@ -19,9 +19,7 @@ module.exports = {
   alias: {},
   provide: {},
   routerConfig: {
-    '/fes/index': 'index.html',
-    '/fes/aboutme': 'about.html',
-    '/fes/info': 'info.html',
+    'project/index.html': '/fes/info',
   },
   // https://github.com/webpack-contrib/css-loader#modules
   cssModules: 'global',

@@ -1,4 +1,4 @@
-const { join, parse } = require('path');
+const { join } = require('path');
 const glob = require('glob');
 const Twig = require('twig');
 const fse = require('fs-extra');
@@ -7,52 +7,60 @@ const Base = require('./utils/Base');
 const base = new Base('tmpl');
 
 base.run((paths, chalk) => {
+  const { entryNames, common } = paths.fesMap;
+
   if (!fse.existsSync(join(paths.appBuild, 'tmpl'))) {
-    base.softExit(null, 0, (() => {
-      console.error(chalk.redBright(`Please make sure ${chalk.greenBright('build dir')} generated, and ${chalk.blueBright('npm run build')} to build tmpl for it!`));
-    }));
+    base.softExit(null, 0, () => {
+      console.error(
+        chalk.redBright(
+          `Please make sure ${chalk.greenBright('build dir')} generated, and ${chalk.blueBright(
+            'npm run build'
+          )} to build tmpl for it!`
+        )
+      );
+    });
   }
 
-  const mockFiles = glob.sync(paths.appMocks);
-  base.app.use(base.views(join(paths.appNodeModules, 'fes-scripts', 'scripts', 'utils', 'tmpl'), {
-    map: {
-      html: 'twig',
-    },
-  }));
+  base.app.use(
+    base.views(join(paths.appNodeModules, 'fes-scripts', 'scripts', 'utils', 'tmpl'), {
+      map: {
+        html: 'twig',
+      },
+    })
+  );
 
-  const pagePath = join(paths.appBuild, 'tmpl', '*.html');
-  const pages = glob.sync(pagePath, {});
   const mapPageToRoute = [];
   const routes = [];
-  pages.forEach((f) => {
-    const metas = parse(f);
+  Object.keys(entryNames).forEach((f) => {
+    const {
+      name, route, mockData, buildTmpl,
+    } = entryNames[f];
     let mock = {};
-    mockFiles.forEach((mf) => {
-      const mfMetas = parse(mf);
-      if (metas.name === mfMetas.name.split('.')[0] || mfMetas.dir.indexOf('common') > -1) {
+    [common.mock, mockData].forEach((exp) => {
+      glob.sync(exp).forEach((mf) => {
         try {
           mock = Object.assign({}, mock, require(mf)); // eslint-disable-line
         } catch (error) {
           mock = {};
         }
-      }
+      });
     });
 
-    mapPageToRoute.push({ url: `/${metas.name}`, name: metas.name });
+    mapPageToRoute.push({ url: route, name: name.replace('_', '/') });
     routes.push({
-      path: `/${metas.name}`,
+      path: route,
       method: 'get',
       middleware: async (ctx) => {
         const template = Twig.twig({
           // id: id, // id is optional, but useful for referencing the template later
-          data: fse.readFileSync(f, 'utf8'),
+          data: fse.readFileSync(buildTmpl, 'utf8'),
           allowInlineIncludes: true,
-          path: f,
+          path: buildTmpl,
         });
         ctx.body = template.render(mock);
         ctx.type = 'text/html';
       },
-    }) // eslint-disable-line
+    }); // eslint-disable-line
   });
 
   // pages.forEach((f) => {

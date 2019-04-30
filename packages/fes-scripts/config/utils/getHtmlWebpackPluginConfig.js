@@ -3,35 +3,32 @@
  * @author zhansingsong
  */
 
-const glob = require('glob');
-const { parse } = require('path');
-
-const getChunks = (chunk, entryFiles) => {
-  const filesName = entryFiles.map(file => parse(file).name);
+const getChunks = (chunk, isDev, isExist) => {
   const chunks = ['vendors', 'common', 'runtime'];
-  if (filesName.indexOf(chunk) > -1) {
+  if (isExist || (!isExist && isDev)) {
     chunks.push(chunk);
   }
   return chunks;
 };
 
 module.exports = (env, paths) => {
-  const viewFiles = glob.sync(paths.appViews, {});
-  const jsFiles = glob.sync(paths.appJsFiles, {});
+  const { entryNames } = paths.fesMap;
   // html-webpack-plugin 配置
   const pageConfigs = [];
-  viewFiles.forEach((templateFile) => {
-    const metas = parse(templateFile);
+  Object.keys(entryNames).forEach((templateFile) => {
+    const {
+      name, isExist, tmplName, tmpl,
+    } = entryNames[templateFile];
 
     const config = {
-      template: templateFile,
+      template: tmpl,
       // avoid FOUC to inject script head tag
       inject: true,
-      chunks: getChunks(metas.name, env === 'development' ? viewFiles : jsFiles),
+      chunks: getChunks(name, env === 'development', isExist),
       // excludeChunks: entryNameArr.filter(i => i !== metas.name),
     };
 
-    config.filename = `${metas.name}.html`;
+    config.filename = tmplName;
     config.minify = {
       removeComments: true,
       collapseWhitespace: true,

@@ -1,24 +1,23 @@
-const { join, parse } = require('path');
-const glob = require('glob');
+const { join } = require('path');
 const Base = require('./utils/Base');
 
 const base = new Base('preview');
+
 base.run((paths) => {
+  const { entryNames } = paths.fesMap;
   base.app.use(base.views(join(paths.appNodeModules, 'fes-scripts', 'scripts', 'utils', 'tmpl'), {
     map: {
       html: 'twig',
     },
   }));
 
-  const pagePath = join(paths.appBuild, '*.html');
-  const pages = glob.sync(pagePath, {});
   const mapPageToRoute = [];
   const routes = [];
 
-  pages.forEach((f) => {
-    const metas = parse(f);
-    mapPageToRoute.push({ url: `/${metas.name}`, name: metas.name });
-    routes.push({ path: `/${metas.name}`,  method: 'get', middleware: `/${metas.name}.html`}) // eslint-disable-line
+  Object.keys(entryNames).forEach((f) => {
+    const { name, route, tmplName } = entryNames[f];
+    mapPageToRoute.push({ url: route, name: name.replace('_', '/') });
+    routes.push({ path: route,  method: 'get', middleware: tmplName}) // eslint-disable-line
   });
   routes.push({
     path: '/',

@@ -1,8 +1,12 @@
 const glob = require('glob');
 const Twig = require('twig');
+const loaderUtils = require('loader-utils');
 const { join, parse, normalize } = require('path');
 
 function getMap(dir, prefix) {
+  if (!dir) {
+    return {};
+  }
   const mockFiles = glob.sync(dir, {});
   const mapNameTofile = {};
   mockFiles.forEach((f) => {
@@ -13,11 +17,8 @@ function getMap(dir, prefix) {
   return mapNameTofile;
 }
 
-function getMockData(name, map, ctx, commonMap) {
-  const REGEXP = new RegExp(`^(${name}).*`);
-  const filterMap = {};
-  Object.keys(map).forEach((key) => { if (REGEXP.test(key)) { filterMap[key] = map[key]; } });
-  const finalMap = { ...commonMap, ...filterMap };
+function getMockData(map, commonMap) {
+  const finalMap = { ...commonMap, ...map };
   const finalArr = Object.keys(finalMap);
   let result = {};
 
@@ -26,8 +27,6 @@ function getMockData(name, map, ctx, commonMap) {
       delete require.cache[finalMap[key]];
       const item = require(finalMap[key]); // eslint-disable-line
       result = Object.assign(result, item);
-      // 不能去掉，因为loader需要对其进行依赖，即使dealing with it by AddDependency plugin
-      // ctx.addDependency(finalMap[key]);
     });
   }
   return result;
@@ -37,12 +36,13 @@ function getMockData(name, map, ctx, commonMap) {
 function loader(source) {
   this.addContextDependency(join(process.cwd(), 'src', 'views'));
   this.addContextDependency(join(process.cwd(), 'src', 'mock'));
+  const { viewFiles, mockFiles } = loaderUtils.getOptions(this).fesMap;
   Twig.cache(false);
   this.cacheable && this.cacheable();  // eslint-disable-line
   const currentFilePath = require.resolve(this.resource);
-  const currentPathInfo = parse(currentFilePath);
-  const mock = join(process.cwd(), 'src', 'mock/*.+(js|json)');
-  const commonMock = join(process.cwd(), 'src', 'mock/common/*.+(js|json)');
+  // const currentFilePath = loaderUtils.getRemainingRequest(this);
+  // const currentPathInfo = parse(currentFilePath);
+  const commonMock = join(process.cwd(), 'src', 'mocks/common/*.+(js|json)');
 
   const template = Twig.twig({
     // id: id, // id is optional, but useful for referencing the template later
@@ -58,8 +58,7 @@ function loader(source) {
     }
   });
 
-  const mockData = getMockData(currentPathInfo.name, getMap(mock), this, getMap(commonMock, 'common'));
-
+  const mockData = getMockData(getMap(mockFiles[viewFiles[currentFilePath]]), getMap(commonMock, 'common'));
   const output = template.render(mockData);
   this.callback(null, output);
 }
