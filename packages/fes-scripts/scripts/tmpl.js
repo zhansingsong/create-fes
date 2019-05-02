@@ -9,7 +9,7 @@ const base = new Base('tmpl');
 base.run((paths, chalk) => {
   const { entryNames, common } = paths.fesMap;
 
-  if (!fse.existsSync(join(paths.appBuild, 'tmpl'))) {
+  if (!fse.existsSync(join(paths.appBuildTmpl))) {
     base.softExit(null, 0, () => {
       console.error(
         chalk.redBright(
@@ -63,11 +63,6 @@ base.run((paths, chalk) => {
     }); // eslint-disable-line
   });
 
-  // pages.forEach((f) => {
-  //   const metas = parse(f);
-  //   mapPageToRoute.push({ url: `/${metas.name}`, name: metas.name });
-  //   routes.push({ path: `/${metas.name}`, method: 'get', middleware: `/${metas.name}.html` }) // eslint-disable-line
-  // });
   routes.push({
     path: '/',
     method: 'get',

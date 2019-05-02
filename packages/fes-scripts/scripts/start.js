@@ -10,7 +10,7 @@ const base = new Base('dev');
 base.run((paths, chalk) => {
   const config = require('./utils/getConfig')('development', paths); // eslint-disable-line
   const compiler = webpack(config);
-  base.createRouter(paths.fesMap.routes, '', true);
+  base.createRouter(undefined, '', true);
   // app dir
   base.app.use(base.serve(paths.appDirectory));
   // public

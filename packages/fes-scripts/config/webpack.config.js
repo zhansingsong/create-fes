@@ -32,31 +32,14 @@ const BuildTmpl = require('./plugins/BuildTmpl');
 // utils
 const outputPathFn = require('./utils/outputPath');
 const getEntry = require('./utils/getEntry');
-const paths = require('../scripts/utils/paths');
 
 // share data
 const sharedData = {};
 
-const useBabel = fs.existsSync(paths.appBabelrc);
-const useTypescript = fs.existsSync(paths.appTsConfig);
-
-const appConfig = require(paths.appConfig); //eslint-disable-line
-
-const alias = {
-  // Support React Native Web
-  // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-  '@': paths.appSrc,
-  ...appConfig.alias,
-};
-
-const { sourceMap = true, devtool } = appConfig;
-const outputhPath = outputPathFn(appConfig.build.outputhPath);
-
 /**
  * get config.output
- * @param {String} env 'development' or 'production'
  */
-const getOutput = (env) => {
+const getOutput = (env, appConfig, outputhPath, paths) => {
   let output = {
     path: paths.appBuild,
     pathinfo: false,
@@ -78,9 +61,8 @@ const getOutput = (env) => {
 
 /**
  * get config.plugins
- * @param {String} env 'development' or 'production'
  */
-const getPlugins = (env) => {
+const getPlugins = (env, appConfig, useTypescript, paths) => {
   const plugins = [];
   // provide global variables
   plugins.push(new ProvidePlugin(appConfig.provide));
@@ -121,14 +103,14 @@ const getPlugins = (env) => {
           };
 
           files.forEach((item) => {
-            if (/.css$/.test(item.name)) {
+            if (/\.css$/.test(item.name)) {
               if (item.chunk && item.chunk.chunkReason) {
                 commonCss[item.name] = item.path;
               } else {
                 cssFiles[item.name] = item.path;
               }
             }
-            if (/.js$/.test(item.name)) {
+            if (/\.js$/.test(item.name)) {
               if (
                 (item.chunk && item.chunk.chunkReason)
                   || ['common', 'vendors', 'runtime'].some(i => item.name.split('.')[0] === i)
@@ -138,13 +120,16 @@ const getPlugins = (env) => {
                 scriptFiles[item.name] = item.path;
               }
             }
-            if (/.html$/.test(item.name) && item.isAsset) {
+            if (/\.html$/.test(item.name) && item.isAsset) {
               htmlFiles[item.name] = item.path;
             }
             if (item.isAsset && item.isModuleAsset) {
               assets[item.name] = item.path;
             }
           });
+          // fesMap
+          manifestFile.entry = paths.fesMap.entry;
+
           return manifestFile;
         },
       }),
@@ -166,7 +151,7 @@ const getPlugins = (env) => {
     )));
 
     if (appConfig.build.isTmpl) {
-      plugins.push(new BuildTmpl({ sharedData }));
+      plugins.push(new BuildTmpl({ sharedData, paths }));
     }
     /* eslint no-extra-boolean-cast: [0] */
     if (!!appConfig.build.report) {
@@ -205,149 +190,25 @@ const getPlugins = (env) => {
 };
 
 /**
- * get config.module.rules
- * @param {String} env 'development' or 'production'
+ * get config.optimization
  */
-const getRules = (env) => {
-  const oneOf = [
-    {
-      test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-      loader: require.resolve('url-loader'),
-      options: Object.assign({
-        limit: 1000,
-        name: `${outputhPath.img}`,
-      }, appConfig.urlLoader),
-    },
-  ];
-  if (useBabel) {
-    oneOf.push(Object.assign({
-      test: /\.(js|mjs|jsx|ts|tsx)$/,
-      include: paths.appSrc,
-      // disable to use 'require.resolve('babel-loader')'
-      loader: 'babel-loader',
-      options: {
-        compact: env === 'production',
-        cacheDirectory: env === 'development',
-        // This is a feature of `babel-loader` for webpack (not Babel itself).
-        // It enables caching results in ./node_modules/.cache/babel-loader/
-        // directory for faster rebuilds.
-      },
-    }, appConfig.babelLoader));
-  }
-
-  const postcssPlugins = () => {
-    const finalPlugins = [];
-    finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
-    finalPlugins.push(autoprefixer({
-      flexbox: 'no-2009',
-    }));
-    finalPlugins.push(sprites({
-      ...{
-        alias,
-        spritePath: join(paths.appSrc, 'assets/'),
-        filterBy: (image) => {
-          if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
-            return Promise.resolve();
-          }
-          return Promise.reject();
-        },
-      },
-      ...appConfig.spritesConfig,
-    }));
-    return finalPlugins;
-  };
-
-  // scss
-  oneOf.push({
-    test: /\.(scss|sass)$/,
-    use: [
-      {
-        loader: MiniCssExtractPlugin.loader,
-        options: {
-          // only enable hot in development
-          hmr: env === 'development',
-          // if hmr does not work, this is a forceful method.
-          reloadAll: true,
-        },
-      },
-      {
-        loader: require.resolve('css-loader'),
-        options: {
-          importLoaders: 2,
-          sourceMap,
-          modules: appConfig.cssModules,
-        },
-      },
-      {
-        loader: require.resolve('postcss-loader'),
-        options: {
-          // Necessary for external CSS imports to work
-          // https://github.com/facebookincubator/create-react-app/issues/2677
-          ident: 'postcss',
-          plugins: postcssPlugins,
-          sourceMap,
-        },
-      },
-      {
-        loader: require.resolve('sass-loader'),
-        options: {
-          sourceMap,
-        },
-      },
-    ],
-  });
-  // html
-  oneOf.push({
-    test: /\.html$/,
-    use: [
-      {
-        loader: require.resolve('./loaders/htmlLoader/index.js'),
-        options: {
-          interpolate: 'require',
-          attrs: ['img:src', 'img:data-src', 'img:data-original'],
-          sharedData: env === 'development' ? null : sharedData,
-        },
-      },
-      { loader: require.resolve('./loaders/twigLoader.js'), options: { fesMap: paths.fesMap } },
-    ],
-  });
-  // other resource
-  oneOf.push({
-    // Exclude `js` files to keep "css" loader working as it injects
-    // its runtime that would otherwise processed through "file" loader.
-    // Also exclude `html` and `json` extensions so they get processed
-    // by webpacks internal loaders.
-    exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-    loader: require.resolve('file-loader'),
-    options: {
-      name: `${outputhPath.others}`,
-    },
-  });
-  const rules = [
-    {
-      oneOf,
-    },
-  ];
-  if (appConfig.build.IE8 && env === 'produnction') {
-    rules.push({
-      test: /\.m?js$/,
-      include: paths.appSrc,
-      loader: require.resolve('./loaders/es3Loader.js'),
-      enforce: 'post',
-    });
-  }
-  return rules;
-};
-
-const getOptimization = env => (env === 'development'
+const getOptimization = (env, sourceMap) => (env === 'development'
   ? {
     removeAvailableModules: false,
     removeEmptyChunks: false,
-    splitChunks: false,
-    // extract webpack runtime
-    runtimeChunk: {
-      name: 'runtime',
+    // splitChunks: false,
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        common: {
+          name: 'common',
+          minChunks: 2,
+          minSize: 0,
+        },
+      },
     },
+    // extract webpack runtime
+    runtimeChunk: 'single',
   }
   : {
     removeAvailableModules: true,
@@ -417,14 +278,162 @@ const getOptimization = env => (env === 'development'
  * get config
  * @param {String} env 'development' or 'production'
  */
-module.exports = (env) => {
+module.exports = (env, paths) => {
+  const useBabel = fs.existsSync(paths.appBabelrc);
+  const useTypescript = fs.existsSync(paths.appTsConfig);
+
+  const appConfig = require(paths.appConfig); //eslint-disable-line
+
+  const alias = {
+    // Support React Native Web
+    // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+    '@': paths.appSrc,
+    ...appConfig.alias,
+  };
+  const { sourceMap = true, devtool } = appConfig;
+  const outputhPath = outputPathFn(appConfig.build.outputhPath);
+
+  /**
+   * get config.module.rules
+   */
+  const getRules = () => {
+    const oneOf = [
+      {
+        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+        loader: require.resolve('url-loader'),
+        options: Object.assign({
+          limit: 1000,
+          name: `${outputhPath.img}`,
+        }, appConfig.urlLoader),
+      },
+    ];
+    if (useBabel) {
+      oneOf.push(Object.assign({
+        test: /\.(js|mjs|jsx|ts|tsx)$/,
+        include: paths.appSrc,
+        // disable to use 'require.resolve('babel-loader')'
+        loader: 'babel-loader',
+        options: {
+          compact: env === 'production',
+          cacheDirectory: env === 'development',
+          // This is a feature of `babel-loader` for webpack (not Babel itself).
+          // It enables caching results in ./node_modules/.cache/babel-loader/
+          // directory for faster rebuilds.
+        },
+      }, appConfig.babelLoader));
+    }
+
+    const postcssPlugins = () => {
+      const finalPlugins = [];
+      finalPlugins.push(require('postcss-flexbugs-fixes'));// eslint-disable-line
+      finalPlugins.push(autoprefixer({
+        flexbox: 'no-2009',
+      }));
+      finalPlugins.push(sprites({
+        ...{
+          alias,
+          spritePath: join(paths.appSrc, 'assets/'),
+          filterBy: (image) => {
+            if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
+              return Promise.resolve();
+            }
+            return Promise.reject();
+          },
+        },
+        ...appConfig.spritesConfig,
+      }));
+      return finalPlugins;
+    };
+
+    // scss
+    oneOf.push({
+      test: /\.(scss|sass)$/,
+      use: [
+        {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            // only enable hot in development
+            hmr: env === 'development',
+            // if hmr does not work, this is a forceful method.
+            reloadAll: true,
+          },
+        },
+        {
+          loader: require.resolve('css-loader'),
+          options: {
+            importLoaders: 2,
+            sourceMap,
+            modules: appConfig.cssModules,
+          },
+        },
+        {
+          loader: require.resolve('postcss-loader'),
+          options: {
+            // Necessary for external CSS imports to work
+            // https://github.com/facebookincubator/create-react-app/issues/2677
+            ident: 'postcss',
+            plugins: postcssPlugins,
+            sourceMap,
+          },
+        },
+        {
+          loader: require.resolve('sass-loader'),
+          options: {
+            sourceMap,
+          },
+        },
+      ],
+    });
+    // html
+    oneOf.push({
+      test: /\.html$/,
+      use: [
+        {
+          loader: require.resolve('./loaders/htmlLoader/index.js'),
+          options: {
+            interpolate: 'require',
+            attrs: ['img:src', 'img:data-src', 'img:data-original'],
+            sharedData: env === 'development' ? null : sharedData,
+          },
+        },
+        { loader: require.resolve('./loaders/twigLoader.js'), options: { fesMap: paths.fesMap } },
+      ],
+    });
+    // other resource
+    oneOf.push({
+      // Exclude `js` files to keep "css" loader working as it injects
+      // its runtime that would otherwise processed through "file" loader.
+      // Also exclude `html` and `json` extensions so they get processed
+      // by webpacks internal loaders.
+      exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+      loader: require.resolve('file-loader'),
+      options: {
+        name: `${outputhPath.others}`,
+      },
+    });
+    const rules = [
+      {
+        oneOf,
+      },
+    ];
+    if (appConfig.build.IE8 && env === 'produnction') {
+      rules.push({
+        test: /\.m?js$/,
+        include: paths.appSrc,
+        loader: require.resolve('./loaders/es3Loader.js'),
+        enforce: 'post',
+      });
+    }
+    return rules;
+  };
+
   const finalConfig = {
     mode: env,
     bail: env === 'production',
     entry: getEntry(env, appConfig, paths),
-    output: getOutput(env),
+    output: getOutput(env, appConfig, outputhPath, paths),
     module: {
-      rules: getRules(env),
+      rules: getRules(),
     },
     resolve: {
       // These are the reasonable defaults supported by the Node ecosystem.
@@ -441,7 +450,7 @@ module.exports = (env) => {
       modules: ['node_modules', paths.appNodeModules],
     },
     devtool,
-    plugins: getPlugins(env),
+    plugins: getPlugins(env, appConfig, useTypescript, paths),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
     node: {
@@ -455,7 +464,7 @@ module.exports = (env) => {
       child_process: 'empty',
     },
 
-    optimization: getOptimization(env),
+    optimization: getOptimization(env, sourceMap),
     // cache: true,
     performance: {
       hints: false,

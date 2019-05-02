@@ -104,7 +104,7 @@ class Base {
       });
   }
 
-  createRouter(routerConfig, root, isIndex) {
+  createRouter(routerConfig = fesMap.routes, root, isIndex) {
     /**
      * normalize string path
      * @param {String} middleware
@@ -133,7 +133,7 @@ class Base {
       let newRouterConfig = routerConfig;
       if (!Array.isArray(newRouterConfig)) {
         newRouterConfig = Object.keys(routerConfig).map((key) => {
-          this.router.mapRoutes.push(routerConfig[key]); // eslint-disable-line
+          this.router.mapRoutes.push(key); // eslint-disable-line
           // 对 key 处理： a/b => /a/b
           return {
             path: key,
@@ -180,8 +180,9 @@ class Base {
       console.log(error);
     }
     generateRoutes(validateRouterConfig(routerConfig, root));
-
-    isIndex && this.router.redirect('/', this.router.mapRoutes[0]); // eslint-disable-line
+    // redirect
+    const getIndexPage = pathArr => pathArr.filter(path => this.router.mapRoutes.indexOf(path) > -1)[0];
+    isIndex && this.router.redirect('/', getIndexPage(['/index', '/home', this.router.mapRoutes[0]])); // eslint-disable-line
     // invoke
     this.app.use(this.router.routes()).use(this.router.allowedMethods());
   }

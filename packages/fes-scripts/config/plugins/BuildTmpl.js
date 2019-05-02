@@ -63,11 +63,6 @@ BuildTmpl.prototype.apply = function (compiler) {
       : '';
   }
 
-  function getEntry(manifest) {
-    const { htmlFiles } = manifest;
-    // return Object.values(htmlFiles);
-    return Object.values(htmlFiles).map(item => join(process.cwd(), 'src', 'views', item));
-  }
 
   function outputTmpl(content, metas) {
     fse.outputFileSync(
@@ -94,7 +89,7 @@ BuildTmpl.prototype.apply = function (compiler) {
   compiler.hooks.afterEmit.tapAsync('BuildTmpl', (compilation, callback) => {
     const manifest = require(join(process.cwd(), 'build', 'asset-manifest.json')); // eslint-disable-line
     const media = self.options.sharedData.mediaSource || {};
-    const entry = getEntry(manifest);
+    const { entry } = manifest;
     const files = glob.sync(join(process.cwd(), 'src', 'views', '**', '**.html'), {});
     files.forEach((f) => {
       // normalize解决Windows下路径分隔符bug
@@ -115,9 +110,9 @@ BuildTmpl.prototype.apply = function (compiler) {
           match => genreateScripts(manifest.commonScripts) + match
         );
       }
-      if (entry.indexOf(f) > -1) {
-        fileContent += insertLinks(manifest, metas);
-        fileContent += insertSript(manifest, metas);
+      if (entry[f] && entry[f].isExist) {
+        fileContent += insertLinks(manifest, entry[f]);
+        fileContent += insertSript(manifest, entry[f]);
       }
       fileContent = handleAssets(fileContent, manifest, media);
       outputTmpl(fileContent, metas);

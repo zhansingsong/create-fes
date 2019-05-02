@@ -40,3 +40,7 @@ module.exports = {
   },
 };
 ```
+
+## 去掉[postcss-modules](https://github.com/css-modules/postcss-modules)使用css-loader的css modules使用css
+之前使用postcss-moudles，主要解决将经过css-modules编译后的类名对象与模板变量数据合并作为模板渲染数据。这种模式对当前的开发场景来说不如将在js中使用灵活。
+>  尝试：将css-modules与模板数据结合在一起也算一种新尝试，可以制定一定规范，只要所有整个模板都遵循这一套规范也是一种新的开发方式。

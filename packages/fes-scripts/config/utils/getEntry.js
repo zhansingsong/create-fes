@@ -31,9 +31,9 @@ module.exports = (env, appConfig, paths) => {
 
   Object.keys(entryNames).forEach((f) => {
     const { name, isExist } = entryNames[f];
-    entry[name] = commonChunks.slice(0); // init and copy
     // 确保没有对应的js文件时不会报错
     if (isExist) {
+      entry[name] = commonChunks.slice(0); // init and copy
       entry[name].push(f);
     }
   });
