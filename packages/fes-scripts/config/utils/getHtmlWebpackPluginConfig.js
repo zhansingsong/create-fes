@@ -3,9 +3,9 @@
  * @author zhansingsong
  */
 
-const getChunks = (chunk, isExist) => {
+const getChunks = (chunk, isExist, isDev) => {
   const chunks = ['vendors', 'common', 'runtime'];
-  if (isExist) {
+  if (isExist || isDev) {
     chunks.push(chunk);
   }
   return chunks;
@@ -24,7 +24,7 @@ module.exports = (env, paths) => {
       template: tmpl,
       // avoid FOUC to inject script head tag
       inject: true,
-      chunks: getChunks(name, isExist),
+      chunks: getChunks(name, isExist, env === 'development'),
     };
 
     config.filename = tmplName;

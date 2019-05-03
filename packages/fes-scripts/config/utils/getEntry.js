@@ -10,12 +10,13 @@ module.exports = (env, appConfig, paths) => {
 
   // 处理 entry 配置项
   const entry = {};
+  const isDev = env === 'development';
 
   const commonChunks = [
     resolve(paths.appNodeModules, 'fes-scripts', 'config', 'utils', 'fesContext.js'),
   ];
 
-  if (env === 'development' && appConfig.isHot) {
+  if (isDev && appConfig.isHot) {
     const hotClient = process.env.FES_DEV
       ? join(
         paths.appNodeModules,
@@ -32,6 +33,9 @@ module.exports = (env, appConfig, paths) => {
   Object.keys(entryNames).forEach((f) => {
     const { name, isExist } = entryNames[f];
     // 确保没有对应的js文件时不会报错
+    if (isDev && !isExist) {
+      entry[name] = commonChunks.slice(0); // init and copy
+    }
     if (isExist) {
       entry[name] = commonChunks.slice(0); // init and copy
       entry[name].push(f);

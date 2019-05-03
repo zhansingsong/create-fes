@@ -1,3 +1,5 @@
+require('./utils/pre')(); // eslint-disable-line
+
 const { join } = require('path');
 const glob = require('glob');
 const Twig = require('twig');

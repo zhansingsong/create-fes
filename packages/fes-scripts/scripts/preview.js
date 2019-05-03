@@ -1,3 +1,5 @@
+require('./utils/pre')(); // eslint-disable-line
+
 const { join } = require('path');
 const Base = require('./utils/Base');
 
