@@ -200,7 +200,13 @@ const getOptimization = (env, sourceMap) => (env === 'development'
     // splitChunks: false,
     splitChunks: {
       chunks: 'all',
+      name: false,
       cacheGroups: {
+        vendors: {
+          name: 'vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+        },
         common: {
           name: 'common',
           minChunks: 2,
