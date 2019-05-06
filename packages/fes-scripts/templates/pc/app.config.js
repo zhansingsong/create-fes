@@ -15,6 +15,8 @@ module.exports = {
   // fork-ts-checker-webpack-plugin: https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme
   tsChecker: {},
   extraDependencies: [],
+  // twig loader by default
+  tmplLoader: null,
   // webpack resolve.alias
   alias: {},
   provide: {},

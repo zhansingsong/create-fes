@@ -32,6 +32,7 @@ const BuildTmpl = require('./plugins/BuildTmpl');
 // utils
 const outputPathFn = require('./utils/outputPath');
 const getEntry = require('./utils/getEntry');
+const getMockData = require('./utils/getMockData');
 
 // share data
 const sharedData = {};
@@ -396,7 +397,7 @@ module.exports = (env, paths) => {
             sharedData: env === 'development' ? null : sharedData,
           },
         },
-        { loader: require.resolve('./loaders/twigLoader.js'), options: { fesMap: paths.fesMap } },
+        { loader: appConfig.tmplLoader ? appConfig.tmplLoader : require.resolve('./loaders/twigLoader.js'), options: { getMockData: getMockData(paths) } },
       ],
     });
     // other resource
