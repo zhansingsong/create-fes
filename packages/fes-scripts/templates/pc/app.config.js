@@ -17,6 +17,8 @@ module.exports = {
   extraDependencies: [],
   // twig loader by default
   tmplLoader: null,
+  // html-loader options
+  htmlLoaderOptions: {},
   // webpack resolve.alias
   alias: {},
   provide: {},

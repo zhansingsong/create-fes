@@ -391,11 +391,11 @@ module.exports = (env, paths) => {
       use: [
         {
           loader: require.resolve('./loaders/htmlLoader/index.js'),
-          options: {
+          options: Object.assign({
             interpolate: 'require',
             attrs: ['img:src', 'img:data-src', 'img:data-original'],
             sharedData: env === 'development' ? null : sharedData,
-          },
+          }, appConfig.htmlLoaderOptions),
         },
         { loader: appConfig.tmplLoader ? appConfig.tmplLoader : require.resolve('./loaders/twigLoader.js'), options: { getMockData: getMockData(paths) } },
       ],
