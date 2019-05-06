@@ -163,7 +163,7 @@ const getPlugins = (env, appConfig, useTypescript, paths) => {
     // plugins.push(new HtmlWebpackHarddiskPlugin());
     plugins.push(new BindViewsData());
     plugins.push(new AddExtraEntryFile({
-      dirs: [join(paths.appSrc, '/mocks/**/**.+(js|json)'), join(paths.appSrc, '/views/**/**.html')],
+      dirs: [join(paths.appSrc, '/mocks/**/**.+(js|json)'), join(paths.appSrc, '/views/*.html')],
       extra: appConfig.extraDependencies || [],
       base: paths.appSrc,
     }));
