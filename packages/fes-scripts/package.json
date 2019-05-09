@@ -68,6 +68,7 @@
     "mockjs": "^1.0.1-beta3",
     "node-sass": "^4.11.0",
     "opn": "^5.3.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss": "^7.0.14",
     "postcss-flexbugs-fixes": "^3.3.1",
     "postcss-loader": "^2.1.5",

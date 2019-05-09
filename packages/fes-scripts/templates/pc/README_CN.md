@@ -51,15 +51,17 @@
   '/your/path': 'index.html' // 默认：'/index': 'index.html'
   ```
 - **cssModules**：配置css modules，默认为`'global'`。[详细配置参考……](https://github.com/webpack-contrib/css-loader#modules)。_如果不需要，建议关闭。这样可让 webpack 编译更快。_
-- **sourceMap**：是否开启 sourceMap，默认为`true`。
-- **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
+
 
 - **dev**：开发模式
   - **port**：端口号，默认为`3000`
   - **autoOpen**：是否自动打开浏览器，默认为`true`。支持 boolean 、String。如果存在`/index`, 默认打开`/index`，否则其中某个页面。如果是字符串(如: '/home')，就当成打开路径。如果路径不存在会回退到 boolean。
   - **qrcode**：是否生成预览二维码，默认为`true`
+  - **sourceMap**：是否开启 sourceMap，默认为`true`。
+  - **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
 - **build**：生产模式
-  - **IE8**：是否开启 es3ify-loader 编译代码，默认为`false`
+  -  **debug**：开启debug模式，不会对打包文件进行压缩处理。
+  
   - **publicPath**：输出路径，默认为'/'
   - **outputPath**：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
     - isHash：是否开启 hash。默认为`true`
@@ -76,6 +78,10 @@
     ```
   - **report**：是否生成打包分析报告，默认为`false`。支持 boolean 、object。如果为`true`，使用默认配置生成分析报告。如果为配置 object， 会根据该配置对象生成分析报告。[配置object](https://github.com/webpack-contrib/webpack-bundle-analyzer)
   - **isTmpl**：是否输出后端模板，默认为`false`
+  - **sourceMap**：是否开启 sourceMap，默认为`false`。
+  - **devtool**：配置 devtool，默认为 `false`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
+  -  **htmlMinify**：是否压缩html文件，默认`false`。[详细配置参考……](https://github.com/jantimon/html-webpack-plugin#minification)
+  - **optimizeCssAssetsPlugin**：压缩 css 配置。[详细配置参考……](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
 
 - **tmpl**：tmpl预览模式，**注意：该模式只能在`isTmpl: true`生效**
   - **port**：端口号，默认为`3100`
@@ -218,11 +224,3 @@ scss：绝对路径引用
   }
 }
 ```
-
-### 注意事项
-
-可以开启`css modules`，不过它更适合与 js 混合开发模式，如css-in-js、react、vue 开发。
-
-- [CSS modules break build if used with `~`](https://github.com/webpack-contrib/css-loader/issues/589#issuecomment-365942989)
-- [@imports not resolving when css-modules enabled ](https://github.com/webpack-contrib/css-loader/issues/436)
-- [CSS Modules & Sass in Create React App](https://medium.com/@kswanie21/css-modules-sass-in-create-react-app-37c3152de9)

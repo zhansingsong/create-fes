@@ -8,7 +8,6 @@ module.exports = {
   spritesConfig: {
     // dpr: v => `${v / 48}rem`,
   },
-  htmlMinify: {},
   // url-loader: https://github.com/webpack-contrib/url-loader
   urlLoader: {},
   // workbox-webpack-plugin: https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
@@ -28,31 +27,38 @@ module.exports = {
   },
   // https://github.com/webpack-contrib/css-loader#modules
   cssModules: 'global',
-  sourceMap: true,
-  devtool: 'cheap-module-source-map',
   dev: {
     port: 3000,
     autoOpen: true,
     qrcode: true,
+    sourceMap: true,
+    devtool: 'cheap-module-source-map',
   },
   build: {
-    IE8: false,
+    debug: false,
+
     publicPath: '/',
     outputhPath: {
-      isHash: true,
-      css: {
-        path: 'static/css/',
-      },
-      others: 'static/media/',
-      img: 'static/media/',
-      js: {
-        path: 'static/js/',
-        filename: '[name].[chunkhash:8].js',
-        chunck: '[name].[chunkhash:8].chunk.js',
-      },
+      // isHash: true,
+      // css: {
+      //   path: 'static/css/',
+      // },
+      // others: 'static/media/',
+      // img: 'static/media/',
+      // js: {
+      //   path: 'static/js/',
+      //   filename: '[name].[contenthash:8].js',
+      //   chunck: '[name].[chunkhash:8].chunk.js',
+      // },
     },
     report: false,
     isTmpl: true,
+    sourceMap: false,
+    devtool: false,
+    // https://github.com/jantimon/html-webpack-plugin#minification
+    htmlMinify: false,
+    // https://github.com/NMFR/optimize-css-assets-webpack-plugin
+    optimizeCssAssetsPlugin: {},
   },
   tmpl: {
     port: 3100,

@@ -29,9 +29,10 @@ module.exports = (env, appConfig, paths) => {
     };
 
     config.filename = tmplName;
+    const { htmlMinify, debug } = appConfig.build;
     if (!isDev) {
-      if (typeof appConfig.htmlMinify === 'boolean') {
-        config.minify = appConfig.htmlMinify;
+      if (typeof htmlMinify === 'boolean') {
+        config.minify = htmlMinify;
       } else {
         config.minify = Object.assign({
           removeComments: true,
@@ -45,6 +46,9 @@ module.exports = (env, appConfig, paths) => {
           minifyCSS: true,
           minifyURLs: true,
         }, appConfig.htmlWebpackMinfy || {});
+      }
+      if (debug) {
+        config.minify = false;
       }
     }
     pageConfigs.push({ ...config });

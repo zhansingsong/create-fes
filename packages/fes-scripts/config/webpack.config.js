@@ -27,6 +27,7 @@ const AddExtraEntryFile = require('./plugins/AddExtraEntryFile');
 const BindViewsData = require('./plugins/BindViewsData');
 
 // build plugins
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // eslint-disable-line
 const BuildTmpl = require('./plugins/BuildTmpl');
 
 // utils
@@ -63,15 +64,15 @@ const getOutput = (env, appConfig, outputhPath, paths) => {
 /**
  * get config.plugins
  */
-const getPlugins = (env, appConfig, useTypescript, paths) => {
+const getPlugins = (env, appConfig, outputhPath, useTypescript, paths) => {
   const plugins = [];
   // provide global variables
   plugins.push(new ProvidePlugin(appConfig.provide));
   // extract a mini css file
   // because of css-hot-loader，file name without [hash] and [hashcontent]
   plugins.push(new MiniCssExtractPlugin({
-    filename: 'static/media/[name].css',
-    chunkFilename: 'static/css/[name].chunk.css',
+    filename: outputhPath.css,
+    chunkFilename: outputhPath.cssChunk,
   }));
   // generate htmls
   const htmlWebpackPluginConfigs = getHtmlWebpackPluginConfigs(env, appConfig, paths);
@@ -81,6 +82,9 @@ const getPlugins = (env, appConfig, useTypescript, paths) => {
 
   if (env === 'production') {
     plugins.push(new CleanWebpackPlugin(paths.appBuild, { root: process.cwd() }));
+    if (!appConfig.build.debug) {
+      plugins.push(new OptimizeCssAssetsPlugin(Object.assign({}, appConfig.build.optimizeCssAssetsPlugin)));
+    }
     // 解决IE低版本：https://github.com/zuojj/fedlab/issues/5
     plugins.push(...[
       new ManifestPlugin({
@@ -193,7 +197,7 @@ const getPlugins = (env, appConfig, useTypescript, paths) => {
 /**
  * get config.optimization
  */
-const getOptimization = (env, sourceMap) => (env === 'development'
+const getOptimization = (env, sourceMap, appConfig) => ((env === 'development')
   ? {
     removeAvailableModules: false,
     removeEmptyChunks: false,
@@ -220,7 +224,7 @@ const getOptimization = (env, sourceMap) => (env === 'development'
   : {
     removeAvailableModules: true,
     removeEmptyChunks: true,
-    minimize: true,
+    minimize: !appConfig.build.debug,
     minimizer: [
       // This is only used in production mode
       new TerserPlugin({
@@ -297,7 +301,7 @@ module.exports = (env, paths) => {
     '@': paths.appSrc,
     ...appConfig.alias,
   };
-  const { sourceMap = true, devtool } = appConfig;
+  const { devtool, sourceMap } = appConfig[(env === 'development' || appConfig.build.debug) ? 'dev' : 'build'];
   const outputhPath = outputPathFn(appConfig.build.outputhPath);
 
   /**
@@ -423,14 +427,6 @@ module.exports = (env, paths) => {
         oneOf,
       },
     ];
-    if (appConfig.build.IE8 && env === 'produnction') {
-      rules.push({
-        test: /\.m?js$/,
-        include: paths.appSrc,
-        loader: require.resolve('./loaders/es3Loader.js'),
-        enforce: 'post',
-      });
-    }
     return rules;
   };
 
@@ -457,7 +453,7 @@ module.exports = (env, paths) => {
       modules: ['node_modules', paths.appNodeModules],
     },
     devtool,
-    plugins: getPlugins(env, appConfig, useTypescript, paths),
+    plugins: getPlugins(env, appConfig, outputhPath, useTypescript, paths),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
     node: {
@@ -471,7 +467,7 @@ module.exports = (env, paths) => {
       child_process: 'empty',
     },
 
-    optimization: getOptimization(env, sourceMap),
+    optimization: getOptimization(env, sourceMap, appConfig),
     // cache: true,
     performance: {
       hints: false,

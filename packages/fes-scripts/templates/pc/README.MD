@@ -48,8 +48,6 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 - **alias**: webpack `resolve.alias` config.
 - **provide**: webpack provide plugin config. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
 - **cssModules**: css modules config. default value is `'global'`. [detailed configuration reference...](https://github.com/webpack-contrib/css-loader#modules)。_It is recommended to turn off if not needed. This will make webpack compile faster._
-- **sourceMap**: Indicates whether sourceMap is enabled. default value is `true`.
-- **devtool**: devtool config. Default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
 - **routerConfig**: router config. It is able to customize route map.
 ```js
   '/your/path': 'index.html' // default: /index: 'index.html'
@@ -58,8 +56,10 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
   - **port**: server port. Default value is `3000`.
   - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`. Support boolean, String type. The `/index` is turned on by default if exist, or one of the pages. If it is a string (such as: '/home'), it will be the open path. if the path does not exist, it will fall back to boolean.
   - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
+  - **sourceMap**: Indicates whether sourceMap is enabled. default value is `true`.
+  - **devtool**: devtool config. Default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
 - **build**: production mode.
-  - **IE8**: Indicates whether es3ify-loader is used. Default value is `false`.
+  - **debug**: debug mode. default value is `false`.
   - **publicPath**: public path. default value is '/'.
   - **outputPath**: output path config. the config can be `String` or `Object` type.
       - isHash: Indicates whether to enable hash in filename. Default value is `true`.
@@ -76,6 +76,10 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
         ```
   - **report**: Indicates whether a report is generated automatically. default value is `false`. Support Boolean and Object type. if `true`, generating an analysis report on the default configuration. if `object`, generating an analysis report on the config object.[config object](https://github.com/webpack-contrib/webpack-bundle-analyzer)
   - **isTmpl**: Indicates whether backend template is generated automatically. default value is `true`.
+  - **sourceMap**: Indicates whether sourceMap is enabled. default value is `false`.
+  - **devtool**: devtool config. Default value is `false`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
+  - **htmlMinify**: Indicates whether html minification is enabled. default value is `false`. [detailed configuration reference...](https://github.com/jantimon/html-webpack-plugin#minification)
+  - **optimizeCssAssetsPlugin**: Indicates that css minification config object. [detailed configuration reference...](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
 - **tmpl**: backend template preview mode. **note：the mode only works on `isTmpl: true`**
   - **port**: server port. default value is `3100`.
   - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.
