@@ -11,8 +11,9 @@ const getChunks = (chunk, isExist, isDev) => {
   return chunks;
 };
 
-module.exports = (env, paths) => {
+module.exports = (env, appConfig, paths) => {
   const { entryNames } = paths.fesMap;
+  const isDev = env === 'development';
   // html-webpack-plugin 配置
   const pageConfigs = [];
   Object.keys(entryNames).forEach((templateFile) => {
@@ -24,22 +25,28 @@ module.exports = (env, paths) => {
       template: tmpl,
       // avoid FOUC to inject script head tag
       inject: true,
-      chunks: getChunks(name, isExist, env === 'development'),
+      chunks: getChunks(name, isExist, isDev),
     };
 
     config.filename = tmplName;
-    config.minify = {
-      removeComments: true,
-      collapseWhitespace: true,
-      removeRedundantAttributes: true,
-      useShortDoctype: true,
-      removeEmptyAttributes: true,
-      removeStyleLinkTypeAttributes: true,
-      keepClosingSlash: true,
-      minifyJS: true,
-      minifyCSS: true,
-      minifyURLs: true,
-    };
+    if (!isDev) {
+      if (typeof appConfig.htmlMinify === 'boolean') {
+        config.minify = appConfig.htmlMinify;
+      } else {
+        config.minify = Object.assign({
+          removeComments: true,
+          collapseWhitespace: true,
+          removeRedundantAttributes: true,
+          useShortDoctype: true,
+          removeEmptyAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          keepClosingSlash: true,
+          minifyJS: true,
+          minifyCSS: true,
+          minifyURLs: true,
+        }, appConfig.htmlWebpackMinfy || {});
+      }
+    }
     pageConfigs.push({ ...config });
   });
   return pageConfigs;

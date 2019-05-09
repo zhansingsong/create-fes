@@ -8,6 +8,7 @@ module.exports = {
   spritesConfig: {
     // dpr: v => `${v / 48}rem`,
   },
+  htmlMinify: {},
   // url-loader: https://github.com/webpack-contrib/url-loader
   urlLoader: {},
   // workbox-webpack-plugin: https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin

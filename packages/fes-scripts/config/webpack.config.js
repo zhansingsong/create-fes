@@ -74,7 +74,7 @@ const getPlugins = (env, appConfig, useTypescript, paths) => {
     chunkFilename: 'static/css/[name].chunk.css',
   }));
   // generate htmls
-  const htmlWebpackPluginConfigs = getHtmlWebpackPluginConfigs(env, paths);
+  const htmlWebpackPluginConfigs = getHtmlWebpackPluginConfigs(env, appConfig, paths);
   htmlWebpackPluginConfigs.forEach((config) => {
     plugins.push(new HtmlWebpackPlugin(config));
   });
