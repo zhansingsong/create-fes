@@ -121,7 +121,7 @@ $ /path/to/your/template #输入模板绝对路径
     options: {},
   }
   ```
-- **styleLoader**: 设置css预处理 loader，默认为 `sass-loader`。
+- **styleLoader**: 设置css预处理 loader，默认为 `sass-loader`。如果不想使用任何预处理器，只需将`styleLoader: false`即可。
   ```js
   styleLoader: {
     test: /\.less$/,

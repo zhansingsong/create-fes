@@ -124,7 +124,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
     options: {},
   }
   ```
-- **styleLoader**: css pre-processor loader setting, sass-loader by default.
+- **styleLoader**: css pre-processor loader setting, sass-loader by default. If not use any pre-processor, just set `styleLoader: false`.
   ```js
   styleLoader: {
     test: /\.less$/,
