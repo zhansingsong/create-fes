@@ -116,6 +116,23 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 - **sw**: service worker config. Default value is `{}`. [detailed configuration reference...](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 - **tsChecker**: fork-ts-checker-webpack-plugin config, default value is `{}`. [detailed configuration reference...](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
 - **extraDependencies**: Add other files as dependencies to watch for dev. glob pattern is available(the path is relative to `src`). [glob info](https://github.com/isaacs/node-glob)
+- **tmplLoader**: template language loader setting, twig-loader by default.
+  ```js
+  tmplLoader: {
+    test: /\.pug$/,
+    loader: 'pug-loader',
+    options: {},
+  }
+  ```
+- **styleLoader**: css pre-processor loader setting, sass-loader by default.
+  ```js
+  styleLoader: {
+    test: /\.less$/,
+    loader: 'less-loader',
+    options: {},
+  }
+  ```
+- **htmlLoaderOptions**: the options of `html-loader`.
 - **alias**: webpack `resolve.alias` config.
 - **provide**: webpack provide plugin config. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
 - **cssModules**: css modules config. default value is `'global'`. [detailed configuration reference...](https://github.com/webpack-contrib/css-loader#modules)。_It is recommended to turn off if not needed. This will make webpack compile faster._
@@ -130,6 +147,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
   - **sourceMap**: Indicates whether sourceMap is enabled. default value is `true`.
   - **devtool**: devtool config. Default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
 - **build**: production mode.
+  - **foolMode**: fool mode. If enable, splitChunks disable. default value is `false`.
   - **debug**: debug mode. default value is `false`.
   - **publicPath**: public path. default value is '/'.
   - **outputPath**: output path config. the config can be `String` or `Object` type.

@@ -16,7 +16,11 @@ module.exports = {
   tsChecker: {},
   extraDependencies: [],
   // twig loader by default
-  tmplLoader: null,
+  // set 'false', without any preprocessor only css
+  tmplLoader: {},
+  // sass-loader by default
+  styleLoader: {
+  },
   // html-loader options
   htmlLoaderOptions: {},
   // webpack resolve.alias
@@ -35,8 +39,8 @@ module.exports = {
     devtool: 'cheap-module-source-map',
   },
   build: {
+    foolMode: false, // false
     debug: false,
-
     publicPath: '/',
     outputhPath: {
       // isHash: true,

@@ -263,8 +263,8 @@ const getOptimization = (env, sourceMap, appConfig) => ((env === 'development')
         sourceMap,
       }),
     ],
-    runtimeChunk: 'single', // 将runtime提出来便于缓存
-    splitChunks: {
+    runtimeChunk: appConfig.build.foolMode ? false : 'single', // 将runtime提出来便于缓存
+    splitChunks: appConfig.build.foolMode ? false : {
       chunks: 'all',
       automaticNameDelimiter: '.',
       name: true,
@@ -357,47 +357,74 @@ module.exports = (env, paths) => {
     };
 
     // scss
-    oneOf.push({
-      test: /\.(scss|sass)$/,
-      use: [
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            // only enable hot in development
-            hmr: env === 'development',
-            // if hmr does not work, this is a forceful method.
-            reloadAll: true,
-          },
+    const cssUse = [
+      {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+          // only enable hot in development
+          hmr: env === 'development',
+          // if hmr does not work, this is a forceful method.
+          reloadAll: true,
         },
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 2,
-            sourceMap,
-            modules: appConfig.cssModules,
-          },
+      },
+      {
+        loader: require.resolve('css-loader'),
+        options: {
+          importLoaders: 2,
+          sourceMap,
+          modules: appConfig.cssModules,
         },
-        {
-          loader: require.resolve('postcss-loader'),
-          options: {
-            // Necessary for external CSS imports to work
-            // https://github.com/facebookincubator/create-react-app/issues/2677
-            ident: 'postcss',
-            plugins: postcssPlugins,
-            sourceMap,
-          },
+      },
+      {
+        loader: require.resolve('postcss-loader'),
+        options: {
+          // Necessary for external CSS imports to work
+          // https://github.com/facebookincubator/create-react-app/issues/2677
+          ident: 'postcss',
+          plugins: postcssPlugins,
+          sourceMap,
         },
-        {
+      },
+    ];
+    let cssTest = /\.css$/;
+    const { styleLoader } = appConfig;
+    if (styleLoader) {
+      if (!styleLoader.loader && !styleLoader.test) {
+        cssTest = /\.(scss|sass)$/;
+        cssUse.push({
           loader: require.resolve('sass-loader'),
-          options: {
-            sourceMap,
-          },
-        },
-      ],
-    });
-    // html
+          options: { sourceMap },
+        });
+      } else {
+        if (!styleLoader.loader) {
+          console.error('fes-styleLoader.loader is required but missing.');
+          process.exit(1);
+        }
+        if (!styleLoader.test) {
+          console.error('fes-styleLoader.test is required but missing.');
+          process.exit(1);
+        }
+        cssTest = styleLoader.test;
+        cssUse.push({
+          loader: styleLoader.loader,
+          options: styleLoader.options || { sourceMap },
+        });
+      }
+    }
+    console.log(cssTest, cssUse);
     oneOf.push({
-      test: /\.html$/,
+      test: cssTest,
+      use: cssUse,
+    });
+
+    // html
+    const { tmplLoader = {} } = appConfig;
+    const htmlTest = tmplLoader.test || /\.html$/;
+    const htmlLoader = tmplLoader.loader || require.resolve('./loaders/twigLoader.js');
+    const htmlOptions = tmplLoader.options || {};
+    oneOf.push({
+      test: htmlTest,
+      include: paths.appViews,
       use: [
         {
           loader: require.resolve('./loaders/htmlLoader/index.js'),
@@ -407,7 +434,7 @@ module.exports = (env, paths) => {
             sharedData: env === 'development' ? null : sharedData,
           }, appConfig.htmlLoaderOptions),
         },
-        { loader: appConfig.tmplLoader ? appConfig.tmplLoader : require.resolve('./loaders/twigLoader.js'), options: { getMockData: getMockData(paths) } },
+        { loader: htmlLoader, options: { getMockData: getMockData(paths), ...htmlOptions } },
       ],
     });
     // other resource

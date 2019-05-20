@@ -5,7 +5,7 @@ module.exports = (env, paths) => {
   const preferenceConfig = require(paths[isDev ? 'devConfig' : 'prodConfig']); // eslint-disable-line
   let config = require('../../config/webpack.config.js')(env, paths); // eslint-disable-line
   if (typeof preferenceConfig === 'function') {
-    config = preferenceConfig(config, merge);
+    config = preferenceConfig(config, merge, paths);
   }
   return config;
 };

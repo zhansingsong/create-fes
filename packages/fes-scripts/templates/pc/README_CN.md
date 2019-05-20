@@ -44,6 +44,23 @@
 - **sw**：service worker 配置，默认为`{}`。[详细配置参考……](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 - **tsChecker**：fork-ts-checker-webpack-plugin 配置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
 - **extraDependencies**：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
+- **tmplLoader**: 设置模板语言 loader， 默认为 `twig-loader`。
+  ```js
+  tmplLoader: {
+    test: /\.pug$/,
+    loader: 'pug-loader',
+    options: {},
+  }
+  ```
+- **styleLoader**: 设置css预处理 loader，默认为 `sass-loader`。
+  ```js
+  styleLoader: {
+    test: /\.less$/,
+    loader: 'less-loader',
+    options: {},
+  }
+  ```
+- **htmlLoaderOptions**: `html-loader` 的 options。
 - **alias**：alias配置项。
 - **provide**：provide plugin 配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
 - **routerConfig**：路由配置项，可以自定义页面的路由映射。
@@ -60,8 +77,8 @@
   - **sourceMap**：是否开启 sourceMap，默认为`true`。
   - **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
 - **build**：生产模式
-  -  **debug**：开启debug模式，不会对打包文件进行压缩处理。
-  
+  -  **foolMode**：开启 fool 模式，如果开启会关闭 splitChunks。默认为`false`。
+  -  **debug**：开启 debug 模式，不会对打包文件进行压缩处理。
   - **publicPath**：输出路径，默认为'/'
   - **outputPath**：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
     - isHash：是否开启 hash。默认为`true`
