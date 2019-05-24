@@ -72,7 +72,7 @@ module.exports = (routerConfig = {}, paths) => {
     }
     return jsFilesObj;
   }, {});
-
+  const chunks = ['vendors', 'commons', 'runtime', 'styles'];
   // twigloader, entry: routes viewFiles mockFiles
   return {
     invert,
@@ -83,5 +83,6 @@ module.exports = (routerConfig = {}, paths) => {
     jsFiles,
     mockFiles,
     entry,
+    chunks,
   };
 };

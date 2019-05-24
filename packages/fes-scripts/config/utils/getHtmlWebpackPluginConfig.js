@@ -3,16 +3,17 @@
  * @author zhansingsong
  */
 
-const getChunks = (chunk, isExist, isDev) => {
-  const chunks = ['vendors', 'common', 'runtime'];
+const getChunks = (chunk, isExist, isDev, chunks) => {
+  // 生成chunks副本
+  const tempChunks = chunks.slice(0);
   if (isExist || isDev) {
-    chunks.push(chunk);
+    tempChunks.push(chunk);
   }
-  return chunks;
+  return tempChunks;
 };
 
 module.exports = (env, appConfig, paths) => {
-  const { entryNames } = paths.fesMap;
+  const { entryNames, chunks } = paths.fesMap;
   const isDev = env === 'development';
   // html-webpack-plugin 配置
   const pageConfigs = [];
@@ -25,7 +26,7 @@ module.exports = (env, appConfig, paths) => {
       template: tmpl,
       // avoid FOUC to inject script head tag
       inject: true,
-      chunks: getChunks(name, isExist, isDev),
+      chunks: getChunks(name, isExist, isDev, chunks),
     };
 
     config.filename = tmplName;

@@ -169,6 +169,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
   - **devtool**: devtool config. Default value is `false`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
   - **htmlMinify**: Indicates whether html minification is enabled. default value is `false`. [detailed configuration reference...](https://github.com/jantimon/html-webpack-plugin#minification)
   - **optimizeCssAssetsPlugin**: Indicates that css minification config object. [detailed configuration reference...](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
+  - **splitChunks**：splitChunks config。[detailed configuration reference...](https://webpack.js.org/plugins/split-chunks-plugin/)
 - **tmpl**: backend template preview mode. **note：the mode only works on `isTmpl: true`**
   - **port**: server port. default value is `3100`.
   - **autoOpen**: Indicates whether the browser is opened automatically. default value is `true`.

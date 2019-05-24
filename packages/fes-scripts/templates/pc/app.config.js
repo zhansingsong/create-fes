@@ -63,6 +63,8 @@ module.exports = {
     htmlMinify: false,
     // https://github.com/NMFR/optimize-css-assets-webpack-plugin
     optimizeCssAssetsPlugin: {},
+    // https://webpack.js.org/plugins/split-chunks-plugin/#splitchunkscachegroupspriority
+    splitChunks: null,
   },
   tmpl: {
     port: 3100,

@@ -168,6 +168,7 @@ $ /path/to/your/template #输入模板绝对路径
   - **devtool**：配置 devtool，默认为 `false`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
   -  **htmlMinify**：是否压缩html文件，默认`false`。[详细配置参考……](https://github.com/jantimon/html-webpack-plugin#minification)
   - **optimizeCssAssetsPlugin**：压缩 css 配置。[详细配置参考……](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
+  - **splitChunks**：splitChunks 配置。[详细配置参考……](https://webpack.js.org/plugins/split-chunks-plugin/)
 
 - **tmpl**：tmpl预览模式，**注意：该模式只能在`isTmpl: true`生效**
   - **port**：端口号，默认为`3100`
