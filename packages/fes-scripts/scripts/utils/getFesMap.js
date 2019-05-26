@@ -4,7 +4,33 @@ const {
 } = require('path');
 const glob = require('glob');
 
-module.exports = (routerConfig = {}, paths) => {
+const generateFocus = (focus = '', viewFiles, appViews) => {
+  const results = {};
+  let focusArr = focus;
+  if (!Array.isArray(focus)) {
+    focusArr = [focus];
+  }
+
+  focusArr.forEach((item) => {
+    let key = '';
+    let ext = '.html';
+    if (/\.html/.test(item)) {
+      ext = '';
+    }
+    try {
+      key = join(appViews, item + ext);
+    } catch (error) {
+      key = '';
+    }
+    if (viewFiles[key]) {
+      results[key] = viewFiles[key];
+    }
+  });
+
+  return Object.keys(results).length > 0 ? results : viewFiles;
+};
+
+module.exports = (routerConfig = {}, focus = '', paths) => {
   const escapeRegExp = string => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
   // invert
   const invert = obj => Object.assign(...Object.entries(obj).map(([k, v]) => ({ [v]: k })));
@@ -40,7 +66,10 @@ module.exports = (routerConfig = {}, paths) => {
     return customRoutes;
   }, {});
   // viewFiles
-  const viewFiles = Object.assign(defaultViewFiles, customViewFiles);
+  let viewFiles = Object.assign(defaultViewFiles, customViewFiles);
+  if (focus) {
+    viewFiles = generateFocus(focus, viewFiles, appViews);
+  }
   // jsFiles
   const jsFiles = Object.keys(viewFiles).reduce((jsFilesObj, file) => {
     const filePath = file.replace(VIEWS_REG_EXP, (m, path, f) => `${appJsFiles}${f}js`);

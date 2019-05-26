@@ -145,6 +145,7 @@ $ /path/to/your/template #输入模板绝对路径
   - **qrcode**：是否生成预览二维码，默认为`true`
   - **sourceMap**：是否开启 sourceMap，默认为`true`。
   - **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
+  - **focus**：表示只编译指定的路由模板文件，提高编译速度。支持 String、Array，默认值为 `''`。
 - **build**：生产模式
   -  **foolMode**：开启 fool 模式，如果开启会关闭 splitChunks。默认为`false`。
   -  **debug**：开启 debug 模式，不会对打包文件进行压缩处理。

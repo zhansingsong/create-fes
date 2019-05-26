@@ -37,6 +37,7 @@ module.exports = {
     qrcode: true,
     sourceMap: true,
     devtool: 'cheap-module-source-map',
+    focus: '',
   },
   build: {
     foolMode: false, // false

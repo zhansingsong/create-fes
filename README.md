@@ -146,6 +146,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
   - **qrcode**: Indicates whether the qrcode is generated automatically. default value is `true`.
   - **sourceMap**: Indicates whether sourceMap is enabled. default value is `true`.
   - **devtool**: devtool config. Default value is `'cheap-module-source-map'`. [detailed configuration reference...](https://webpack.js.org/configuration/devtool/#root)
+  - **focus**: Indicates that only the specified route template file is compiled to improve the compilation speed. Support for String or Array types. default value is `''`.
 - **build**: production mode.
   - **foolMode**: fool mode. If enable, splitChunks disable. default value is `false`.
   - **debug**: debug mode. default value is `false`.
