@@ -111,7 +111,7 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 - **isHot**: Indicates whether the hmr is enabled. Default value is `true`(only dev mode).
 - **proxy**: Proxy config. [detailed configuration reference...](https://github.com/chimurai/http-proxy-middleware)
 - **babelLoader**：babel-loader config. Default value is `{}`. [detailed configuration reference...](https://github.com/babel/babel-loader)
-- spritesConfig: postcss sprites config. Default value is `{}`. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
+- **spritesConfig**: postcss sprites config. Default value is `{}`. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
 - **urlLoader**: url-loader config. [detailed configuration reference...](https://github.com/webpack-contrib/url-loader)
 - **sw**: service worker config. Default value is `{}`. [detailed configuration reference...](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 - **tsChecker**: fork-ts-checker-webpack-plugin config, default value is `{}`. [detailed configuration reference...](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
