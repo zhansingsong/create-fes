@@ -1,6 +1,10 @@
 # 为什么我构建这个脚手架
 
-本文不是什么技术性介绍文章，准确地说算是自己的成长记录吧。刚参加工作时，组里使用的脚手架是由 leader 使用 webpack, gulp 搭建的 fex。当时只需知道怎么使用就行了，不过为了能更好地工作，对 fex 怎么构建一直很好奇，也一直关注相关的技术栈。经过一年多磨练后，对 fex 的怎么搭建有了个大概认识。不过常言道："没有对比就没有伤害"。 在使用 vue-cli 构建第一个 vue 项目后，对脚手架构建有了个全新的认识。发现 fex 存在很多不足：
+本文不是什么技术性介绍文章，准确地说算是自己的成长记录吧。刚参加工作时，组里使用的脚手架是由 leader 使用 webpack, gulp 搭建的 fex。当时只需知道怎么使用就行了，不过为了能更好地工作，对 fex 怎么构建一直很好奇，也一直关注相关的技术栈。经过一年多磨练后，对 fex 的怎么搭建有了个大概认识。常言道："没有对比就没有伤害"。
+
+![](./imgs/niubi.gif)
+
+在使用 vue-cli 构建第一个 vue 项目后，对脚手架构建有了个全新的认识。发现 fex 存在很多不足：
 
 - 在打包时，只对 JavaScript 和 CSS 脚本文件进行打包压缩处理。不能对资源文件（如 img，字体等）进行依赖处理。导致在打包时：
   - 不能按需打包（即实际用到资源，才将其进行打包）
@@ -13,7 +17,10 @@
 
 当然，fex 也有自己的优点。基于自建服务提供前后端复用模板功能。前端后端使用相同的模板语言，前端拼接的模板可以直接输出给后端使用。
 
-第二年年初，组里项目不是太多，刚好有时间折腾一下，于是决定构建一个新的脚手架 fes。为了尝试一些新东西，在技术栈上，都使用了当时最新的技术框架 webpack4、koa2、babel6 来搭建。但为了了解 webpack 如何工作，对 webpack 就做了 8 次调试，才稍微对 webpack 整个架构有个初步认识。还对 koa2、babel6 做了相关的研究。为了能将 fes 体验做到更好，除了继承 fex 的模板复用功能外，还集成了 vue-cli 中不错的功能。
+第二年年初，组里项目不是太多，刚好有时间折腾一下，于是决定构建一个新的脚手架 fes。为了尝试一些新东西，在技术栈上，都使用了当时最新的技术框架 webpack4、koa2、babel6 来搭建。但为了了解 webpack 如何工作，对 webpack 就做了 8 次调试，才稍微对 webpack 整个架构有个初步认识。
+> singsong: 在真正去了解 webpack，才知道它有多太复杂了。当然参考了网上一些大神分享关于 webpack 源码分析的文章。反正整个过程还是挺熬心的。
+
+同时，还对 koa2、babel6 做了相关的研究。为了提高 fes 开发体验，除了继承 fex 的模板复用功能外，还集成了 vue-cli 中不错的功能。
 
 - 兼容 macOS、windows、Linux 等操作系统。同时兼容主流浏览器及 IE 低版本
 - ES6、SASS
@@ -45,7 +52,7 @@
 >- 规范化可以让开发规避一些常见的错误。如未使用的变量；文件命名错误，未能成功导入等。
 >- 规范化对新人有很好的指导作用，好的开始很重要。因为这些规范都是行业内一些最佳实践，可新人成长得更加专业化。
 
-为了能将规范化在组内推广，作为一种开发习惯。所以也将 eslint、stylelint、prettier、husky、lint-staged 集成到 fes 中。
+为了促进团队的代码规范化，也将 eslint、stylelint、prettier、husky、lint-staged 集成到 fes 中。
 
 当然整个 fes 搭建过程中也并不是一帆风顺的，途中也遇见一些坑：
 
@@ -131,9 +138,9 @@ fes 是基于 webpack-html-plugin 插件自动生成合成的 html 文件。但�
 }
 ```
 
-大概经历一个半月的时间，fes 也如期而至。于是就在组里推广使用，自己也使用开发了几个项目。与 fex 相比，fes 在开发效率、体验上都得到很大的提升。但是也暴露一些问题，其中最头疼的问题是：由于没有将核心代码提取作为依赖包，导致在使用过程中，若发现问题都是现场解决，然后再同步到代码库中。但这样不能很好地将代码同步其他已使用项目中。
+大概经历一个半月的时间，fes 也如期而至。于是就在组里推广使用，自己也使用开发了几个项目。与 fex 相比，fes 在开发效率、体验上都得到很大的提升。但是也暴露一些问题，其中最头疼的问题是：由于没有将核心代码提取作为依赖包。导致在使用过程中升级维护不是很方便。一般发现问题都是现场解决，然后再同步到代码库中。但这样不能很好地将代码同步其他已使用项目中。
 
-所以在经过半年的沉淀后，决定对 fes 进行重构。并整理了需要优化的点：
+在经过半年的沉淀后，决定对 fes 进行重构。并整理了一些优化点：
 - 优化热加载。
 - 支持模板语言 loader 的配置。
 - 支持 css 预处理 loader 的配置。
@@ -154,20 +161,19 @@ fes 是基于 webpack-html-plugin 插件自动生成合成的 html 文件。但�
 - 优化编译，打包时间。
 
 不过在重构过程中，在是否将 Babel 内置于 fes 中有了一些新的思考 🤔。
-> 在搭建 fes 初版时，只要是觉得不错的功能都集成于 fes 中，但并不是所有的项目都需要所有功能，而且这样会导致 fes 变得臃肿。也就是说有些可选功能，没必要作为内置功能。如果 babel、typeScript、stylelint、eslint、precommit 等。其实 fes 只需内置基础架构即可，其他可选功能可以通过配置来定制。这样不仅可让 fes 变得灵活轻巧，而且也方便扩展。这才是架构的精髓！
+
+> 在搭建 fes 初版时，只要觉得功能不错都会集成于 fes 中。但并不是所有的项目都需要所有功能，而且这样会导致 fes 变得臃肿。也就是说有些可选功能，没必要作为内置功能。如 babel、typeScript、stylelint、eslint、precommit 等。其实 fes 只需内置基础架构即可，其他可选功能可以通过配置来定制。这样不仅可让 fes 变得灵活轻巧，而且也方便扩展。这才是架构的精髓！
 
 
 为了将 fes 的核心代码提取作为依赖包，参考了 [create-react-app](https://github.com/facebook/create-react-app) 构建。毕竟 create-react-app 是个明星项目，技术也相对稳定成熟。加上之前也使用 create-react-app 构建几个 react 项目，对其也算有点了解，不过只停留在使用上。如果要重构 fes 还需要对 create-react-app 源码深入研究一番。
 
 整个 fes 的构建完全基于 create-react-app。代码结构也由两个 packages 组成：create-fes 和 fes-scripts。但对于如何维护这两个 packages 是一个很棘手的问题。如果独立管理开发起来不是很方便，后期维护成本也高（如版本号维护）。查看了 create-react-app 源码，发现在其源码中有一个 `lerna.json` 文件。好奇这个文件是做什么的，就了解一番。经查阅了解到 [Lerna](https://github.com/lerna/lerna) 可以用来管理项目中多个 packages。这正是自己所需要的，为此自己也专门写了一篇 Lerna 文章：[monorepos by lerna](./Lerna-monorepos.md)。
 
-经历一个多月的重构之旅，fes-v1 也基本告一段落。其中 create-fes 是在 create-react-app 的基础上做的修改。所以使用上与 create-react-app 很相似。为了验证
-在该次重构中自己做了一些优化，让fes的体验得到很大提升。
+在该次重构中自己做了一些优化，让 fes 的体验得到很大地提升。
 
 - 动态响应mock api
 
-在 fes 初版时，对 mock api 的修改，需要重启服务才能生效。这样体验在开发中不是很友好的。有木有什么方法能让mock api的能修改不用重启就能生效。一开始想到的解决方案是基于 `nodemon`，但是这样只要对 mock api 文件做修改，就会重新服务。如果修改频繁，会不停修改重启服务，会影响正常的开放服务，不是很理想。那另开一个服务来专门服务于mock api，在基于 `nodemon` 监听变化，这样就不会影响正常的开发服务。但这样就感觉整个架构变得有点重。于是换个思路，对请求响应下手，在响应请求时，去掉缓存，确保每次响应都是最新的数据，这样不就解决了自己的问题？
-但需要过滤掉静态资源的请求，不然会影响页面的响应时间。
+在 fes 初版时，对 mock api 的修改，需要重启服务才能生效。这样体验在开发中不是很友好的。有木有什么方法能让mock api的能修改不用重启就能生效。一开始想到的解决方案是基于 `nodemon`，但是这样只要对 mock api 文件做修改，就会重新服务。如果频繁地修改，会不停修改重启服务，会影响正常的开放服务，不是很理想。那另开一个服务来专门服务于mock api，再基于 `nodemon` 监听变化，这样就不会影响正常的开发服务。但这样整个架构就变得有点重了。于是换了一个思路，对请求响应着手，在响应请求时，去掉缓存，确保每次响应都是最新的数据，这样不就解决了自己的问题么😝。但需要过滤掉静态资源的请求，不然会影响页面的响应时间。
 
 ```js
 // mockApi 中间件
@@ -206,52 +212,52 @@ const mockApi = async (ctx, next) => {
 };
 ```
 - css 热加载
-之前 webpack 支持 css 热加载，一直由 sytle-loader 来完成。由于 style-loader 是由 js 将 css 注入到 DOM 中，这样会导致 FOUC(flash of unstyled content) 问题。为了避免 FOUC，可以使用 [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)，但是 mini-css-extract-plugin 不支持 hmr，不过可以配合 [css-hot-loader](https://github.com/shepherdwind/css-hot-loader) 让其支持 hmr。
+之前 webpack 支持 css 热加载，一直由 sytle-loader 来完成。而 style-loader 是由 js 将 css 注入到 DOM 中，这样会导致 FOUC(flash of unstyled content) 问题。为了避免 FOUC，可以使用 [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)，尴尬的是 mini-css-extract-plugin 不支持 hmr。不过可以配合 [css-hot-loader](https://github.com/shepherdwind/css-hot-loader) 让其支持 hmr。
 
-[mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) 在 0.0.6 开始支持 hmr。
+  [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) 在 0.0.6 版本开始支持 hmr。
 
-```js
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-module.exports = {
-  plugins: [
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: '[name].css',
-      chunkFilename: '[id].css',
-    }),
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              // only enable hot in development
-              hmr: process.env.NODE_ENV === 'development',
-              // if hmr does not work, this is a forceful method.
-              reloadAll: true,
-            },
-          },
-          'css-loader',
-        ],
-      },
+  ```js
+  const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+  module.exports = {
+    plugins: [
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+      }),
     ],
-  },
-};
-```
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                // only enable hot in development
+                hmr: process.env.NODE_ENV === 'development',
+                // if hmr does not work, this is a forceful method.
+                reloadAll: true,
+              },
+            },
+            'css-loader',
+          ],
+        },
+      ],
+    },
+  };
+  ```
 
 - [template]-loader
 
-为优化，webpack loader在输出时，一般都是一个js-runtime字符串。而js-runtime对`html-loader`不是很友好，特别对一些结构完全与html结构不相似的 template engine。如`pug`。如果不使用`html-loader`可以忽略。但在实际开发过程，在html中直接插入图片或其他资源还是个很常用的需求。
+  为优化，webpack loader 在输出时，一般都是一个 **js runtime** 字符串。而js-runtime对`html-loader`不是很友好，特别对一些结构完全与html结构不相似的 template engine。如`pug`。如果不使用`html-loader`可以忽略。但在实际开发过程，在html中直接插入图片或其他资源还是个很常用的需求。
 
-要解决这个问题，需要对loader做一些定制。loader在输出最好是编译好的html，这样对下游`html-loader`处理就很友好了。同时，这样也方便对mock数据的处理。
+  要解决这个问题，需要对loader做一些定制。loader在输出最好是编译好的html，这样对下游`html-loader`处理就很友好了。同时，这样也方便对mock数据的处理。
 
-另外，在编写 template loader 时，需要确保支持可以指定模板文件的目录，即支持绝对路径。因为为了方便前后端模板复用，需要与后端的使用方式保持一致。而后端常使用绝对路径方式。
+  另外，在编写 template loader 时，需要确保支持可以指定模板文件的目录，即支持绝对路径。因为为了方便前后端模板复用，需要与后端的使用方式保持一致。而后端常使用绝对路径方式。
 
-在编写twig-loader时，为了方便使用webpack loader 传入的文件数据，使用twig的数渲染方法，而数据渲染方法是不支持指定模板文件的目录。虽然可以通过hack方式来支持，不过最好使用路径加载渲染方式，让其支持绝对路径。
+  在编写twig-loader时，为了方便使用webpack loader 传入的文件数据，使用twig的数渲染方法，而数据渲染方法是不支持指定模板文件的目录。虽然可以通过hack方式来支持，不过最好使用路径加载渲染方式，让其支持绝对路径。
 
 - 去掉[postcss-modules](https://github.com/css-modules/postcss-modules)使用css-loader的css modules使用css
   之前使用postcss-moudles，主要解决将经过css-modules编译后的类名对象与模板变量数据合并作为模板渲染数据。这种模式对当前的开发场景来说不如将在js中使用灵活。
@@ -351,7 +357,7 @@ module.exports = {
 
 > 在解决问题过程，如果实在不能解决，可以先放一放，缓几天在回过头来看，可能就豁然明朗呢，贵在坚持。自己也没有什么高追求，就想把这件事做好就行。
 
-在刚开始搭建时，感觉有很多事要处理，有点让人畏惧。
+在刚开始搭建时，不要想着该
 
 绝对有很多事要做，有点让人畏惧。此时可以将任务按时间节点划分。一个一个攻破，还是那句老话'坚持'。再自己搭建完，感觉就那么一回事，觉得任何人花点时间都能完成。
 
