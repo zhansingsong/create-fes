@@ -30,7 +30,7 @@ const generateFocus = (focus = '', viewFiles, appViews) => {
   return Object.keys(results).length > 0 ? results : viewFiles;
 };
 
-module.exports = (routerConfig = {}, focus = '', paths) => {
+module.exports = (routerConfig = {}, focus = '', paths, chalk) => {
   const escapeRegExp = string => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
   // invert
   const invert = obj => Object.assign(...Object.entries(obj).map(([k, v]) => ({ [v]: k })));
@@ -62,7 +62,13 @@ module.exports = (routerConfig = {}, focus = '', paths) => {
     return defaultRoutes;
   }, {});
   const customViewFiles = Object.keys(routerConfig).reduce((customRoutes, file) => {
-    customRoutes[join(appViews, file)] = routerConfig[file]; // eslint-disable-line
+    // check custom route exist or not
+    const viewFilePath = join(appViews, file);
+    if (existsSync(viewFilePath)) {
+      customRoutes[viewFilePath] = routerConfig[file]; // eslint-disable-line
+    } else {
+      console.log(`${chalk.redBright('routerConfig[')}${chalk.dim(file)}${chalk.redBright(']=')}${chalk.dim(routerConfig[file])}${chalk.bold.redBright(' doesn\'t exist.')}`);
+    }
     return customRoutes;
   }, {});
   // viewFiles

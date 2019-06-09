@@ -57,7 +57,7 @@ const mockApi = async (ctx, next) => {
   await next();
 };
 // 将fesMap绑定到paths减少传递到下游的参数数量
-const fesMap = getFesMap(appConfig.routerConfig, appConfig.dev.focus, paths);
+const fesMap = getFesMap(appConfig.routerConfig, appConfig.dev.focus, paths, chalk);
 paths.fesMap = fesMap;
 
 class Base {
