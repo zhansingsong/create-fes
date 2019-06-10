@@ -43,7 +43,7 @@
 - **urlLoader**：配置url-loader。[详细配置参考……](https://github.com/webpack-contrib/url-loader)
 - **sw**：service worker 配置，默认为`{}`。[详细配置参考……](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 - **tsChecker**：fork-ts-checker-webpack-plugin 配置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
-- **extraDependencies**：增加依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
+- **extraDependencies**：增加额外的依赖文件。方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
 - **tmplLoader**: 设置模板语言 loader， 默认为 `twig-loader`。
   ```js
   tmplLoader: {
