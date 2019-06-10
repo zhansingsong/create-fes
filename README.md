@@ -31,6 +31,7 @@
 - 模板输出(便于后端复用模板)。
 - 基于[mockjs](https://github.com/nuysoft/Mock/wiki/Getting-Started) 模拟 api。
 - 支持模板语言 loader 的配置。
+- 自动优先使用 yarn 安装依赖包。
 - 支持 css 预处理器 loader 的配置。
 - 针对 dev，提供了 focus 功能。
 - 针对 build，提供了 foolMode、debug 功能。
