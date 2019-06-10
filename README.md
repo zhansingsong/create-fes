@@ -5,6 +5,9 @@
 **create-fes** 是一个构建 **fes** 多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
 
 [English DOC](./README_EN.md)
+
+🤘[为什么我要构建这个脚手架](./docs/why.md)🤘
+
 ## 设计架构
 
 ![fes](./media/FES.svg)
