@@ -2,23 +2,27 @@
 
 **fes(front end scaffold)**，发音：**/fes/**。它是基于 [webpack4](https://github.com/webpack/webpack)、[koa2](https://github.com/koajs/koa) 搭建的多页面开发环境。高效开发，快速打包。
 
-**create-fes** 是一个构建 **fes** 多页面应用的命令，灵感来源于[create-react-app](https://github.com/facebook/create-react-app)。
+**create-fes** 是一个构建 **fes** 多页面应用的命令，灵感来源于 [create-react-app](https://github.com/facebook/create-react-app)。
 
-[English DOC](./README_EN.md)
+[**English DOC**](./README_EN.md)
 
-🤘[为什么我要构建这个脚手架](./docs/why.md)🤘
+## why
+
+🌴[为什么我要构建这个脚手架](./docs/why.md) 🌴
 
 ## 设计架构
 
 ![fes](./media/FES.svg)
 
-**fes** 以 HTML 的文件名来关联 JS 和 DATA。 其中 JS 和 DATA 是可选的。而 SCSS 则通过 JS 引入，再使用 `mini-css-extract-plugin` 做优化。另外，**fes** 还提供了 `build`、`start`、`preview`、`tmpl` 脚本命令。
+> singsong：架构图中的 sass-loader、twig-loader 只是用于说明，不代表 **fes** 模板语言只支持 twig、css预处理器只支持 sass。可以是其他模板言语、或其他 css 预处理器。
+
+**fes** 以 HTML 的文件名来关联 JS 和 DATA。 其中 JS 和 DATA 是可选的。而 SCSS 则通过 JS 引入，再使用 `mini-css-extract-plugin` 来优化。另外，**fes** 还提供了 `build`、`start`、`preview`、`tmpl` 脚本命令。
 
 ## 安装
 ```js
 npm install create-fes -g
 ```
-如果不想安装`create-fes`，可以直接使用`npx`命令(推荐)
+如果不想安装`create-fes`，可以直接使用`npx`命令(**推荐**)
 ```js
 npx create-fes <project-name>
 ```
@@ -28,14 +32,14 @@ npx create-fes <project-name>
 ```js
 create-fes example
 ```
-- `-B, --no-babel` 表示是否关闭`babel`。
+- `-B, --no-babel` 表示是否关闭 `babel`。默认开启 `babel`。
 
 ```js
 create-fes example -B
 // or
 create-fes example --no-babel
 ```
-- `-t, --typescript` 表示是否开启`typeScript`。
+- `-t, --typescript` 表示是否开启`typeScript`。默认关闭 `typeScript`。
 
 ```js
 create-fes example -t
@@ -61,14 +65,15 @@ create-fes example -h
 // or
 create-fes example --help
 ```
+
 ## 自定义模板
-在使用`create-fes`命令创建 fes-app 过程中，会提供模板选择功能:
+在使用 `create-fes` 命令创建 fes-app 过程中，会提供模板选择功能:
 ```
 What template do you need?
 pc
 other custom template(<path-to-template>)
 ```
-选择`other custom template(<path-to-template>)`选项，提示
+选择 `other custom template(<path-to-template>)` 选项，提示
 ```
 Please input a valid path of template?
 $ /path/to/your/template #输入模板绝对路径
@@ -77,9 +82,9 @@ $ /path/to/your/template #输入模板绝对路径
 
 ## 项目目录结构
 
-```css
+```c
 ├── .babelrc ---> babel配置文件
-├── .browserslistrc ---> browserslist 配置文件。postcss、babel 会根据其配置进行编译。更多参考：https://github.com/browserslist/browserslist
+├── .browserslistrc ---> browserslist 配置文件。postcss、babel 会根据其配置进行编译。更多参考: https://github.com/browserslist/browserslist
 ├── tsconfig.js ---> typeScript配置文件
 ├── README.MD
 ├── package.json
@@ -90,24 +95,25 @@ $ /path/to/your/template #输入模板绝对路径
 └── src ---> 源代码文件夹
 ```
 ### config 配置文件夹
-如果`app.config.js`提供的配置项不能满足你的项目需要，可以通过`webpack.dev.config.js`和`webpack.prod.config.js`进行重写定制。
-```js
+
+如果 `app.config.js` 提供的配置项不能满足你的项目需要，可以通过 `webpack.dev.config.js` 和 `webpack.prod.config.js` 进行重写定制。
+```c
 ├── webpack.dev.config.js
 └── webpack.prod.config.js
 ```
 
 ### src 文件夹
 
-```js
+```c
 ├── api ---> 使用 mockjs 模拟 api
 ├── assets ---> 资源文件
 ├── javascripts ---> js 源代码文件夹（根据该目录下直接 js 文件生成 entry）
-├── mock ---> 模板变量数据。支持 js、json 格式，及多文件数据(index.1.json, index.2.json.....)。其中`common`是公用 mock 数据。
+├── mock ---> 模板变量数据。支持 js、json 格式，及多文件数据(index.1.json, index.2.json.....)。其中 `common` 是公用 mock 数据。
 ├── styles ---> scss 源代码文件夹
 └── views ---> template 源代码文件夹
 ```
 
-### `app.config.js`配置
+### `app.config.js` 配置
 - **isHot**：是否开启热加载，默认为`true`。只在开发模式下有效。
 - **proxy**：配置 proxy。[详细配置参考……](https://github.com/chimurai/http-proxy-middleware)
 - **babelLoader**：配置babel-loader，默认为`{}`。[详细配置参考……](https://github.com/2createStudio/postcss-sprites)
@@ -115,7 +121,7 @@ $ /path/to/your/template #输入模板绝对路径
 - **urlLoader**：配置url-loader。[详细配置参考……](https://github.com/webpack-contrib/url-loader)
 - **sw**：service worker 配置，默认为`{}`。[详细配置参考……](https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin)
 - **tsChecker**：fork-ts-checker-webpack-plugin 配置，默认为`{}`。[详细配置参考……](https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme)
-- **extraDependencies**：增加额外的依赖文件，方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
+- **extraDependencies**：增加额外的依赖文件。方便开发修改时，能自动编译。相对于 'src' 目录，支持 `'**/*.js'` 形式。[详细配置参考……](https://github.com/isaacs/node-glob)
 - **tmplLoader**: 设置模板语言 loader， 默认为 `twig-loader`。
   ```js
   tmplLoader: {
@@ -124,7 +130,7 @@ $ /path/to/your/template #输入模板绝对路径
     options: {},
   }
   ```
-- **styleLoader**: 设置css预处理 loader，默认为 `sass-loader`。如果不想使用任何预处理器，只需将`styleLoader: false`即可。
+- **styleLoader**: 设置css预处理 loader，默认为 `sass-loader`。如果不想使用任何预处理器，只需将 `styleLoader: false` 即可。
   ```js
   styleLoader: {
     test: /\.less$/,
@@ -133,28 +139,28 @@ $ /path/to/your/template #输入模板绝对路径
   }
   ```
 - **htmlLoaderOptions**: `html-loader` 的 options。
-- **alias**：alias配置项。
-- **provide**：provide plugin 配置，默认为`{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
+- **alias**：alias 配置项。其中 `@` 表示 'src' 目录。
+- **provide**：provide plugin 配置，默认为 `{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
 - **routerConfig**：路由配置项，可以自定义页面的路由映射。
   ```js
   '/your/path': 'index.html' // 默认：'/index': 'index.html'
   ```
-- **cssModules**：配置css modules，默认为`'global'`。[详细配置参考……](https://github.com/webpack-contrib/css-loader#modules)。_如果不需要，建议关闭。这样可让 webpack 编译更快。_
+- **cssModules**：配置 css modules，默认为 `'global'`。[详细配置参考……](https://github.com/webpack-contrib/css-loader#modules)。_如果不需要，建议关闭。这样可让 webpack 编译更快。_
 
 
 - **dev**：开发模式
   - **port**：端口号，默认为`3000`
-  - **autoOpen**：是否自动打开浏览器，默认为`true`。支持 boolean 、String。如果存在`/index`, 默认打开`/index`，否则其中某个页面。如果是字符串(如: '/home')，就当成打开路径。如果路径不存在会回退到 boolean。
-  - **qrcode**：是否生成预览二维码，默认为`true`
-  - **sourceMap**：是否开启 sourceMap，默认为`true`。
+  - **autoOpen**：是否自动打开浏览器，默认为 `true`。支持 boolean 、String。如果存在 `/index`, 默认打开 `/index`，否则其中某个页面。如果是字符串(如: '/home')，就当成打开路径。如果路径不存在会回退到 boolean。
+  - **qrcode**：是否生成预览二维码，默认为 `true`
+  - **sourceMap**：是否开启 sourceMap，默认为 `true`。
   - **devtool**：配置 devtool，默认为 `'cheap-module-source-map'`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
   - **focus**：表示只编译指定的路由模板文件，提高编译速度。支持 String、Array，默认值为 `''`。
 - **build**：生产模式
-  -  **foolMode**：开启 fool 模式，如果开启会关闭 splitChunks。默认为`false`。
+  -  **foolMode**：开启 fool 模式，如果开启会关闭 splitChunks。默认为 `false`。
   -  **debug**：开启 debug 模式，不会对打包文件进行压缩处理。
   - **publicPath**：输出路径，默认为'/'
   - **outputPath**：配置资料文件输出路径。支持字符串或对象，字符串表示path。如果想精细定制，可以使用对象形式：`{path, filename, chunk(仅js有效)}`
-    - isHash：是否开启 hash。默认为`true`
+    - isHash：是否开启 hash。默认为 `true`
     - css：css 输出路径
     - others：除了 css、img、js 文件外的资源输出路径
     - img：img 输出路径
@@ -166,22 +172,22 @@ $ /path/to/your/template #输入模板绝对路径
       chunck: '[name].[chunkhash:8].chunk.js',
     }
     ```
-  - **report**：是否生成打包分析报告，默认为`false`。支持 boolean 、object。如果为`true`，使用默认配置生成分析报告。如果为配置 object， 会根据该配置对象生成分析报告。[配置object](https://github.com/webpack-contrib/webpack-bundle-analyzer)
-  - **isTmpl**：是否输出后端模板，默认为`false`
-  - **sourceMap**：是否开启 sourceMap，默认为`false`。
+  - **report**：是否生成打包分析报告，默认为 `false`。支持 boolean 、object。如果为 `true`，使用默认配置生成分析报告。如果为配置 object， 会根据该配置对象生成分析报告。[配置object](https://github.com/webpack-contrib/webpack-bundle-analyzer)
+  - **isTmpl**：是否输出后端模板，默认为 `false`
+  - **sourceMap**：是否开启 sourceMap，默认为 `false`。
   - **devtool**：配置 devtool，默认为 `false`。[详细配置参考……](https://webpack.js.org/configuration/devtool/#root)
-  -  **htmlMinify**：是否压缩html文件，默认`false`。[详细配置参考……](https://github.com/jantimon/html-webpack-plugin#minification)
+  -  **htmlMinify**：是否压缩html文件，默认 `false`。[详细配置参考……](https://github.com/jantimon/html-webpack-plugin#minification)
   - **optimizeCssAssetsPlugin**：压缩 css 配置。[详细配置参考……](https://github.com/NMFR/optimize-css-assets-webpack-plugin)
   - **splitChunks**：splitChunks 配置。[详细配置参考……](https://webpack.js.org/plugins/split-chunks-plugin/)
 
-- **tmpl**：tmpl预览模式，**注意：该模式只能在`isTmpl: true`生效**
+- **tmpl**：tmpl预览模式，**注意：该模式只能在 `isTmpl: true` 生效**
   - **port**：端口号，默认为`3100`
-  - **autoOpen**：是否自动打开浏览器，默认为`true`
-  - **qrcode**：是否生成预览二维码，默认为`true`
+  - **autoOpen**：是否自动打开浏览器，默认为 `true`
+  - **qrcode**：是否生成预览二维码，默认为 `true`
 - **preview**：预览模式
   - **port**：端口号，默认为`3030`
-  - **autoOpen**：是否自动打开浏览器，默认为`true`
-  - **qrcode**：是否生成预览二维码，默认为`true`
+  - **autoOpen**：是否自动打开浏览器，默认为 `true`
+  - **qrcode**：是否生成预览二维码，默认为 `true`
 
 ### 项目使用
 

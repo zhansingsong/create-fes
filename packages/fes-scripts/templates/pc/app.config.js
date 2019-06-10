@@ -15,16 +15,17 @@ module.exports = {
   // fork-ts-checker-webpack-plugin: https://github.com/Realytics/fork-ts-checker-webpack-plugin#readme
   tsChecker: {},
   extraDependencies: [],
-  // twig loader by default
-  // set 'false', without any preprocessor only css
+  // twig-loader by default
   tmplLoader: {},
   // sass-loader by default
+  // set 'false', without any preprocessor only css
   styleLoader: {
   },
-  // html-loader options
+  // html-loader options: https://github.com/webpack-contrib/html-loader
   htmlLoaderOptions: {},
   // webpack resolve.alias
   alias: {},
+  // https://webpack.js.org/plugins/provide-plugin/
   provide: {},
   routerConfig: {
     'project/index.html': '/fes/info',
