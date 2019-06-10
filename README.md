@@ -20,15 +20,15 @@
 
 ## 特征
 
-- 多页面开发环境
-- js-code-splitting、css-code-splitting
+- 多页面开发环境。
+- js-code-splitting、css-code-splitting。
 - proxy
 - css autoprefixer
 - css/svg sprite
 - 支持灵活定制，如自动打开浏览器、热加载、生成二维码等配置。
 - 自动监听 port，如果被占用，提示性切换。
-- 打包优化分析
-- 模板输出(便于后端复用模板)
+- 打包优化分析。
+- 模板输出(便于后端复用模板)。
 - 基于[mockjs](https://github.com/nuysoft/Mock/wiki/Getting-Started) 模拟 api。
 - 支持模板语言 loader 的配置。
 - 支持 css 预处理器 loader 的配置。
