@@ -47,7 +47,7 @@ BuildTmpl.prototype.apply = function (compiler) {
 
   function handleAssets(content, manifest, media) {
     const mediaMapAssetObj = mediaMapAsset(manifest, media);
-    const keys = Object.keys(media);
+    const keys = Object.keys(mediaMapAssetObj);
     keys.forEach((key) => {
       content = content.replace(RegExp(key, 'g'), mediaMapAssetObj[key]); // eslint-disable-line
     });

@@ -40,4 +40,5 @@ base.run((paths) => {
     base.autoOpenBrowser();
   });
   base.bindSigEvent(server);
+  base.bindCommand();
 });

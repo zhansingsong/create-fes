@@ -4,6 +4,7 @@
 
 [中文文档](./README.md)
 
+
 ## Structure in project by create-fes command
 
 ```css
@@ -64,6 +65,22 @@ If it is disable to meet your project demands that `app.config.js` is applied, y
 - **htmlLoaderOptions**: the options of `html-loader`.
 - **alias**: webpack `resolve.alias` config.
 - **provide**: webpack provide plugin config. [detailed configuration reference...](https://github.com/2createStudio/postcss-sprites)
+- **mockConfig**：mock config
+  ```js
+  mockConfig: {
+    // the access path as the key
+    '/index': {
+      // the api serving mock data to render
+      api: 'https://postman-echo.com/get?page=index',
+      // format mock data
+      format: data => data.args,
+    },
+    '/fes/info': {
+      api: 'https://postman-echo.com/get?page=info',
+      format: data => data.args,
+    },
+  }
+  ```
 - **cssModules**: css modules config. default value is `'global'`. [detailed configuration reference...](https://github.com/webpack-contrib/css-loader#modules)。_It is recommended to turn off if not needed. This will make webpack compile faster._
 - **routerConfig**: router config. It is able to customize route map.
 ```js
@@ -134,6 +151,45 @@ npm run preview
 ```js
 npm run tmpl
 ```
+### mockConfig
+- Background
+  There is a problem when multiplexing templates at the front and back ends (I don't know if you have this feeling): When splicing templates, the variable data needs to be given by the backend as a document. However, this not only has the problem of information synchronization, but also the front and back ends are not very convenient to develop. The front end needs to mock the template data, sometimes it is difficult to simulate the online data environment; when the backend updates the data structure, it may not be synchronized to the front end in time.
+- Solution
+  This requires the backend to do some extra work on the template rendering data. An additional interface that contains the data for the render template is required for the front end (only in the development environment, it needs to be closed when going online). There is no development cost. Simply define a specific prefix for the interface and then intercept the output data before the template rendering logic. This not only maintains data consistency, but is also easy to maintain.
+- Usage
+  ```js
+  mockConfig: {
+    // the access path as the key
+    '/index': {
+      // the api serving mock data to render
+      api: 'https://postman-echo.com/get?page=index',
+      // format mock data
+      format: data => data.args,
+    },
+    '/fes/info': {
+      api: 'https://postman-echo.com/get?page=info',
+      format: data => data.args,
+    },
+  }
+  ```
+  And then type `mock` command to get the corresponding mock data in dev mode.
+  ```bash
+  $ mock
+  Mock Data:
+
+  {
+      "common": "commons",
+      "name": "fes-index-page",
+      "data": {
+          "name": "fes"
+      }
+  }
+  ```
+  The following all commands are available:
+
+  - mock: viewing mock data to render templates.
+  - view: outputting access info including access address and qrcode.
+  - clear: clear console.
 
 ### css modules
 
@@ -179,7 +235,15 @@ cssmContainer.innerHTML = getCssmHtml(cssm);
 
 ### Way of referring to pictures
 
-_Note: The reference to the image must be relative to the entry page_
+_Note: The reference to the image must be relative to the entry page. The **absolute path** way is recommended._
+
+html: **absolute path**
+
+```html
+<!-- alias: @:/Users/singsong/github/fes/src -->
+<img src="@/assets/puppy.jpg" alt="">
+<div style="background-image: url('${require(`@/assets/puppy.jpg`)}')">
+```
 
 html: **relative path** is relative to the entry html file
 
@@ -188,12 +252,7 @@ html: **relative path** is relative to the entry html file
 <!-- require -->
 <div style="background-image: url('${require(`../assets/puppy.jpg`)}')">
 ```
-html: **absolute path**
-```html
-<!-- alias: @:/Users/singsong/github/fes/src -->
-<img src="@/assets/puppy.jpg" alt="">
-<div style="background-image: url('${require(`@/assets/puppy.jpg`)}')">
-```
+
 scss：**relative path** is relative to the entry css file
 
 ```scss

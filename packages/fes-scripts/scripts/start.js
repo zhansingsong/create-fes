@@ -70,4 +70,5 @@ base.run((paths, chalk) => {
   compiler.hooks.done.tap('open-browser-and-address-info', doneCallback);
 
   base.bindSigEvent(server);
+  base.bindCommand();
 });

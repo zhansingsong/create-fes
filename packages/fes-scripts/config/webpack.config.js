@@ -489,7 +489,7 @@ module.exports = (env, paths) => {
             appConfig.htmlLoaderOptions
           ),
         },
-        { loader: htmlLoader, options: { getMockData: getMockData(paths), ...htmlOptions } },
+        { loader: htmlLoader, options: { getMockData: getMockData(paths, appConfig.mockConfig || {}), ...htmlOptions } },
       ],
     });
     // other resource

@@ -1,7 +1,6 @@
 require('./utils/pre')(); // eslint-disable-line
 
 const { join } = require('path');
-const glob = require('glob');
 const Twig = require('twig');
 const fse = require('fs-extra');
 const Base = require('./utils/Base');
@@ -9,7 +8,7 @@ const Base = require('./utils/Base');
 const base = new Base('tmpl');
 
 base.run((paths, chalk) => {
-  const { entryNames, common } = paths.fesMap;
+  const { entryNames } = paths.fesMap;
 
   if (!fse.existsSync(join(paths.appBuildTmpl))) {
     base.softExit(null, 0, () => {
@@ -35,18 +34,8 @@ base.run((paths, chalk) => {
   const routes = [];
   Object.keys(entryNames).forEach((f) => {
     const {
-      name, route, mockData, buildTmpl,
+      name, route, buildTmpl,
     } = entryNames[f];
-    let mock = {};
-    [common.mock, mockData].forEach((exp) => {
-      glob.sync(exp).forEach((mf) => {
-        try {
-          mock = Object.assign({}, mock, require(mf)); // eslint-disable-line
-        } catch (error) {
-          mock = {};
-        }
-      });
-    });
 
     mapPageToRoute.push({ url: route, name: name.replace('_', '/') });
     routes.push({
@@ -59,7 +48,8 @@ base.run((paths, chalk) => {
           allowInlineIncludes: true,
           path: buildTmpl,
         });
-        ctx.body = template.render(mock);
+        const mockData = await base.getMockData(route);
+        ctx.body = template.render(mockData);
         ctx.type = 'text/html';
       },
     }); // eslint-disable-line
@@ -79,4 +69,5 @@ base.run((paths, chalk) => {
     base.autoOpenBrowser();
   });
   base.bindSigEvent(server);
+  base.bindCommand();
 });

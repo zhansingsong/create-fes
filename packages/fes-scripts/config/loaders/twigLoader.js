@@ -3,6 +3,8 @@ const loaderUtils = require('loader-utils');
 const { join } = require('path');
 
 function loader() {
+  // async
+  const callback = this.async();
   this.addContextDependency(join(process.cwd(), 'src', 'views'));
   this.addContextDependency(join(process.cwd(), 'src', 'mock'));
   const { getMockData, ...others } = loaderUtils.getOptions(this);
@@ -30,10 +32,12 @@ function loader() {
       T.Templates.registry = {}; // eslint-disable-line
     }
   });
-
-  const mockData = getMockData(currentFilePath);
-  const output = template.render(mockData);
-  this.callback(null, output);
+  // 异步调用
+  // 由于使用异步调用所有不能使用相对路径，需要使用绝对路径。
+  getMockData(currentFilePath, (mockData) => {
+    const output = template.render(mockData);
+    callback(null, output);
+  });
 }
 
 module.exports = loader;

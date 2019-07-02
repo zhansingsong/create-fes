@@ -16,6 +16,7 @@ const clearConsole = require('./clearConsole');
 const openBrowser = require('./openBrowser');
 const choosePort = require('./choosePort');
 const getFesMap = require('./getFesMap');
+const getMockData = require('../../config/utils/getMockData');
 
 const appConfig = require(paths.appConfig); // eslint-disable-line
 const appname = require(paths.appPackageJson).name; // eslint-disable-line
@@ -73,6 +74,9 @@ class Base {
     this.clearConsole = clearConsole;
   }
 
+  getMockData(key) { // eslint-disable-line
+    return getMockData(paths, appConfig.mockConfig)(key);
+  }
   softExit(msg, code = 1, customMsg) { // eslint-disable-line
     msg && console.error(chalk.bold.red(msg)); // eslint-disable-line
     customMsg();
@@ -193,6 +197,47 @@ class Base {
         server.close();
         process.exit();
       });
+    });
+  }
+
+  bindCommand() {
+    // 处理命令
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('readable', () => {
+      let chunk;
+      // Use a loop to make sure we read all available data.
+      while ((chunk = process.stdin.read()) !== null) { // eslint-disable-line
+        switch (chunk.toLocaleLowerCase()) {
+          case 'mock\n':
+            clearConsole();
+            console.log(chalk.bold.green('Mock Data: '));
+            console.log();
+            console.log(chalk.blueBright(JSON.stringify(global.fes_mock_data, '', 4)));
+            console.log();
+            break;
+          case 'view\n':
+            this.logViewInfo();
+            console.log();
+            break;
+          case 'clear\n':
+            clearConsole();
+            console.log();
+            break;
+          default:
+            clearConsole();
+            console.log(chalk.red(`Invalid Command: ${chalk.bold.redBright(chunk.trim())}\n`));
+            console.log();
+            console.log(chalk.blue('The following commands are available: \n'));
+            console.log(chalk.green(`${chalk.bold('mock')}: viewing mock data to render templates.`));
+            console.log(chalk.green(`${chalk.bold('view')}: outputting access info including access address and qrcode.`));
+            console.log(chalk.green(`${chalk.bold('clear')}: clear console.`));
+            console.log();
+            break;
+        }
+      }
+    });
+    process.stdin.on('end', () => {
+      process.stdout.write('end');
     });
   }
 

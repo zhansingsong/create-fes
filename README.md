@@ -141,6 +141,22 @@ $ /path/to/your/template #输入模板绝对路径
 - **htmlLoaderOptions**: `html-loader` 的 options。
 - **alias**：alias 配置项。其中 `@` 表示 'src' 目录。
 - **provide**：provide plugin 配置，默认为 `{}`。[详细配置参考……](https://webpack.js.org/plugins/provide-plugin/)
+- **mockConfig**：配置模板数据以接口的形式提供。
+  ```js
+  mockConfig: {
+    // 访问路径作为key
+    '/index': {
+      // 提供渲染mock数据接口
+      api: 'https://postman-echo.com/get?page=index',
+      // 格式化接口数据
+      format: data => data.args,
+    },
+    '/fes/info': {
+      api: 'https://postman-echo.com/get?page=info',
+      format: data => data.args,
+    },
+  },
+  ```
 - **routerConfig**：路由配置项，可以自定义页面的路由映射。
   ```js
   '/your/path': 'index.html' // 默认：'/index': 'index.html'
@@ -215,6 +231,48 @@ npm run preview
 npm run tmpl
 ```
 
+### mockConfig
+
+- Background
+  在前后端复用模板时，存在一个问题（不知道大家是否有这样感觉）：在拼接模板时，变量数据需要后端以文档形式给出。但这样不仅存在信息同步性的问题，而且前后端开发起来不是很方便。前端需要对模板数据进行 mock，有时很难模拟线上数据环境；后端更新数据结构时，可能没有及时同步给前端等
+- Solution
+  这里需要后端对模板渲染数据做些额外的处理工作。需要额外提供一个包含了渲染模板的数据的接口供前端使用（只存在开发环境下，在上线时需要关闭掉）。这没有什么开发成本。只需对该接口定义特定前缀，然后在模板渲染逻辑之前拦截输出数据。这样不仅能保持数据一致性，而且维护起来也方便。
+- Usage
+  ```js
+  mockConfig: {
+    // 访问路径作为key
+    '/index': {
+      // 提供渲染mock数据接口
+      api: 'https://postman-echo.com/get?page=index',
+      // 格式化接口数据
+      format: data => data.args,
+    },
+    '/fes/info': {
+      api: 'https://postman-echo.com/get?page=info',
+      format: data => data.args,
+    },
+  }
+  ```
+  同时开发模式下可以输入`mock`指令来获取对应的 mock 数据
+  ```bash
+  $ mock
+  Mock Data:
+
+  {
+      "common": "commons",
+      "name": "fes-index-page",
+      "data": {
+          "name": "fes"
+      }
+  }
+  ```
+  另外，除了`mock`指令，还提供了如下器指令：
+
+  - mock: 查看当前的 mock 数据
+  - view: 打印范围地址和二维码信息
+  - clear: 清空控制台
+
+
 ### css modules
 _注意：默认开启 `global` 模式，要使用需要主动声明 `local`_
 
@@ -258,7 +316,15 @@ cssmContainer.innerHTML = getCssmHtml(cssm);
 ```
 ### 引用图片的方式
 
-_注意：图片的引用必须相对于入口页面_
+_注意：图片的引用必须相对于入口页面，推荐使用绝对路径引用方式。因为如果存在多级入口的目录结构很难维护相对引用方式_
+
+html：绝对路径引用
+
+```html
+<!-- alias: @:/Users/singsong/github/fes/src -->
+<img src="@/assets/puppy.jpg" alt="">
+<div style="background-image: url('${require(`@/assets/puppy.jpg`)}')">
+```
 
 html：相对路径是相对入口 html 文件引用
 
@@ -267,14 +333,6 @@ html：相对路径是相对入口 html 文件引用
 <img src="../assets/puppy.jpg" alt="">
 <!-- 嵌入方式 -->
 <div style="background-image: url('${require(`../assets/puppy.jpg`)}')">
-```
-
-html：绝对路径引用
-
-```html
-<!-- alias: @:/Users/singsong/github/fes/src -->
-<img src="@/assets/puppy.jpg" alt="">
-<div style="background-image: url('${require(`@/assets/puppy.jpg`)}')">
 ```
 
 scss：相对路径是相对入口的 scss 文件引用
