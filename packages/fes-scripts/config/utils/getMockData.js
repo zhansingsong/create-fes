@@ -2,6 +2,8 @@ const glob = require('glob');
 const { parse, normalize } = require('path');
 const fetch = require('node-fetch');
 
+global.fes_mock_data = {};
+
 /**
  * get mock data by specific path of view file
  */
@@ -45,7 +47,7 @@ module.exports = (paths, mockConfig) => {
     const mockApi = mockConfig[key];
     const mockData = getMockData(getMap(mockFiles[key]), getMap(common.mock, 'common'));
     let finalData = mockData;
-    global.fes_mock_data = finalData;
+    global.fes_mock_data[key] = finalData;
 
     if (mockApi) {
       return fetch(mockApi.api)
@@ -61,7 +63,7 @@ module.exports = (paths, mockConfig) => {
             mockData,
           );
           isCallback && callback(finalData); // eslint-disable-line
-          global.fes_mock_data = finalData;
+          global.fes_mock_data[key] = finalData;
           return finalData;
         })
         .catch((err) => {

@@ -207,23 +207,32 @@ class Base {
       let chunk;
       // Use a loop to make sure we read all available data.
       while ((chunk = process.stdin.read()) !== null) { // eslint-disable-line
-        switch (chunk.toLocaleLowerCase()) {
-          case 'mock\n':
+        chunk = chunk.toLocaleLowerCase().trim();
+        switch (chunk) {
+          case 'mock':
             clearConsole();
             console.log(chalk.bold.green('Mock Data: '));
             console.log();
             console.log(chalk.blueBright(JSON.stringify(global.fes_mock_data, '', 4)));
             console.log();
             break;
-          case 'view\n':
+          case 'view':
             this.logViewInfo();
             console.log();
             break;
-          case 'clear\n':
+          case 'clear':
             clearConsole();
             console.log();
             break;
           default:
+            if (global.fes_mock_data[chunk]) {
+              clearConsole();
+              console.log(chalk.bold.green(`Mock Data [${chunk}]: `));
+              console.log();
+              console.log(chalk.blueBright(JSON.stringify(global.fes_mock_data[chunk], '', 4)));
+              console.log();
+              break;
+            }
             clearConsole();
             console.log(chalk.red(`Invalid Command: ${chalk.bold.redBright(chunk.trim())}\n`));
             console.log();
