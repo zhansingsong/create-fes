@@ -18,6 +18,30 @@
 
 **fes** 以 HTML 的文件名来关联 JS 和 DATA。 其中 JS 和 DATA 是可选的。而 SCSS 则通过 JS 引入，再使用 `mini-css-extract-plugin` 来优化。另外，**fes** 还提供了 `build`、`start`、`preview`、`tmpl` 脚本命令。
 
+## 特征
+
+- 多页面开发环境。
+- js-code-splitting、css-code-splitting。
+- proxy
+- css autoprefixer
+- css/svg sprite
+- 支持灵活定制，如自动打开浏览器、热加载、生成二维码等配置。
+- 自动监听 port，如果被占用，提示性切换。
+- 打包优化分析。
+- 模板输出(便于后端复用模板)。
+- 基于[mockjs](https://github.com/nuysoft/Mock/wiki/Getting-Started) 模拟 api。
+- 支持模板语言 loader 的配置。
+- 自动优先使用 yarn 安装依赖包。
+- 支持 css 预处理器 loader 的配置。
+- 针对 dev，提供了 focus 功能。
+- 针对 build，提供了 foolMode、debug 功能。
+- 支持路由配置。
+- 支持多级目录结构。
+- 支持 preview、tmpl 预览。
+- 支持 CSS-Modules。
+- 支持 typeScript。
+- 支持 service worker。
+
 ## 安装
 ```js
 npm install create-fes -g
