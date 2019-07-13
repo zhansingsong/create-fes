@@ -8,27 +8,27 @@
 
 在那个前端角色比较弱化的年代，页面主要以静态页面为主。合作模式很简单粗暴。
 
-![model-1](./imgs/dev-model-1.png)
+![model-1](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model-1.png)
 
 前端开发完页面，输出给后端。后端拿到页面拼模板，然后再渲染输出。但随着前端业务复杂性逐渐地增加，这种模式合作起来就不是很愉快了。**后端在拼模板时，不能确保输出的页面结构与前端保持一致**。为了规避这个问题，聪明的开发人员就给前端同学建议：**使用后端开发环境开发前端页面**。
 
-![model-2](./imgs/dev-model-2.png)
+![model-2](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model-2.png)
 
 前端直接在本地部署后端开发环境，只负责 views 开发。再基于代码托管工具 git，实现前后端的合作。此时还是以后端为主导，维护性成本依然很高。
 
 随着 node.js 的崛起，前端工程化也逐渐成为前端开发重要组成部分。各种构建工具（如 webpack、rollup、grunt、gulp 等），MVVM 框架（如 React、Vue、Angular 等），模块化系统（cjs、amd、umd、ES6-modules 等），CSS 预处理器（SASS、Less、Stylus、Postcss 等），模块管理工具（NPM、Yarn、brower 等）犹如雨后春笋般不断涌现。SAP 也开始在前端领域流行来，前端能做的事情更多。如客户端渲染，静态分析、优化打包等。后端只需负责数据提供。此时，前后端已完全分离，各自负责各自的业务。
 
-![model-3](./imgs/dev-model-3.png)
+![model-3](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model-3.png)
 
 这种合作模式的核心：**客户端渲染 + 接口**。由于基于客户端渲染，对浏览器的 SEO 不是很友好。虽然可以通过 SRR 来解决，但是 SRR 也存在局限性。关于 SRR 感兴趣的同学可自行查阅相关的资料。本文主要探讨传统多页面应用构建的优化。
 
 基于前端工程化，要让传统多页面应用构建也支持前后端完全分离。还需要做一件事，前端脚手架需要与后端使用相同的模板渲染引擎。前端编写好后，直接输出模板给后端使用。为此自己也构建一个 [fes](#fes) 脚手架。
 
-![model-4](./imgs/dev-model-4.png)
+![model-4](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model-4.png)
 
 在使用 [fes](#fes) 构建了几个项目后，虽然在开发体验、开发效率上都得到了很大地提升。但与后端合作起来不是很轻松。因为在开发之前需要与后端约定好模板数据变量，一般会以文档形式进行说明。如果后端更新了数据，没同步更新文档，就会存在数据不一致的问题。对开发效率大打折扣，与传统的后端重新拼接模板相比优势不是很明显。秉着 geek 的精神，就想能不能 **将模板数据以接口的形式提供给前端**。这样上述问题不就迎刃而解了么。
 
-![model-5](./imgs/dev-model-5.png)
+![model-5](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model-5.png)
 
 于是就对 [fes](#fes) 进行改造。让其支持模板数据接口的配置，在渲染之前会根据配置拉起接口数据，再进行渲染输出。同时还提供了接口数据适配功能，能让客户端更好地控制数据结构。
 
@@ -245,7 +245,7 @@ mockConfig: {
 
 运行效果：
 
-![](./imgs/dev-model.gif)
+![](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model.gif)
 
 
 ## 总结
