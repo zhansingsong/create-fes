@@ -2,7 +2,7 @@
 
 本文主要介绍一种全新的前后端合作模式，在介绍这种模式之前咋们先来看看前后端合作模式的演变。
 
-> singsong：该模式主要对传统多页面应用构建的改进。关于 SPA（Single Page Application，单页应用程序）可以参考 SRR（Server-Side Render，服务端渲染）。
+> singsong：该模式主要对传统多页面应用构建的改进。关于 SPA（Single Page Application，单页应用程序）可以参考 SSR（Server-Side Render，服务端渲染）。
 
 ## 演变
 
@@ -20,7 +20,7 @@
 
 ![model-3](https://raw.githubusercontent.com/zhansingsong/create-fes/master/docs/dev-model/imgs/dev-model-3.png)
 
-这种合作模式的核心：**客户端渲染 + 接口**。由于基于客户端渲染，对浏览器的 SEO 不是很友好。虽然可以通过 SRR 来解决，但是 SRR 也存在局限性。关于 SRR 感兴趣的同学可自行查阅相关的资料。本文主要探讨传统多页面应用构建的优化。
+这种合作模式的核心：**客户端渲染 + 接口**。由于基于客户端渲染，对浏览器的 SEO 不是很友好。虽然可以通过 SSR 来解决，但是 SSR 也存在局限性。关于 SSR 感兴趣的同学可自行查阅相关的资料。本文主要探讨传统多页面应用构建的优化。
 
 基于前端工程化，要让传统多页面应用构建也支持前后端完全分离。还需要做一件事，前端脚手架需要与后端使用相同的模板渲染引擎。前端编写好后，直接输出模板给后端使用。为此自己也构建一个 [fes][fes] 脚手架。
 
