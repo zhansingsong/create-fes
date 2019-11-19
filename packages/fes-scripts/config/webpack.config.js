@@ -17,7 +17,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const BundleAnalyzer = require('webpack-bundle-analyzer');
-const { join, parse } = require('path');
+const { join } = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getHtmlWebpackPluginConfigs = require('./utils/getHtmlWebpackPluginConfig');
 const sprites = require('./plugins/sprites');
@@ -396,10 +396,19 @@ module.exports = (env, paths) => {
             alias,
             spritePath: join(paths.appSrc, 'assets/'),
             filterBy: (image) => {
-              if (join(paths.appSrc, 'assets', 'sprite') === parse(image.path).dir) {
+              if (image.path.indexOf(join(paths.appSrc, 'assets', 'sprite')) >= 0) {
                 return Promise.resolve();
               }
               return Promise.reject();
+            },
+            svgsprite: {
+              mode: {
+                stack: {
+                  sprite: join(paths.appSrc, 'assets', 'stack-sprite.svg'),
+                  // 用于构建引用者与被引用者的相对关系
+                  dest: join(paths.appSrc, 'styles'),
+                },
+              },
             },
           },
           ...appConfig.spritesConfig,

@@ -50,27 +50,41 @@ const defaults = {
 		exportOpts: {}
 	},
 	svgsprite: {
-		mode: {
-			css: {
-				dimensions: true,
-				bust: false,
-				render: {
-					css: true
-				}
-			}
+    mode: {
+			stack: true,
+			inline: true
 		},
-
-		shape: {
-			id: {
-				generator(name, file) {
-					return new Buffer(file.path).toString('base64');
-				}
-			}
-		},
-
-		svg: {
-			precision: 5
+		onUpdateRule: (rule, token, image) => {
+			token.cloneAfter({
+				type: 'decl',
+				prop: 'background',
+				value: `url(${image.usage}) no-repeat`
+			}).cloneAfter({
+				prop: 'background-size',
+				value: `cover`
+			});
 		}
+		// mode: {
+		// 	css: {
+		// 		dimensions: true,
+		// 		bust: false,
+		// 		render: {
+		// 			css: true
+		// 		}
+		// 	}
+		// },
+
+		// shape: {
+		// 	id: {
+		// 		generator(name, file) {
+		// 			return new Buffer(file.path).toString('base64');
+		// 		}
+		// 	}
+		// },
+
+		// svg: {
+		// 	precision: 5
+		// }
 	},
 	verbose: false
 };
@@ -185,7 +199,9 @@ function extractImages(root, opts, result) {
 			const imageUrl = getImageUrl(rule.toString());
 
 			image.originalUrl = imageUrl[0];
-			image.url = imageUrl[1];
+      image.url = imageUrl[1];
+      // 为 svg 增加查找 name
+      image.name = path.parse(image.url).name;
       // replace prefix '~' to alias
       image = replaceAlias(image);
 
@@ -368,6 +384,10 @@ function saveSpritesheets(opts, images, spritesheets) {
 	opts.logger('Saving the spritesheets...');
 
 	return Promise.each(spritesheets, (spritesheet) => {
+    // 输出 SVG 合成图
+    if(spritesheet.svgPath){
+			return fs.outputFileAsync(path.resolve(spritesheet.svgPath), spritesheet.image);
+		}
 		return (
 				_.isFunction(opts.hooks.onSaveSpritesheet) ?
 				Promise.resolve(opts.hooks.onSaveSpritesheet(opts, spritesheet)) :
@@ -385,7 +405,6 @@ function saveSpritesheets(opts, images, spritesheets) {
 				}
 
 				spritesheet.path = spritesheet.path.replace(/\\/g, '/');
-
 				return fs.outputFileAsync(spritesheet.path, spritesheet.image);
 			});
 	}).then(spritesheets => {
@@ -401,12 +420,13 @@ function saveSpritesheets(opts, images, spritesheets) {
  * @return {Promise}
  */
 function mapSpritesheetProps(opts, images, spritesheets) {
-	_.forEach(spritesheets, ({ coordinates, path, properties }) => {
+	_.forEach(spritesheets, ({ coordinates, path, properties, extension }) => {
 		const spritePath = path;
 		const spriteWidth = properties.width;
 		const spriteHeight = properties.height;
 
 		_.forEach(coordinates, (coords, imagePath) => {
+      extension === 'svg' ? _.chain(images).find(['name', imagePath]).merge(coords).value() :
 			_.chain(images)
 				.find(['path', imagePath])
 				.merge({
@@ -444,14 +464,20 @@ function updateReferences(root, opts, images, spritesheets) {
 			// Update the rule with background declarations
 			if (image) {
 				// Generate CSS url to sprite
-				image.spriteUrl = path.relative(opts.stylesheetPath || path.dirname(root.source.input.file), image.spritePath);
-				image.spriteUrl = image.spriteUrl.split(path.sep).join('/');
+				image.spriteUrl = path.relative(opts.stylesheetPath || path.dirname(root.source.input.file), image.spritePath || '');
+        image.spriteUrl = image.spriteUrl.split(path.sep).join('/');
 
-				// Update rule
-				if (_.isFunction(opts.hooks.onUpdateRule)) {
-					opts.hooks.onUpdateRule(rule, comment, image);
+        console.log(opts.stylesheetPath, path.dirname(root.source.input.file), image.spritePath || '', image.spriteUrl)
+
+				if(image.isStack){
+					opts.svgsprite.onUpdateRule(rule, comment, image);
 				} else {
-					updateRule(rule, comment, image, opts.dpr);
+					// Update rule
+					if (_.isFunction(opts.hooks.onUpdateRule)) {
+						opts.hooks.onUpdateRule(rule, comment, image);
+					} else {
+						updateRule(rule, comment, image);
+					}
 				}
 
 				// Cleanup token
