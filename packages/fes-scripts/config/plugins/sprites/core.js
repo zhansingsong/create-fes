@@ -467,8 +467,6 @@ function updateReferences(root, opts, images, spritesheets) {
 				image.spriteUrl = path.relative(opts.stylesheetPath || path.dirname(root.source.input.file), image.spritePath || '');
         image.spriteUrl = image.spriteUrl.split(path.sep).join('/');
 
-        console.log(opts.stylesheetPath, path.dirname(root.source.input.file), image.spritePath || '', image.spriteUrl)
-
 				if(image.isStack){
 					opts.svgsprite.onUpdateRule(rule, comment, image);
 				} else {
