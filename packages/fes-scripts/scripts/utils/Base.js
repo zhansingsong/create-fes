@@ -1,4 +1,5 @@
-const { parse, join } = require('path');
+const { parse, join, resolve } = require('path');
+const fse = require('fs-extra');
 const Koa = require('koa');
 const Mock = require('mockjs');
 const serve = require('koa-static');
@@ -58,24 +59,41 @@ const mockApi = async (ctx, next) => {
   await next();
 };
 // 将fesMap绑定到paths减少传递到下游的参数数量
-const fesMap = getFesMap(appConfig.routerConfig, appConfig.dev.focus, paths, chalk);
-paths.fesMap = fesMap;
+// const fesMap = getFesMap(appConfig.routerConfig, appConfig.dev.focus, paths, chalk);
+// paths.fesMap = fesMap;
+
+// 获取用户配置的文件
+const getUserAppConfig = () => {
+  const configFile = process.argv[2];
+  if (!configFile) {
+    return;
+  }
+  const filePath = resolve(paths.appDirectory, configFile);
+  if (!fse.existsSync(filePath)) {
+    console.log(`${chalk.red(`${chalk.bold.redBright(configFile)} file does not exist.`)}`);
+    process.exit(1);
+  }
+  return require(filePath); // eslint-disable-line
+};
 
 class Base {
   constructor(mode) {
     this.mode = mode;
-    this.appConfig = appConfig;
-    this.config = appConfig[mode];
+    this.appConfig = getUserAppConfig() || appConfig;
+    this.config = this.appConfig[mode];
     this.app = new Koa();
     this.router = new Router();
     this.router.mapRoutes = [];
     this.views = views;
     this.serve = serve;
     this.clearConsole = clearConsole;
+    // 将fesMap绑定到paths减少传递到下游的参数数量
+    this.paths = paths;
+    this.paths.fesMap = getFesMap(this.appConfig.routerConfig, this.appConfig.dev.focus, paths, chalk);
   }
 
   getMockData(key) { // eslint-disable-line
-    return getMockData(paths, appConfig.mockConfig)(key);
+    return getMockData(this.paths, this.appConfig.mockConfig)(key);
   }
   softExit(msg, code = 1, customMsg) { // eslint-disable-line
     msg && console.error(chalk.bold.red(msg)); // eslint-disable-line
@@ -84,6 +102,8 @@ class Base {
   }
 
   run(runCallback = () => {}, isCtx) {
+    const { paths } = this; // eslint-disable-line
+
     if (isCtx) {
       runCallback(paths, chalk);
       return;
@@ -108,7 +128,7 @@ class Base {
       });
   }
 
-  createRouter(routerConfig = fesMap.routes, root, isIndex) {
+  createRouter(routerConfig = this.paths.fesMap.routes, root, isIndex) {
     /**
      * normalize string path
      * @param {String} middleware
