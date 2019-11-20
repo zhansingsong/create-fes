@@ -28,17 +28,24 @@ module.exports = {
   // https://webpack.js.org/plugins/provide-plugin/
   provide: {},
   routerConfig: {
+    'project/index.html': '/fes/info',
   },
   mockConfig: {
     // the access path as the key
-    // '/index': {
-    //   api: 'https://postman-echo.com/get?page=index',
-    //   format: data => data.args,
-    // },
-    // '/about': {
-    //   api: 'https://postman-echo.com/get?page=about',
-    //   format: data => data.args,
-    // },
+    '/index': {
+      // the api serving mock data to render
+      api: 'https://postman-echo.com/get?page=index',
+      // format mock data
+      format: data => data.args,
+    },
+    '/about': {
+      api: 'https://postman-echo.com/get?page=about',
+      format: data => data.args,
+    },
+    '/fes/info': {
+      api: 'https://postman-echo.com/get?page=info',
+      format: data => data.args,
+    },
   },
   // https://github.com/webpack-contrib/css-loader#modules
   cssModules: 'global',

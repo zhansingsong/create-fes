@@ -7,36 +7,10 @@
   <link rel="icon" href="/favicon.ico?v=1" type="image/x-icon">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fes</title>
-  <script>
-    const MAX_WIDTH = 1800;
-    let fontSize;
-    const fitCB = () => {
-      if(window.innerWidth > MAX_WIDTH){
-        fontSize = '180px';
-      } else {
-        fontSize = '10vw';
-      }
-      document.documentElement.style.fontSize = fontSize;
-    }
-    window.addEventListener('size', fitCB, false);
-  </script>
 </head>
 
 <body>
-  <header class="header">
-    <div class="icons">
-      <i class="bee"></i>... hover me ...
-    </div>
-    <a href="https://github.com/zhansingsong/create-fes" class="header-logo">
-      <img class="img" src="@/assets/logo.png" alt="logo">
-    </a>
-    <p class="header-desc">Set up a modern multiple pages by running one command</p>
-  </header>
-  <section class="main">
-    {% block main %}{% endblock %}
-    {% include '../modules/footer.html' %}
-  </section>
-  <!--[if lt IE 9]><script src="https://123p3.sogoucdn.com/dhfe/2018/06/19jilga74f.js"></script><![endif]-->
+  {% block main %}{% endblock %}
 </body>
 
 </html>

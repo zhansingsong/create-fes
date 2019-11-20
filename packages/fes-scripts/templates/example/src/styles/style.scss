@@ -1,0 +1,98 @@
+@import "./base/reset";
+@import "./base/config";
+@import "./base/helper";
+@import "./lib/iconfont";
+@import "./base/imgs";
+@import "./modules/footer";
+
+html,
+body{
+  height: 100%;
+}
+html{
+  font-size: 10vw;
+}
+.header{
+  position: absolute;
+  width: 100%;
+  display: block;
+  z-index: 2;
+  text-align: center;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+  height: 3.2rem;
+  .icons{
+    top: 0.2rem;
+  }
+  .header-logo{
+    display: block;
+    height: 2rem;
+  }
+  .img{
+    height: 100%;
+    margin: 0 auto;
+  }
+  .header-desc{
+    font-size: 0.3rem;
+    color: #808080;
+  }
+}
+.main{
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 3.2rem;
+  padding-bottom: 2.4rem;
+}
+.page{
+  position: relative;
+  min-height: 100%;
+  .page-bg{
+    position: absolute;
+    font-size: 1.6rem;
+    left: 50%;
+    color: #ddd;
+    top: 50%;
+    transform: translate(-150%, -66%);
+  }
+  .page-wp{
+    position: absolute;
+    box-sizing: border-box;
+    top: 50%;
+    left: 50%;
+    transform: translate(-20%, -80%);
+  }
+  .page-tt{
+    font-size: 0.3rem;
+    font-weight: 700;
+    text-shadow: 0px 1px 1px;
+    color: #595959;
+  }
+  .page-desc{
+    font-size: 0.2rem;
+    color: #aaa;
+  }
+}
+
+.icons {
+  position: absolute;
+  overflow: hidden;
+  padding: 0.1rem 0.2rem;
+  color: #aaa;
+  .bee {
+    width: 64px;
+    height: 64px;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    float: left;
+    transform: scale(1);
+    @extend %bee;
+
+    &:hover {
+      @extend %bee-hover;
+
+      transform: scale(1.2);
+    }
+  }
+}
+.a { background: url(~@/assets/sprite/svgs/tag.svg) no-repeat; position: relative; z-index: 1; width: 200px; height: 200px;}

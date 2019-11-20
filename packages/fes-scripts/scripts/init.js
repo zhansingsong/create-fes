@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
+const glob = require('glob');
 
 module.exports = (appPath, appName, verbose, originalDirectory, template) => { // eslint-disable-line
   // fes-scripts
@@ -29,19 +30,31 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     JSON.stringify(appPackage, null, 2)
   );
 
+  const generateChoices = () => {
+    const choices = [];
+    const templates = glob.sync(path.join(ownPath, 'templates', '*'));
+    templates.forEach((file) => {
+      const match = /\/(\w*)\/?$/.exec(file);
+      if (match) {
+        choices.push({
+          name: match[1],
+          value: match[1],
+        });
+      }
+    });
+    choices.push({
+      name: 'other custom template(<path-to-template>)?',
+      value: 'other',
+    });
+    return choices;
+  };
+
   inquirer.prompt([{
     type: 'list',
     name: 'tmpl',
     message: 'What template do you need',
-    choices: [
-      {
-        name: 'pc',
-        value: 'pc',
-      },
-      {
-        name: 'other custom template(<path-to-template>)?',
-        value: 'other',
-      }],
+    choices: generateChoices(),
+    default: 'pc',
   },
   ]).then(({ tmpl }) => {
     if (tmpl === 'other') {
