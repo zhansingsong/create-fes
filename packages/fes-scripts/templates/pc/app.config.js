@@ -77,6 +77,7 @@ module.exports = {
     optimizeCssAssetsPlugin: {},
     // https://webpack.js.org/plugins/split-chunks-plugin/#splitchunkscachegroupspriority
     splitChunks: null,
+    focus: '',
   },
   tmpl: {
     port: 3100,

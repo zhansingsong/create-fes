@@ -89,7 +89,7 @@ class Base {
     this.clearConsole = clearConsole;
     // 将fesMap绑定到paths减少传递到下游的参数数量
     this.paths = paths;
-    this.paths.fesMap = getFesMap(this.appConfig.routerConfig, this.appConfig.dev.focus, paths, chalk);
+    this.paths.fesMap = getFesMap(this.appConfig.routerConfig, this.config.focus, paths, chalk);
   }
 
   getMockData(key) { // eslint-disable-line
