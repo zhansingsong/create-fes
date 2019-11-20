@@ -25,11 +25,6 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     tmpl: 'fes-scripts tmpl',
   };
 
-  fs.writeFileSync(
-    path.join(appPath, 'package.json'),
-    JSON.stringify(appPackage, null, 2)
-  );
-
   const generateChoices = () => {
     const choices = [];
     const templates = glob.sync(path.join(ownPath, 'templates', '*'));
@@ -70,6 +65,14 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
         },
       }).then(t => t);
     }
+    if (tmpl === 'font') {
+      appPackage.scripts.font = 'cd ./generateFont && node index.js public';
+    }
+    // 写 package.json
+    fs.writeFileSync(
+      path.join(appPath, 'package.json'),
+      JSON.stringify(appPackage, null, 2)
+    );
     return path.join(ownPath, 'templates', tmpl);
   }).then((templatePath) => {
     fs.copySync(templatePath, appPath);
