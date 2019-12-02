@@ -83,10 +83,12 @@ module.exports = {
     port: 3100,
     autoOpen: false,
     qrcode: true,
+    focus: '',
   },
   preview: {
     port: 3030,
     autoOpen: false,
     qrcode: true,
+    focus: '',
   },
 };
