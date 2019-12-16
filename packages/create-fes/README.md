@@ -7,5 +7,5 @@
 ```
 const createFes = require('create-fes');
 
-// TODO: DEMONSTRATE API..
+// TODO: DEMONSTRATE API.
 ```

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const SVGSpriter = require('svg-sprite');
+const SVGSpriter = require('fes-svg-sprite');
 const Promise = require('bluebird');
 const _ = require('lodash');
 
