@@ -7,5 +7,5 @@
 ```
 const fesScripts = require('fes-scripts');
 
-// TODO: DEMONSTRATE API.
+// TODO: DEMONSTRATE API..
 ```
