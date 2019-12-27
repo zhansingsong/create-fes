@@ -1,5 +1,10 @@
 # changelog
 
+## v1.4.4
+
+- 增加 **mini-app-h5**
+- 支持指定 template 的特定依赖包 `dependencies.json`
+
 ## v1.4.2
 - 修复 **svg stack sprite** 合成方案。增加 `fes-svg-sprite` 依赖
 
