@@ -1,0 +1,8 @@
+{
+  "printWidth": 140,
+  "singleQuote": true,
+  "arrowParens": "always",
+  "prettier.bracketSpacing": true,
+  "tabWidth": 2,
+  "prettier.useTabs": false
+}

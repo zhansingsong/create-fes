@@ -81,9 +81,9 @@ function run(root, appName, version, verbose, originalDirectory, useYarn, useBab
         console.log(`Installing ${chalk.cyan(packageName)}...`);
         console.log();
 
-        return install(useYarn, allDependencies, verbose, isOnline).then(() => packageName);
+        return install(useYarn, allDependencies, verbose, isOnline).then(() => ({ packageName, isOnline }));
       })
-      .then((packageName) => {// eslint-disable-line
+      .then(({packageName, isOnline}) => {// eslint-disable-line
         checkNodeVersion(packageName);
         setCaretRangeForRuntimeDeps(packageName);
 
@@ -95,7 +95,7 @@ function run(root, appName, version, verbose, originalDirectory, useYarn, useBab
           'init.js'
         );
         const init = require(scriptsPath); // eslint-disable-line
-        init(root, appName, verbose, originalDirectory);
+        init(root, appName, verbose, originalDirectory, isOnline);
       })
       .catch((reason) => {
         console.log();
@@ -137,6 +137,7 @@ function createApp(name, verbose, version, useBabel, useTypescript, useNpm) {
   process.chdir(root);
 
   let useYarn = useNpm ? false : shouldUseYarn(); // eslint-disable-line
+  process.env.FES_DEV_USE_YARN = useYarn;
   // as yarn is disable to install locale package，it is intetional to set to false for test.
   if (process.env.FES_DEV) {
     useYarn = false; // test

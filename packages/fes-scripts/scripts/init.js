@@ -5,8 +5,12 @@ const fs = require('fs-extra');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const glob = require('glob');
+const semver = require('semver');
+const rm = require('rimraf');
+const install = require('./utils/install');
 
-module.exports = (appPath, appName, verbose, originalDirectory, template) => { // eslint-disable-line
+
+module.exports = (appPath, appName, verbose, originalDirectory, isOnline) => { // eslint-disable-line
   // fes-scripts
   const ownPackageName = require(path.join(__dirname, '..', 'package.json')).name; // eslint-disable-line
   // node_modules/fes-scripts
@@ -29,7 +33,7 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
     const choices = [];
     const templates = glob.sync(path.join(ownPath, 'templates', '*'));
     templates.forEach((file) => {
-      const match = /\/(\w*)\/?$/.exec(file);
+      const match = /\/([\w|_|-]*)\/?$/.exec(file);
       if (match) {
         choices.push({
           name: match[1],
@@ -95,40 +99,56 @@ module.exports = (appPath, appName, verbose, originalDirectory, template) => { /
         throw err;
       }
     }
-    // Display the most elegant way to cd.
-    // This needs to handle an undefined originalDirectory for
-    // backward compatibility with old global-cli's.
-    let cdpath;
-    if (originalDirectory && path.join(originalDirectory, appName) === appPath) {
-      cdpath = appName;
-    } else {
-      cdpath = appPath;
+    // install dependencies
+    const depsFilePath = path.join(appPath, 'dependencies.json');
+    const deps = [];
+    if (fs.existsSync(depsFilePath)) {
+      const depsFile = require(depsFilePath) || {}; //eslint-disable-line
+      Object.keys(depsFile).forEach((k) => {
+        deps.push(`${k}@${semver.validRange(depsFile[k])}`);
+      });
+      console.log('Installing specific dependencies. This might take a couple of minutes.');
+      console.log('Installing ...');
+      console.log();
     }
-    // Change displayed command to yarn instead of yarnpkg
-    const displayedCommand = useYarn ? 'yarn' : 'npm';
 
-    console.log();
-    console.log(`Success! Created ${chalk.green(appName)} at ${chalk.underline(appPath)}`);
-    console.log('Inside that directory, you can run several commands:');
-    console.log();
-    console.log(chalk.cyan(`  ${displayedCommand} start`));
-    console.log('    Starts the development server.');
-    console.log();
-    console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`));
-    console.log('    Bundles the app into static files for production.');
-    console.log('    and views the app built by running the following commands.');
-    console.log();
-    console.log(chalk.cyan(`    - ${displayedCommand} ${useYarn ? '' : 'run '}preview`));
-    console.log('        Previews the app built for production before publish.');
-    console.log();
-    console.log(chalk.cyan(`    - ${displayedCommand} ${useYarn ? '' : 'run '}tmpl`));
-    console.log('        Previews templates generated to backend.');
-    console.log();
-    console.log('suggesting that you begin by typing:');
-    console.log();
-    console.log(chalk.cyan('  cd'), cdpath);
-    console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
-    console.log();
-    console.log('Happy hacking!');
+    install(useYarn, deps, verbose, isOnline).then(() => {
+      rm.sync(depsFilePath);
+      // Display the most elegant way to cd.
+      // This needs to handle an undefined originalDirectory for
+      // backward compatibility with old global-cli's.
+      let cdpath;
+      if (originalDirectory && path.join(originalDirectory, appName) === appPath) {
+        cdpath = appName;
+      } else {
+        cdpath = appPath;
+      }
+      // Change displayed command to yarn instead of yarnpkg
+      const displayedCommand = useYarn ? 'yarn' : 'npm';
+
+      console.log();
+      console.log(`Success! Created ${chalk.green(appName)} at ${chalk.underline(appPath)}`);
+      console.log('Inside that directory, you can run several commands:');
+      console.log();
+      console.log(chalk.cyan(`  ${displayedCommand} start`));
+      console.log('    Starts the development server.');
+      console.log();
+      console.log(chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}build`));
+      console.log('    Bundles the app into static files for production.');
+      console.log('    and views the app built by running the following commands.');
+      console.log();
+      console.log(chalk.cyan(`    - ${displayedCommand} ${useYarn ? '' : 'run '}preview`));
+      console.log('        Previews the app built for production before publish.');
+      console.log();
+      console.log(chalk.cyan(`    - ${displayedCommand} ${useYarn ? '' : 'run '}tmpl`));
+      console.log('        Previews templates generated to backend.');
+      console.log();
+      console.log('suggesting that you begin by typing:');
+      console.log();
+      console.log(chalk.cyan('  cd'), cdpath);
+      console.log(`  ${chalk.cyan(`${displayedCommand} start`)}`);
+      console.log();
+      console.log('Happy hacking!');
+    });
   });
 };

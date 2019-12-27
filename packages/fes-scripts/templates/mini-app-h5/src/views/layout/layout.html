@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,minimum-scale=1, user-scalable=no">
+  <link rel="icon" href="/favicon.ico?v=1" type="image/x-icon">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>搜狗快递查询</title>
+  <script>
+    var __is_not_full_screen__ = false;
+    !(function (win, division, MAX_WIDTH, MIN_WIDTH) {
+      division = division || 10;
+      MAX_WIDTH = MAX_WIDTH || 2000;
+      MIN_WIDTH = MIN_WIDTH || 320;
+      // make sure that checkVUnit is only called once.
+      var docElement = document.documentElement;
+      var checkVwUnit = function () {
+        var foolElement = document.createElement('div');
+        foolElement.style.width = '10vw';
+        docElement.appendChild(foolElement);
+        var compStyle = parseInt(
+          (win.getComputedStyle
+            ? getComputedStyle(foolElement, null)
+            : foolElement.currentStyle
+          ).width,
+          10
+        );
+        win.__is_vw__ = parseInt(win.innerWidth / 10, 10) === compStyle;
+        docElement.removeChild(foolElement);
+      };
+      checkVwUnit();
+
+      var dpr = win.devicePixelRatio || 1;
+      function setFit() {
+        var screenHeight = screen.height;
+        var winHeight = window.innerHeight;
+        if (winHeight / screenHeight <= 0.8) {
+          docElement.classList.add('notfullscreen');
+          __is_not_full_screen__ = true;
+        }
+      }
+      setFit();
+      // adjust body font size
+      function setBodyFontSize() {
+        if (document.body) {
+          document.body.style.fontSize = 12 * dpr + 'px';
+        }
+        else {
+          document.addEventListener('DOMContentLoaded', setBodyFontSize);
+        }
+      }
+      setBodyFontSize();
+
+      var fontSize;
+      var fitCB = function () {
+        var innerWidth = win.innerWidth;
+        if (innerWidth > MAX_WIDTH) {
+          fontSize = MAX_WIDTH / division + 'px';
+        } else if (innerWidth < MIN_WIDTH) {
+          fontSize = MIN_WIDTH / division + 'px';
+        } else {
+          fontSize = win.__is_vw__ ? division + 'vw' : innerWidth / division + 'px';
+        }
+        document.documentElement.style.fontSize = fontSize;
+      };
+      var throttle = function (fn, delay) {
+        var timer;
+        return function () {
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
+          timer = setTimeout(fn, delay);
+        };
+      };
+      fitCB();
+      win.addEventListener('resize', throttle(fitCB, 100), false);
+      win.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+          fitCB();
+        }
+      });
+      // detect 0.5px supports
+      if (dpr >= 2) {
+        var fakeBody = document.createElement('body');
+        var testElement = document.createElement('div');
+        testElement.style.border = '.5px solid transparent';
+        fakeBody.appendChild(testElement);
+        docElement.appendChild(fakeBody);
+        if (testElement.offsetHeight === 1) {
+          docElement.classList.add('hairlines');
+        }
+        docElement.removeChild(fakeBody);
+      }
+    })(window);
+  </script>
+  <script>
+    var device = (/(android.+)[;\/].+build/i).exec(navigator.userAgent);
+    if(device && __is_not_full_screen__){
+      var vendor = device[0];
+      var filters = [/HUAWEI NXT-AL10/];
+      for (var index = 0, item; item = filters[index++];) {
+          if(item.test(vendor)){
+            document.documentElement.style.fontSize="28px";
+            break;
+          }
+      }
+    }
+  </script>
+</head>
+
+<body>
+  {% block main %}{% endblock %}
+  {% block script %}{% endblock %}
+  <script type="text/javascript" src="//upd10.sogoucdn.com/nstatic/js/sa_v1.0.3.js"></script>
+  <script src="{{publicPath}}polyfill.js"></script>
+</body>
+
+</html>

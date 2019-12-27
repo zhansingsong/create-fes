@@ -1,0 +1,29 @@
+/* stylelint-disable */
+@function p2m($values) {
+  $baseline: 75 / 1rem * 1;
+  @if type-of($values)=="number" {
+    @if abs($values) < 4 {
+      @if $values ==0{
+        @return 0;
+      }
+      @if $values < 0 {
+        @return -0.03rem;
+      }
+      @else {
+        @return 0.03rem;
+      }
+    }
+    @else {
+      @return ($values / $baseline);
+    }
+  }
+  @else {
+    $results: ();
+    @each $value in $values {
+      @if $value==0 or type-of($value)=="number" {
+        $results: append($results, p2m($value));
+      }
+    }
+    @return $results;
+  }
+}
