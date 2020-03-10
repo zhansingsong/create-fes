@@ -12,6 +12,7 @@ const {
   HotModuleReplacementPlugin,
   optimize,
   ProvidePlugin,
+  DefinePlugin,
 } = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -68,6 +69,8 @@ const getOutput = (env, appConfig, outputhPath, paths) => {
  */
 const getPlugins = (env, appConfig, outputhPath, useTypescript, paths) => {
   const plugins = [];
+  // provide global variables
+  plugins.push(new DefinePlugin({ ...{ PRODUCTION: JSON.stringify(env === 'production') }, ...appConfig.define }));
   // provide global variables
   plugins.push(new ProvidePlugin(appConfig.provide));
   // extract a mini css file

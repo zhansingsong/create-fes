@@ -25,6 +25,8 @@ module.exports = {
   htmlLoaderOptions: {},
   // webpack resolve.alias
   alias: {},
+  // https://webpack.docschina.org/plugins/define-plugin/
+  define: {},
   // https://webpack.js.org/plugins/provide-plugin/
   provide: {},
   routerConfig: {
