@@ -1,5 +1,9 @@
 # changelog
 
+## v1.4.8
+
+- 增加 **definePlugin** 功能
+
 ## v1.4.4
 
 - 增加 **mini-app-h5**
