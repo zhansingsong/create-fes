@@ -1,6 +1,6 @@
 # changelog
 
-## v1.5.7
+## v1.5.0
 
 - 增加 **svg2font** 功能
 - node 版本需要大于 10
