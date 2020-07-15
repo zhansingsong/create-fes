@@ -1,5 +1,10 @@
 # changelog
 
+## v1.5.7
+
+- 增加 svg2font 功能
+- node 版本需要大于 10
+
 ## v1.4.4
 
 - 增加 **mini-app-h5**

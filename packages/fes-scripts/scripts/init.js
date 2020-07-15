@@ -27,6 +27,7 @@ module.exports = (appPath, appName, verbose, originalDirectory, isOnline) => { /
     build: 'fes-scripts build',
     preview: 'fes-scripts preview',
     tmpl: 'fes-scripts tmpl',
+    font: 'fes-scripts font',
   };
 
   const generateChoices = () => {

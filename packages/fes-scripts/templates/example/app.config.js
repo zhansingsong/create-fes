@@ -49,6 +49,8 @@ module.exports = {
   },
   // https://github.com/webpack-contrib/css-loader#modules
   cssModules: 'global',
+  // https://github.com/zhansingsong/svg2font
+  svg2font: {},
   dev: {
     port: 3000,
     autoOpen: true,

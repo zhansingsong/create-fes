@@ -300,5 +300,6 @@ class Base {
     }
   }
 }
+Base.appConfig = getUserAppConfig() || appConfig;
 
 module.exports = Base;
