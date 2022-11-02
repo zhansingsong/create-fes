@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "b3b": "0.0.1",
-    "fontmin": "^0.9.8",
+    "fontmin": "^0.9.9",
     "is-ttf": "^0.2.2",
     "lodash": "^4.17.15",
     "replace-ext": "^1.0.0",
